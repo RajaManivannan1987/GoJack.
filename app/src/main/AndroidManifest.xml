@@ -80,7 +80,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.NotificationAlertActivity"
-            android:label=""
+            android:label=" "
             android:launchMode="singleInstance"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
