@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">GoJack Pilot</string>
+    <string name="versionCode">Version 0.2</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="forgotpassword"><u>Forgot Your Password?</u></string>
+    <string name="forgotpassword1">Forgot Password?</string>
+    <string name="forgotcontent1">To reset your password, Please enter your registered email address or mobile number.</string>
+    <string name="forgotcontent2">You will receive an email or sms with a four digit code to reset yout password shortly. Be sure to check you junk folder if you dont receive in 10 minutes.</string>
+    <string name="forgotcontent3">You can always contact us at +91-xxxxx-xxxxx or by email.</string>
+    <string name="logout">Logout</string>
+    <string name="mobile">Mobile Number / Email</string>
+    <string name="submit">Submit</string>
+    <string name="bin">Enter PIN number</string>
+    <string name="codesend">Code Send</string>
+    <string name="codesendcontent1">Four digit code send to your email/mobile. This code is valid for next 2 hours.</string>
+    <string name="codesendcontent2">Once you receive your code, please enter in the section below.</string>
+    <string name="newpassword">Enter New Password</string>
+    <string name="confirmpassword">Confirm Password</string>
+    <string name="confirmpasswordcontent1">Please enter a new password below.</string>
+    <string name="confirmpasswordcontent2">Your password must be at least 8, but no more then 20 characters. It must also contain a capital letter(Uppercase letter)and one number.</string>
+    <string name="changepassword">Change Password</string>
+    <string name="onlineslide">> Slide to Go Online</string>
+    <string name="offlineslide">> Slide to Go Offline</string>
+    <string name="startslide">> Slide to Start Trip</string>
+    <string name="endslide">> Slide to End Trip</string>
+    <string name="balance">Your balance is low.<br /> Please recharge your account.</string>
+    <string name="recharge">Recharge</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="rs">`</string>
+</resources>

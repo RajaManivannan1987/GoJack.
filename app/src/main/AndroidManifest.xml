@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.gojack.gojack">
+
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="com.sendbird.android.sample.permission.C2D_MESSAGE" />
+
+    <permission
+        android:name="com.example.gojack.gojack.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+
+    <application
+        android:name=".ApplicationClass.AppControler"
+        android:allowBackup="true"
+        android:icon="@mipmap/gojack_pilot_logo"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".Activities.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activities.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.ForgotPassword"
+            android:screenOrientation="portrait"
+            android:theme="@style/SettingsTheme" />
+        <activity
+            android:name=".Activities.EndTripDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SettingsTheme" />
+        <activity
+            android:name=".Activities.CodeConfirmation"
+            android:screenOrientation="portrait"
+            android:theme="@style/SettingsTheme" />
+        <activity
+            android:name=".Activities.ChangePassword"
+            android:screenOrientation="portrait"
+            android:theme="@style/SettingsTheme" />
+        <activity
+            android:name=".Activities.GoOnline"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.GoOffline"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.About"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Account"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Help"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.History"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Settings"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.NotificationAlertActivity"
+            android:label=""
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".Activities.HistoryDetails"
+            android:screenOrientation="portrait"
+            android:theme="@style/SettingsTheme" />
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.example.im028.streetwalla" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".GCMClasses.GCMListener"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".GCMClasses.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".GCMClasses.RegistrationIntentService"
+            android:exported="false"></service>
+        <service
+            android:name=".ServiceClass.GPSTracker"
+            android:enabled="true" />
+        <service
+            android:name=".ServiceClass.LocationService"
+            android:enabled="true" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+    </application>
+
+</manifest>

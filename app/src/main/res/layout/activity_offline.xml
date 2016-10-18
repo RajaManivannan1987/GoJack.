@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/pilotLocationMap"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".Activities.GoOffline" />
+
+        <TextView
+            android:id="@+id/showStartTrip"
+            android:layout_width="200dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center|top"
+            android:background="@drawable/transprant_textview_style"
+            android:gravity="center"
+            android:text="On Trip"
+            android:textColor="@color/ColorRed"
+            android:textSize="@dimen/contentSizeLarge"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/showlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:clickable="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_gravity="bottom"
+                    android:background="#fdfcfc" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/userImageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/alphabet_icon"
+                    app:civ_border_color="#f3f3f3"
+                    app:civ_border_width="0.5dp" />
+            </FrameLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fdfcfc"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/callButton"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/call_icon"
+                            app:civ_border_color="#f3f3f3"
+                            app:civ_border_width="0.5dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/riderNameTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="@dimen/contentSizeNormal" />
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/directionButton"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/directions_icon"
+                            app:civ_border_color="#f3f3f3"
+                            app:civ_border_width="0.5dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/hideLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="From"
+                            android:textColor="@color/ColorBlack"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/fromAddressTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:textColor="@color/ColorGray"
+                            android:textSize="@dimen/contentSizeSmall" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/ColorGray"></View>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="To"
+                            android:textColor="@color/ColorBlack"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/twoAddressTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:text="Will be shown once trip starts"
+                            android:textColor="@color/ColorGray"
+                            android:textSize="@dimen/contentSizeSmall" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton
+                    android:id="@+id/startTripButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="@string/startslide"
+                    android:textColor="@color/colorPrimary"
+                    android:theme="@style/button_style_transprent" />
+
+                <com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton
+                    android:id="@+id/endTripButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/ColorRed"
+                    android:text="@string/endslide"
+                    android:textColor="@color/colorPrimary"
+                    android:theme="@style/button_style_transprent"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/pilotCancelTripTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/cancel_icon"
+                    android:drawablePadding="5dp"
+                    android:text="Cancel Trip"
+                    android:textColor="@color/ColorRed" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

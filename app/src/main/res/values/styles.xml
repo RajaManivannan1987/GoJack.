@@ -1,0 +1,62 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="SettingsTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="inputTextView" parent="@android:style/TextAppearance">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginTop">10dp</item>
+    </style>
+
+    <style name="editText" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/contentSizeNormal</item>
+    </style>
+
+    <style name="textView_Normal" parent="@android:style/TextAppearance">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/contentSizeNormal</item>
+        <item name="android:textColor">@color/ColorGray</item>
+    </style>
+
+    <style name="button_style" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="colorButtonNormal">@color/ColorButtonBg</item>
+        <item name="android:background">@color/ColorButtonBg</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="button_style_transprent" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@drawable/rectange_button_style</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="button_style_redcolor" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="colorButtonNormal">@color/ColorRed</item>
+
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+</resources>

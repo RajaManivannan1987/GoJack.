@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0372BA</color>
+    <color name="colorPrimaryDark">#0372BA</color>
+    <color name="colorAccent">#ca022e</color>
+
+
+    <color name="ColorButtonBg">#0372ba</color>
+    <color name="ColorTextView">#549fd0</color>
+    <color name="ColorGrayLight">#d3d3d3</color>
+    <color name="ColorGray">#909090</color>
+    <color name="ColorBlack">#000000</color>
+    <color name="ColorRed">#f03131</color>
+    <color name="app_BackgroundColor">#fefefe</color>
+    <color name="ColorGreen">#05e177</color>
+
+    <color name="textcolor">#549fd0</color>
+    <color name="textcolor1">#666666</color>
+    <color name="textcolor2">#333333</color>549fd0
+    <color name="textcolor3">#549fd0</color>
+</resources>

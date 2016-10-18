@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_BackgroundColor"
+    android:orientation="vertical"
+    tools:context=".Activities.GoOnline">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="50dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rectange_style"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/bikeImageView"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                app:civ_border_color="#f3f3f3"
+                app:civ_border_width="0.5dp" />
+
+            <TextView
+                android:id="@+id/bikeNameTextView"
+                style="@style/textView_Normal"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textColor="@color/ColorBlack"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/bikeModelTextView"
+                style="@style/textView_Normal"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:textColor="@color/ColorGray" />
+
+            <TextView
+                android:id="@+id/bikeNoTextView"
+                style="@style/textView_Normal"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:textColor="@color/ColorGray" />
+
+            <com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton
+                android:id="@+id/my_swipe_button"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/onlineslide"
+                android:textColor="@color/colorPrimary"
+                android:theme="@style/button_style_transprent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="10dp"
+                android:background="@color/ColorGray"></View>
+
+            <TextView
+                android:id="@+id/balanceStatus"
+                style="@style/textView_Normal"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textColor="@color/ColorGray" />
+
+            <Button
+                android:layout_width="140dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/recharge"
+                android:theme="@style/button_style_redcolor" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
