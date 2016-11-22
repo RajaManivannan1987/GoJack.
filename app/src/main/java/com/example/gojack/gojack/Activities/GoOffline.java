@@ -5,17 +5,22 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,9 +46,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -82,6 +89,9 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
     protected LocationRequest mLocationRequest;
     protected Location mCurrentLocation;
     protected Boolean mRequestingLocationUpdates;
+
+    int firstTime = 1, drawable;
+    MarkerOptions markerOptionsmylocaiton;
 
 
     @Override
@@ -442,11 +452,13 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+        // today 22.11.2016
+//        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         mMap.getUiSettings().setRotateGesturesEnabled(false);
+
         //mMap.getUiSettings().setZoomControlsEnabled(true);
         //mMap.setMyLocationEnabled(true);
     }
@@ -475,7 +487,37 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
         if (marker != null) {
             marker.remove();
         }
+
+        if (firstTime == 1) {
+            LatLng ll = new LatLng(currentLocation.latitude, currentLocation.longitude);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 17);
+            mMap.animateCamera(update);
+            firstTime = 0;
+        }
+
         if (genderType.startsWith("Male")) {
+            drawable = R.drawable.male_pilot_icon;
+        } else if (genderType.startsWith("Female")) {
+            drawable = R.drawable.female_pilot_icon;
+        } else {
+            if (riderGender.startsWith("male")) {
+                drawable = R.drawable.male_pilot_ride_icon;
+            } else {
+                drawable = R.drawable.female_pilot_ride_icon;
+            }
+        }
+
+
+        LatLng position = new LatLng(currentLocation.latitude, currentLocation.longitude);
+        markerOptionsmylocaiton = new MarkerOptions().position(position).icon(BitmapDescriptorFactory.fromResource(drawable)).title("").anchor(0.5f, 1f);
+        marker = mMap.addMarker(markerOptionsmylocaiton);
+        LatLng latlang = new LatLng(currentLocation.latitude, currentLocation.longitude);
+        animateMarker(marker, latlang, false);
+
+
+        //Today 22.11.16
+
+      /*  if (genderType.startsWith("Male")) {
             marker = mMap.addMarker(new MarkerOptions().position(currentLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.male_pilot_icon)));
         } else if (genderType.startsWith("Female")) {
             marker = mMap.addMarker(new MarkerOptions().position(currentLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.female_pilot_icon)));
@@ -485,7 +527,44 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
             } else {
                 marker = mMap.addMarker(new MarkerOptions().position(currentLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.female_pilot_ride_icon)));
             }
-        }
+        }*/
+    }
+
+    private void animateMarker(final Marker marker, final LatLng toPosition, final boolean hideMarker) {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        Projection proj = mMap.getProjection();
+        Point startPoint = proj.toScreenLocation(marker.getPosition());
+        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+        final long duration = 500;
+        final Interpolator interpolator = new LinearInterpolator();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed
+                        / duration);
+                double lng = t * toPosition.longitude + (1 - t)
+                        * startLatLng.longitude;
+                double lat = t * toPosition.latitude + (1 - t)
+                        * startLatLng.latitude;
+                marker.setPosition(new LatLng(lat, lng));
+
+                if (t < 1.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 17);
+                }
+                {
+                    if (hideMarker) {
+                        marker.setVisible(false);
+                    } else {
+                        marker.setVisible(true);
+                    }
+                }
+            }
+        });
+
     }
 
     @Override
@@ -526,7 +605,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
         currentLat = String.valueOf(currentLocation.latitude);
         currentLong = String.valueOf(currentLocation.longitude);
         setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "");
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
 //        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
     }
 
@@ -545,6 +624,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
         handleNewLocation(mCurrentLocation);
+
     }
 
     @Override

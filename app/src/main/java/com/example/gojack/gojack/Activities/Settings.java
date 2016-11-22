@@ -11,6 +11,7 @@ import com.example.gojack.gojack.HelperClasses.PrefManager;
 import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
 import com.example.gojack.gojack.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
+import com.example.gojack.gojack.ServiceClass.LocationService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +36,7 @@ public class Settings extends CommonNavigstionBar {
                     public void onResponse(JSONObject response) throws JSONException {
                         if (response.getString("token_status").equalsIgnoreCase("1")) {
                             CommonMethods.toast(Settings.this, response.getString("message"));
+                            stopService(setIntent(getBaseContext()));
                             PrefManager.getPrefManager(Settings.this).logout();
                             startActivity(new Intent(Settings.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         }

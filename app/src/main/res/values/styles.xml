@@ -25,6 +25,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/contentSizeNormal</item>
+
     </style>
 
     <style name="textView_Normal" parent="@android:style/TextAppearance">
@@ -47,7 +48,7 @@
         <item name="android:layout_width">150dp</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:background">@drawable/rectange_button_style</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textAllCaps">false</item>
     </style>
 
@@ -55,7 +56,6 @@
         <item name="android:layout_width">150dp</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="colorButtonNormal">@color/ColorRed</item>
-
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textAllCaps">false</item>
     </style>
