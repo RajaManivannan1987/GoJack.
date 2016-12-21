@@ -83,14 +83,16 @@ public class EndTripDetailActivity extends CommonActionBar {
             JSONObject jsonObject = new JSONObject(getIntent().getExtras().getString("EndTrip"));
             distanceTextView.setText("Duration " + jsonObject.getString("distance") + " kms, Time " + jsonObject.getString("minutes"));
             amountTextView.setText(jsonObject.getString("rate"));
-            riderNameTextView.setText(jsonObject.getString("name"));
+            if (jsonObject.has("name")) {
+                riderNameTextView.setText(jsonObject.getString("name"));
+            }
             dateAndTimeTextView.setText(jsonObject.getString("datetime"));
             payMode = jsonObject.getString("mode");
             type = jsonObject.getString("type");
             if (type.startsWith("courier")) {
                 //userLayout.setVisibility(View.vi);
                 cashCollectTextView.setVisibility(View.GONE);
-               // deliverLayout.setVisibility(View.GONE);
+                // deliverLayout.setVisibility(View.GONE);
             } else {
                 userLayout.setVisibility(View.VISIBLE);
             }

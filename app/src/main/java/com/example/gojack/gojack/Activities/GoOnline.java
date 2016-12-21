@@ -16,8 +16,13 @@ import com.example.gojack.gojack.HelperClasses.GoJackServerUrls;
 import com.example.gojack.gojack.HelperClasses.PrefManager;
 import com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton;
 import com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButtonCustomItems;
+import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
+import com.example.gojack.gojack.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.ModelClasses.VehicleDetails;
 import com.example.gojack.gojack.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -38,7 +43,12 @@ public class GoOnline extends CommonNavigstionBar {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            CommonMethods.checkLocationPermission(GoOnline.this);
+            if (CommonMethods.checkLocationPermission(GoOnline.this)) {
+                if (!CommonMethods.checkProvider(GoOnline.this)) {
+                    CommonMethods.showLocationAlert(GoOnline.this);
+                }
+            }
+
         }
         // prefManager = new PrefManager(GoOnline.this);
         getData = VehicleDetails.getVehicleDetails();
@@ -58,6 +68,17 @@ public class GoOnline extends CommonNavigstionBar {
                 }
                 stopService(setIntent(getBaseContext()));
                 startService(setIntent(getBaseContext()));
+                WebServiceClasses.getWebServiceClasses(GoOnline.this, TAG).updateStatus("1", new VolleyResponseListerner() {
+                    @Override
+                    public void onResponse(JSONObject response) throws JSONException {
+
+                    }
+
+                    @Override
+                    public void onError(String message, String title) {
+
+                    }
+                });
                 startActivity(new Intent(GoOnline.this, GoOffline.class));
                 finish();
 

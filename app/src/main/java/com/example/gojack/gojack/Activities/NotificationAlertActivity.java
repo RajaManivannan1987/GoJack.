@@ -2,7 +2,9 @@ package com.example.gojack.gojack.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -148,6 +150,7 @@ public class NotificationAlertActivity extends Activity {
                     } else if (response.getString("status").equalsIgnoreCase("0")) {
                         CommonMethods.toast(NotificationAlertActivity.this, response.getString("message"));
                         NotificationAlertActivity.this.finish();
+                        finishAffinity();
                     } else {
                         NotificationAlertActivity.this.finish();
                     }
@@ -164,5 +167,12 @@ public class NotificationAlertActivity extends Activity {
 
             }
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }

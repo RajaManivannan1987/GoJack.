@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "569571792316",
+    "project_id": "go-jack-pilot"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569571792316:android:0fea73cd33df366d",
+        "android_client_info": {
+          "package_name": "com.example.gojack.gojack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "569571792316-7867lgmssnsq3fnt7pahsrrl4lmnrr1f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gojack.gojack",
+            "certificate_hash": "21FBD3AE64257F1F89B24EA7888137993A91975E"
+          }
+        },
+        {
+          "client_id": "569571792316-ccv0ug176sqv1q935cs3qotiaoj4ldjp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgX-_CBQSF6uRkjabzdO5sRjs9fG3Z2S0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

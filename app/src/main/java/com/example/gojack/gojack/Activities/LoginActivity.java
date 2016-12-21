@@ -96,6 +96,5 @@ public class LoginActivity extends AppCompatActivity {
         userName = (EditText) findViewById(R.id.userNameEditText);
         password = (EditText) findViewById(R.id.passwordEditText);
         submitButton = (Button) findViewById(R.id.loginButton);
-
     }
 }

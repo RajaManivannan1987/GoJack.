@@ -50,7 +50,9 @@
                     style="@style/editText"
                     android:drawableLeft="@drawable/mobile_icon"
                     android:drawablePadding="25dp"
-                    android:hint="@string/bin" />
+                    android:hint="@string/bin"
+                    android:maxLength="6"
+                    android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
 
             <Button

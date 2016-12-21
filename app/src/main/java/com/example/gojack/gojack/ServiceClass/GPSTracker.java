@@ -16,7 +16,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.example.gojack.gojack.HelperClasses.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by IM0033 on 8/4/2016.
@@ -48,7 +50,7 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
 
-    private Location getLocation() {
+    public Location getLocation() {
         try {
             mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
             //getting gps status
@@ -123,6 +125,11 @@ public class GPSTracker extends Service implements LocationListener {
         return longitude;
     }
 
+    public String getAddress() {
+        String address = CommonMethods.getMarkerMovedAddress(this, new LatLng(getLatitude(), getLongitude()));
+        return address;
+    }
+
     public double getSpeed() {
         return speed;
     }
@@ -136,7 +143,7 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     public void showSettingsAlert() {
-        AlertDialog.Builder alertBox = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertBox = new AlertDialog.Builder(GPSTracker.this);
         alertBox.setTitle("GPS is settings");
         alertBox.setMessage("GPS is not enabled. Do you want to go to settings menu?");
         alertBox.setPositiveButton("Settings", new DialogInterface.OnClickListener() {

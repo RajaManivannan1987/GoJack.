@@ -218,6 +218,15 @@
                     android:textColor="@color/ColorRed" />
             </LinearLayout>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/HailButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="10dp"
+            android:text="HAIL"
+            android:theme="@style/button_style" />
     </FrameLayout>
 
 </LinearLayout>

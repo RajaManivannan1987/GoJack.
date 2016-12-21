@@ -7,15 +7,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.gojack.gojack.Activities.LoginActivity;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by IM0033 on 8/2/2016.
@@ -63,7 +70,7 @@ public class CommonMethods extends AppCompatActivity {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle("Location!");
         dialog.setMessage(message);
-        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 //                listener.yes();
@@ -72,7 +79,7 @@ public class CommonMethods extends AppCompatActivity {
                 dialogInterface.dismiss();
             }
         });
-        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 //                listener.no();
@@ -93,7 +100,40 @@ public class CommonMethods extends AppCompatActivity {
         } else {
             return true;
         }
+    }
 
+    public static void checkmarshmallowPermission(Activity activity, String permision, int requestCode) {
+        if (ActivityCompat.checkSelfPermission(activity, permision) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{permision}, requestCode);
+        }
+    }
+
+    public static String getMarkerMovedAddress(Context context, LatLng dragPosition) {
+        String adres = "";
+        String location = "";
+
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(dragPosition.latitude, dragPosition.longitude, 1);
+//            toLat = String.valueOf(dragPosition.latitude);
+//            toLang = String.valueOf(dragPosition.longitude);
+            if (addresses != null) {
+                android.location.Address returnedAddress = addresses.get(0);
+                if (addresses.get(0).getSubLocality() != null) {
+                    location = addresses.get(0).getSubLocality();
+                } else if (addresses.get(0).getLocality() != null) {
+                    location = addresses.get(0).getLocality();
+                }
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                    stringBuilder.append(returnedAddress.getAddressLine(i));
+                }
+                adres = stringBuilder.toString();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return adres;
     }
 
 }

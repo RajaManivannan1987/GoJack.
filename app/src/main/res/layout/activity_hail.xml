@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/hailPageMap"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".Activities.HailActivity" />
+
+        <fragment
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_margin="15dp" />
+
+        <TextView
+            android:id="@+id/hailOnTripTextView"
+            android:layout_width="200dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center|top"
+            android:layout_margin="15dp"
+            android:background="@drawable/transprant_textview_style"
+            android:gravity="center"
+            android:text="On Trip"
+            android:textColor="@color/ColorRed"
+            android:textSize="@dimen/contentSizeLarge"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/hailDirectionButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="70dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/directions_icon" />
+
+        <com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton
+            android:id="@+id/hailStartTripButton"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/ColorGreen"
+            android:text="@string/startslide"
+            android:textColor="@color/colorPrimary"
+            android:theme="@style/button_style_transprent" />
+
+        <com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton
+            android:id="@+id/hailEndTripButton"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/ColorRed"
+            android:text="@string/endslide"
+            android:textColor="@color/colorPrimary"
+            android:theme="@style/button_style_transprent"
+            android:visibility="gone" />
+    </FrameLayout>
+</LinearLayout>

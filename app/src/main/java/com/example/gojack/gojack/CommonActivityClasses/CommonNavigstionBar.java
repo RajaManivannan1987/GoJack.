@@ -119,6 +119,7 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
                     TextView textView = (TextView) view.findViewById(R.id.navigationBarListTextView);
                     switch (textView.getText().toString().trim()) {
                         case "GO OFFLINE":
+                            updatePilotStatus();
                             stopService(setIntent(getBaseContext()));
                             startActivity(new Intent(CommonNavigstionBar.this, GoOnline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                             break;
@@ -154,6 +155,20 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(layoutid, null, false);
         frameLayout.addView(view);
+    }
+
+    private void updatePilotStatus() {
+        WebServiceClasses.getWebServiceClasses(CommonNavigstionBar.this, TAG).updateStatus("0", new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+
+            }
+
+            @Override
+            public void onError(String message, String title) {
+
+            }
+        });
     }
 
     @Override

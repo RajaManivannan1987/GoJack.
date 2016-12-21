@@ -180,7 +180,7 @@ public class WebServiceClasses {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        volleyClass.volleyPostData(GoJackServerUrls.PILOT_CANCELTRIP, jsonObject, (Activity) context, new VolleyResponseListerner() {
+        volleyClass.volleyNoProgressPostData(GoJackServerUrls.PILOT_CANCELTRIP, jsonObject, new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
                 if (response.getString("token_status").equalsIgnoreCase("1")) {
@@ -209,6 +209,31 @@ public class WebServiceClasses {
             e.printStackTrace();
         }
         volleyClass.volleyNoProgressPostData(GoJackServerUrls.START_TRIP, jsonObject, new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+                listerner.onResponse(response);
+            }
+
+            @Override
+            public void onError(String message, String title) {
+                listerner.onError(message, title);
+            }
+        });
+
+    }
+
+    public void hailStartTrip(String address, final VolleyResponseListerner listerner) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("token", PrefManager.getPrefManager(context).getPilotToken());
+            jsonObject.put("driverid", PrefManager.getPrefManager(context).getPilotId());
+            jsonObject.put("startinglatitude", gpsTracker.getLatitude());
+            jsonObject.put("startinglongitude", gpsTracker.getLongitude());
+            jsonObject.put("startingaddress", address);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        volleyClass.volleyNoProgressPostData(GoJackServerUrls.HAIL_START_TRIP, jsonObject, new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
                 listerner.onResponse(response);
@@ -297,6 +322,31 @@ public class WebServiceClasses {
             e.printStackTrace();
         }
         volleyClass.volleyNoProgressPostData(GoJackServerUrls.END_TRIP, jsonObject, new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+                listerner.onResponse(response);
+            }
+
+            @Override
+            public void onError(String message, String title) {
+                listerner.onError(message, title);
+            }
+        });
+    }
+
+    public void hideEndTrip(String rideId, String lat, String lang, String address, final VolleyResponseListerner listerner) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("token", PrefManager.getPrefManager(context).getPilotToken());
+            jsonObject.put("driverid", PrefManager.getPrefManager(context).getPilotId());
+            jsonObject.put("rideid", rideId);
+            jsonObject.put("endinglatitude", lat);
+            jsonObject.put("endinglongitude", lang);
+            jsonObject.put("endingaddress", address);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        volleyClass.volleyNoProgressPostData(GoJackServerUrls.HAIL_END_TRIP, jsonObject, new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
                 listerner.onResponse(response);
