@@ -1,6 +1,7 @@
 package com.example.gojack.gojack.Activities;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,6 +16,10 @@ import com.paytm.pgsdk.PaytmOrder;
 import com.paytm.pgsdk.PaytmPGService;
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -24,13 +29,18 @@ import java.util.Random;
  */
 
 public class MerchantActivity extends Activity {
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.paytm);
         initOrderId();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
     }
+
+
 
     private void initOrderId() {
         Random r = new Random(System.currentTimeMillis());
@@ -47,11 +57,10 @@ public class MerchantActivity extends Activity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
-    public void onStartTransaction(View view){
+    public void onStartTransaction(View view) {
         PaytmPGService Service = PaytmPGService.getStagingService();
         Map<String, String> paramMap = new HashMap<String, String>();
-
-        paramMap.put("ORDER_ID", ((EditText) findViewById(R.id.order_id)).getText().toString());
+       /* paramMap.put("ORDER_ID", ((EditText) findViewById(R.id.order_id)).getText().toString());
         paramMap.put("MID", ((EditText) findViewById(R.id.merchant_id)).getText().toString());
         paramMap.put("CUST_ID", ((EditText) findViewById(R.id.customer_id)).getText().toString());
         paramMap.put("CHANNEL_ID", ((EditText) findViewById(R.id.channel_id)).getText().toString());
@@ -61,53 +70,70 @@ public class MerchantActivity extends Activity {
         paramMap.put("THEME", ((EditText) findViewById(R.id.theme)).getText().toString());
         paramMap.put("EMAIL", ((EditText) findViewById(R.id.cust_email_id)).getText().toString());
         paramMap.put("MOBILE_NO", ((EditText) findViewById(R.id.cust_mobile_no)).getText().toString());
+*/
+        paramMap.put("ORDER_ID", ((EditText) findViewById(R.id.order_id)).getText().toString());
+        paramMap.put("MID", "imagin69474426581763");
+        paramMap.put("CUST_ID", ((EditText) findViewById(R.id.customer_id)).getText().toString());
+        paramMap.put("CHANNEL_ID", "WAP");
+        paramMap.put("INDUSTRY_TYPE_ID", ((EditText) findViewById(R.id.industry_type_id)).getText().toString());
+        paramMap.put("WEBSITE", "APP_STAGING");
+        paramMap.put("TXN_AMOUNT", ((EditText) findViewById(R.id.transaction_amount)).getText().toString());
+        paramMap.put("THEME", ((EditText) findViewById(R.id.theme)).getText().toString());
+        paramMap.put("EMAIL", "rajamcaarg@gmail.com");
+        paramMap.put("MOBILE_NO", "9865132365");
+
+
         PaytmOrder Order = new PaytmOrder(paramMap);
 
         PaytmMerchant Merchant = new PaytmMerchant(
-                "https://pguat.paytm.com/paytmchecksum/paytmCheckSumGenerator.jsp",
-                "https://pguat.paytm.com/paytmchecksum/paytmCheckSumVerify.jsp");
-//
-//        "http://imaginetventures.me/sample/steptest/generateChecksum.php",
-//                "http://imaginetventures.me/sample/steptest/verifyChecksum.php");
+               /* "https://pguat.paytm.com/paytmchecksum/paytmCheckSumGenerator.jsp",
+                "https://pguat.paytm.com/paytmchecksum/paytmCheckSumVerify.jsp");*/
+
+               /* "https://steptest.in/demo/lib/generateChecksum.php",
+                "https://steptest.in/demo/lib/verifyChecksum.php");*/
+
+
+                "http://imaginetventures.me/sample/steptest/generateChecksum.php",
+                "http://imaginetventures.me/sample/steptest/verifyChecksum.php");
 
         Service.initialize(Order, Merchant, null);
 
         Service.startPaymentTransaction(this, true, true, new PaytmPaymentTransactionCallback() {
             @Override
             public void onTransactionSuccess(Bundle inResponse) {
-                Log.d("LOG", "Payment Transaction is successful " + inResponse);
+                Log.d("MerchantActivity", "Payment Transaction is successful " + inResponse);
                 Toast.makeText(getApplicationContext(), "Payment Transaction is successful ", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onTransactionFailure(String s, Bundle inErrorMessage) {
-                Log.d("LOG", "Payment Transaction Failed " + inErrorMessage);
+                Log.d("MerchantActivity", "Payment Transaction Failed " + inErrorMessage);
                 Toast.makeText(getBaseContext(), "Payment Transaction Failed ", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void networkNotAvailable() {
-
+                Log.d("LOG", "Payment networkNotAvailable ");
             }
 
             @Override
             public void clientAuthenticationFailed(String s) {
-
+                Log.d("LOG", "Payment clientAuthenticationFailed " + s);
             }
 
             @Override
             public void someUIErrorOccurred(String s) {
-
+                Log.d("LOG", "Payment someUIErrorOccurred " + s);
             }
 
             @Override
             public void onErrorLoadingWebPage(int i, String s, String s1) {
-
+                Log.d("LOG", "Payment onErrorLoadingWebPage " + s + " onErrorLoadingWebPage" + s1);
             }
 
             @Override
             public void onBackPressedCancelTransaction() {
-
+                Log.d("LOG", "Payment onBackPressedCancelTransaction");
             }
         });
     }

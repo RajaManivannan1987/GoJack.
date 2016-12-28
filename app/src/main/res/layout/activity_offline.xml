@@ -219,14 +219,14 @@
             </LinearLayout>
         </LinearLayout>
 
-        <Button
+        <ImageView
             android:id="@+id/HailButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="10dp"
-            android:text="HAIL"
-            android:theme="@style/button_style" />
+            android:src="@drawable/hail_icon"
+            android:text="" />
     </FrameLayout>
 
 </LinearLayout>

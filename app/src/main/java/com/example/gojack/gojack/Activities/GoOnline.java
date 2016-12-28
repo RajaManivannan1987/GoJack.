@@ -71,6 +71,8 @@ public class GoOnline extends CommonNavigstionBar {
                 WebServiceClasses.getWebServiceClasses(GoOnline.this, TAG).updateStatus("1", new VolleyResponseListerner() {
                     @Override
                     public void onResponse(JSONObject response) throws JSONException {
+                        startActivity(new Intent(GoOnline.this, GoOffline.class));
+                        finish();
 
                     }
 
@@ -79,8 +81,8 @@ public class GoOnline extends CommonNavigstionBar {
 
                     }
                 });
-                startActivity(new Intent(GoOnline.this, GoOffline.class));
-                finish();
+                /*startActivity(new Intent(GoOnline.this, GoOffline.class));
+                finish();*/
 
             }
         };

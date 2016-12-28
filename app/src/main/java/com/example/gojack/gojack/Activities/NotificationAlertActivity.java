@@ -131,6 +131,7 @@ public class NotificationAlertActivity extends Activity {
             public void onResponse(JSONObject response) throws JSONException {
                 if (response.getString("token_status").equalsIgnoreCase("1")) {
                     if (response.getString("status").equalsIgnoreCase("1")) {
+                        /*ActionCompletedSingleton.getHideHailSingleton().ActionCompleted();*/
                         JSONObject jsonObject = response.getJSONObject("data");
                         Intent i = new Intent(getApplicationContext(), GoOffline.class);
                         i.putExtra("riderName", jsonObject.getString("name"));

@@ -8,6 +8,7 @@ import com.example.gojack.gojack.Interface.ActionCompleted;
 public class ActionCompletedSingleton {
     private static ActionCompletedSingleton completedSingleton = new ActionCompletedSingleton();
     private static ActionCompletedSingleton actionCompletedSingleton = new ActionCompletedSingleton();
+    private static ActionCompletedSingleton hideHailSingleton = new ActionCompletedSingleton();
     private ActionCompleted actionCompleted;
 
     public static ActionCompletedSingleton actionCompletedSingleton() {
@@ -18,6 +19,9 @@ public class ActionCompletedSingleton {
         return actionCompletedSingleton;
     }
 
+    public static ActionCompletedSingleton getHideHailSingleton() {
+        return hideHailSingleton;
+    }
     public ActionCompletedSingleton() {
 
     }
