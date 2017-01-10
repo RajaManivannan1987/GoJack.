@@ -52,7 +52,9 @@ public class CodeConfirmation extends CommonActionBar {
     @Override
     protected void onStart() {
         super.onStart();
-        CommonMethods.checkmarshmallowPermission(CodeConfirmation.this, Manifest.permission.RECEIVE_SMS, GoJackServerUrls.MY_PERMISSIONS_REQUEST_LOCATION);
+        if (!CommonMethods.checkmarshmallowPermission(CodeConfirmation.this, Manifest.permission.RECEIVE_SMS, GoJackServerUrls.MY_PERMISSIONS_REQUEST_LOCATION)) {
+            CommonMethods.showLocationAlert(CodeConfirmation.this);
+        }
     }
 
     @Override

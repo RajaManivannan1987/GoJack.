@@ -18,6 +18,15 @@
             android:layout_height="match_parent"
             tools:context=".Activities.GoOffline" />
 
+        <ImageView
+            android:id="@+id/markerImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/showStartTrip"
             android:layout_width="200dp"

@@ -102,10 +102,12 @@ public class CommonMethods extends AppCompatActivity {
         }
     }
 
-    public static void checkmarshmallowPermission(Activity activity, String permision, int requestCode) {
+    public static boolean checkmarshmallowPermission(Activity activity, String permision, int requestCode) {
         if (ActivityCompat.checkSelfPermission(activity, permision) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{permision}, requestCode);
+            return true;
         }
+        return false;
     }
 
     public static String getMarkerMovedAddress(Context context, LatLng dragPosition) {

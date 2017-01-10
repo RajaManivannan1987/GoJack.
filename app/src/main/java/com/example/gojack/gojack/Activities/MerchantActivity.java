@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.gojack.gojack.HelperClasses.CommonMethods;
 import com.example.gojack.gojack.R;
 import com.paytm.pgsdk.Log;
 import com.paytm.pgsdk.PaytmMerchant;
@@ -41,7 +42,6 @@ public class MerchantActivity extends Activity {
     }
 
 
-
     private void initOrderId() {
         Random r = new Random(System.currentTimeMillis());
         String orderId = "ORDER" + (1 + r.nextInt(2)) * 10000
@@ -58,6 +58,7 @@ public class MerchantActivity extends Activity {
     }
 
     public void onStartTransaction(View view) {
+
         PaytmPGService Service = PaytmPGService.getStagingService();
         Map<String, String> paramMap = new HashMap<String, String>();
        /* paramMap.put("ORDER_ID", ((EditText) findViewById(R.id.order_id)).getText().toString());
@@ -85,13 +86,13 @@ public class MerchantActivity extends Activity {
 
         PaytmOrder Order = new PaytmOrder(paramMap);
 
-        PaytmMerchant Merchant = new PaytmMerchant(
+        final PaytmMerchant Merchant = new PaytmMerchant(
                /* "https://pguat.paytm.com/paytmchecksum/paytmCheckSumGenerator.jsp",
                 "https://pguat.paytm.com/paytmchecksum/paytmCheckSumVerify.jsp");*/
 
-               /* "https://steptest.in/demo/lib/generateChecksum.php",
-                "https://steptest.in/demo/lib/verifyChecksum.php");*/
-
+             /*   "https://steptest.in/demo/lib/generateChecksum.php",
+                "https://steptest.in/demo/lib/verifyChecksum.php");
+*/
 
                 "http://imaginetventures.me/sample/steptest/generateChecksum.php",
                 "http://imaginetventures.me/sample/steptest/verifyChecksum.php");
@@ -108,32 +109,35 @@ public class MerchantActivity extends Activity {
             @Override
             public void onTransactionFailure(String s, Bundle inErrorMessage) {
                 Log.d("MerchantActivity", "Payment Transaction Failed " + inErrorMessage);
-                Toast.makeText(getBaseContext(), "Payment Transaction Failed ", Toast.LENGTH_LONG).show();
+                CommonMethods.toast(MerchantActivity.this, "onErrorLoadingWebPage " + s);
             }
 
             @Override
             public void networkNotAvailable() {
+                CommonMethods.toast(MerchantActivity.this, "networkNotAvailable");
                 Log.d("LOG", "Payment networkNotAvailable ");
             }
 
             @Override
             public void clientAuthenticationFailed(String s) {
-                Log.d("LOG", "Payment clientAuthenticationFailed " + s);
+                CommonMethods.toast(MerchantActivity.this, "networkNotAvailable " + s);
+                Log.d("MerchantActivity", "Payment clientAuthenticationFailed " + s);
             }
 
             @Override
             public void someUIErrorOccurred(String s) {
-                Log.d("LOG", "Payment someUIErrorOccurred " + s);
+                Log.d("MerchantActivity", "Payment someUIErrorOccurred " + s);
             }
 
             @Override
             public void onErrorLoadingWebPage(int i, String s, String s1) {
-                Log.d("LOG", "Payment onErrorLoadingWebPage " + s + " onErrorLoadingWebPage" + s1);
+                CommonMethods.toast(MerchantActivity.this, "onErrorLoadingWebPage " + s);
+                Log.d("MerchantActivity", "Payment onErrorLoadingWebPage " + s + " onErrorLoadingWebPage" + s1);
             }
 
             @Override
             public void onBackPressedCancelTransaction() {
-                Log.d("LOG", "Payment onBackPressedCancelTransaction");
+                Log.d("MerchantActivity", "Payment onBackPressedCancelTransaction");
             }
         });
     }

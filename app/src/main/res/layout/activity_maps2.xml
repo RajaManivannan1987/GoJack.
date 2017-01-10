@@ -22,7 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:src="@drawable/bike_icon" />
+            android:src="@drawable/to_location_icon"
+            android:visibility="visible" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/dashboardActivityCurrentLocationFloatingActionButton"
@@ -31,6 +32,7 @@
             android:layout_gravity="bottom|right"
             android:layout_marginRight="5dp"
             android:src="@drawable/hail_icon"
+            android:visibility="gone"
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="mini" />
     </FrameLayout>

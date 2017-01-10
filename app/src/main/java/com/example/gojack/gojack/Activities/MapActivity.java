@@ -1,49 +1,33 @@
 package com.example.gojack.gojack.Activities;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.CountDownTimer;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.provider.*;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.gojack.gojack.ApplicationClass.AppControler;
 import com.example.gojack.gojack.HelperClasses.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.GoJackServerUrls;
 import com.example.gojack.gojack.HelperClasses.SearchLocation;
-import com.example.gojack.gojack.Interface.PlaceInterface;
 import com.example.gojack.gojack.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -57,11 +41,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+public class MapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     boolean gps_enabled = false;
     boolean network_enabled = false;
@@ -77,7 +59,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Location prevLoc;
     Location newLoc;
     float bearing;
-    int init_loc = 0, final_loc = -300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,63 +77,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
-
-        final CountDownTimer timer = new CountDownTimer(300, 300) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                init_loc = 0;
-                ObjectAnimator objectAnimatorY = ObjectAnimator.ofFloat(markerImage, "translationY", final_loc, init_loc);
-                objectAnimatorY.setDuration(200);
-                objectAnimatorY.start();
-            }
-        };
-        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
-            @Override
-            public void onCameraMoveStarted(int i) {
-                System.out.println("Camera started moving worked");
-                timer.cancel();
-                ObjectAnimator objectAnimatorY = ObjectAnimator.ofFloat(markerImage, "translationY", init_loc, final_loc);
-                objectAnimatorY.setDuration(200);
-                objectAnimatorY.start();
-                init_loc = -300;
-            }
-        });
-        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-                System.out.println("Camera idle worked");
-                int initial_flag = 0;
-                if (initial_flag != 0) {
-                    System.out.println("Camera Setting timer now");
-                    timer.cancel();
-                    timer.start();
-                }
-                initial_flag++;
-                System.out.println("Camera Value of initial_flag =" + initial_flag);
-            }
-        });
-
-       /* if (mMap != null) {
+        if (mMap != null) {
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             mMap.setMyLocationEnabled(true);
             mMap.setTrafficEnabled(false);
             mMap.setIndoorEnabled(false);
             mMap.getUiSettings().setZoomControlsEnabled(true);
 
-            goToLocationZoom(googleMap.getCameraPosition().target.latitude, googleMap.getCameraPosition().target.longitude, 17);
+           goToLocationZoom(googleMap.getCameraPosition().target.latitude, googleMap.getCameraPosition().target.longitude, 17);
             mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                 @Override
                 public void onCameraChange(CameraPosition cameraPosition) {
                     LatLng ll = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
-                    String address = CommonMethods.getMarkerMovedAddress(MapsActivity.this, ll);
-                    CommonMethods.toast(MapsActivity.this, "" + address);
+                    String address = CommonMethods.getMarkerMovedAddress(MapActivity.this, ll);
+                    CommonMethods.toast(MapActivity.this, "" + address);
                 }
             });
             mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
@@ -168,7 +107,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 @Override
                 public void onMarkerDragEnd(Marker marker) {
-                    Geocoder gc = new Geocoder(MapsActivity.this);
+                    Geocoder gc = new Geocoder(MapActivity.this);
                     LatLng ll = marker.getPosition();
                     List<Address> addresses = null;
                     try {
@@ -180,11 +119,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     marker.setTitle(add.getLocality());
                 }
             });
-        }*/
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            return;
-//        }
-//        mMap.setMyLocationEnabled(true);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
@@ -196,8 +135,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 LatLng ll = mMap.getCameraPosition().target;
-                String address = CommonMethods.getMarkerMovedAddress(MapsActivity.this, ll);
-                CommonMethods.toast(MapsActivity.this, "" + address);
+                String address = CommonMethods.getMarkerMovedAddress(MapActivity.this, ll);
+                CommonMethods.toast(MapActivity.this, "" + address);
             }
         });
     }
@@ -211,9 +150,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private boolean enableMyLocation() {
-        if (CommonMethods.checkLocationPermission(MapsActivity.this)) {
+        if (CommonMethods.checkLocationPermission(MapActivity.this)) {
         } else {
-            AppControler.instanceLocation(MapsActivity.this);
+            AppControler.instanceLocation(MapActivity.this);
             return true;
         }
         return false;
@@ -225,7 +164,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             case GoJackServerUrls.MY_PERMISSIONS_REQUEST_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 } else {
-                    CommonMethods.toast(MapsActivity.this, "My Location permission denied");
+                    CommonMethods.toast(MapActivity.this, "My Location permission denied");
                     finish();
                 }
                 break;
@@ -290,12 +229,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.animateCamera(update);
             firsttime = 0;
         }
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                .target(ll)
-                .zoom(zoom)
-                .bearing(45)
-                .tilt(90)
-                .build()));
+
         options = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.drawable.bike_icon)).title("my location").anchor(0.5f, 1f);
         marker = mMap.addMarker(options);
         animateMarker(marker, ll, false);

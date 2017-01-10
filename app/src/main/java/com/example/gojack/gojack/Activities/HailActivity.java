@@ -91,8 +91,8 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
         super.onCreate(savedInstanceState);
         setView(R.layout.activity_hail);
 
-
-        buildGoogleApiClient();
+        initMap();
+        // buildGoogleApiClient();
 
         gpsTracker = new GPSTracker();
         prefManager = PrefManager.getPrefManager(HailActivity.this);
@@ -107,8 +107,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
         endTripButton = (SwipeButton) findViewById(R.id.hailEndTripButton);
         hailDirectionButton = (ImageView) findViewById(R.id.hailDirectionButton);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.hailPageMap);
-        mapFragment.getMapAsync(this);
+
         hailDirectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -207,20 +206,19 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
         }
     }
 
+    private void initMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.hailPageMap);
+        mapFragment.getMapAsync(this);
+    }
+
     private void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-        createLocationRequest();
-    }
-
-    private void createLocationRequest() {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(100);
-        mLocationRequest.setFastestInterval(100);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mGoogleApiClient.connect();
+        //createLocationRequest();
     }
 
     private void checkBuildPermission() {
@@ -253,7 +251,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
         LatLng ll = new LatLng(currentLocation.latitude, currentLocation.longitude);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 17);
         hailPageMap.animateCamera(update);
-        if (genderType.startsWith("Male")) {
+        if (genderType.startsWith("male")) {
             drawable = R.drawable.male_pilot_icon;
         } else {
             drawable = R.drawable.female_pilot_icon;
@@ -305,16 +303,14 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (mCurrentLocation == null) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            mRequestingLocationUpdates = true;
-            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(1000);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
         }
-        if (mRequestingLocationUpdates) {
-            startLocationUpdates();
-        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
     private void startLocationUpdates() {
@@ -338,15 +334,13 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
     @Override
     protected void onResume() {
         super.onResume();
-        if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
-            startLocationUpdates();
-        }
+        checkBuildPermission();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             stopLocationUpdates();
         }
     }
@@ -357,14 +351,15 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
 
     @Override
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
         super.onStop();
     }
 
     @Override
     protected void onStart() {
-        checkBuildPermission();
-        mGoogleApiClient.connect();
+//        mGoogleApiClient.connect();
         super.onStart();
     }
 
@@ -375,6 +370,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
             return;
         }
         hailPageMap.getUiSettings().setRotateGesturesEnabled(false);
+        buildGoogleApiClient();
     }
 
     @Override
@@ -405,6 +401,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
             }
         }
     }
+
     @Override
     public void onError(Status status) {
         Log.e(TAG, "onError: Status = " + status.toString());

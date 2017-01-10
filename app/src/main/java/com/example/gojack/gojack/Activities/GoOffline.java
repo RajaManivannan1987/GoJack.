@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.gojack.gojack.ApplicationClass.AppControler;
 import com.example.gojack.gojack.CommonActivityClasses.CommonNavigstionBar;
 import com.example.gojack.gojack.HelperClasses.ActionCompletedSingleton;
 import com.example.gojack.gojack.HelperClasses.CommonMethods;
@@ -44,6 +45,7 @@ import com.example.gojack.gojack.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.ModelClasses.CancelReason;
 import com.example.gojack.gojack.R;
 import com.example.gojack.gojack.ServiceClass.GPSTracker;
+import com.example.gojack.gojack.ServiceClass.MyLocation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -57,6 +59,7 @@ import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -76,9 +79,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private String TAG = "GoOffline";
     private GoogleMap mMap;
-    private LatLng currentLocation;
+    //    private LatLng currentLocation;
     private Marker marker;
-    private ImageView HailButton;
+    private ImageView HailButton, markerImageView;
     private SwipeButton startTripButton, endTripButton;
     private CircleImageView userImageView, directionButton, callButton;
     private LinearLayout showlayout, hideLayout;
@@ -107,13 +110,12 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
             stopService(setIntent(getBaseContext()));
             startService(setIntent(getBaseContext()));
         }
-        checkBuildPermission();
-        buildGoogleApiClient();
+
         prefManager = PrefManager.getPrefManager(GoOffline.this);
         findViewById();
         mRequestingLocationUpdates = false;
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.pilotLocationMap);
-        mapFragment.getMapAsync(this);
+        initMap();
+
 
         onClickEvents();
         if (getIntent().getExtras() != null) {
@@ -142,7 +144,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
             public void actionCompleted() {
                 showlayout.setVisibility(View.GONE);
                 showStartTrip.setVisibility(View.GONE);
-                setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "", "ActionCompletedSingleton");
+                setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "", "ActionCompletedSingleton");
             }
         });
         HailButton.setOnClickListener(new View.OnClickListener() {
@@ -153,13 +155,18 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
         });
     }
 
+    private void initMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.pilotLocationMap);
+        mapFragment.getMapAsync(this);
+    }
+
     private void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        mGoogleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
                 .build();
-        createLocationRequest();
+        mGoogleApiClient.connect();
+        //createLocationRequest();
     }
 
     private void createLocationRequest() {
@@ -216,7 +223,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                                 ridetype = response.getString("ridetype");
                                 CommonMethods.toast(GoOffline.this, response.getString("message"));
                                 flag = true;
-                                setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), "tripStart", riderGender, "startSwipeButton");
+                                setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), "tripStart", riderGender, "startSwipeButton");
                                 startTripButton.setVisibility(View.GONE);
                                 showStartTrip.setVisibility(View.VISIBLE);
                                 endTripButton.setVisibility(View.VISIBLE);
@@ -330,7 +337,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                                         showStartTrip.setVisibility(View.GONE);
                                         showStartTrip.setVisibility(View.GONE);
                                         alertdialog.dismiss();
-                                        setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "", "yes");
+                                        setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "", "yes");
                                     }
                                 }
 
@@ -407,7 +414,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                     //HailButton.setVisibility(View.VISIBLE);
                     showlayout.setVisibility(View.GONE);
                     showStartTrip.setVisibility(View.GONE);
-                    setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "", "checkRideStatus");
+                    setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "", "checkRideStatus");
                 }
 
             }
@@ -434,7 +441,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
             end_lang = jsonObject.getString("endinglongitude");
             fromAddressTextView.setText(CommonMethods.getMarkerMovedAddress(GoOffline.this, new LatLng(Double.parseDouble(start_lat), Double.parseDouble(start_lang))));
             if (mCurrentLocation != null) {
-                setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), "tripStart", riderGender, "getCheckStatusValues");
+                setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), "tripStart", riderGender, "getCheckStatusValues");
             } else {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
@@ -462,6 +469,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
 
     private void findViewById() {
         HailButton = (ImageView) findViewById(R.id.HailButton);
+        markerImageView = (ImageView) findViewById(R.id.markerImageView);
         userImageView = (CircleImageView) findViewById(R.id.userImageView);
         showlayout = (LinearLayout) findViewById(R.id.showlayout);
         hideLayout = (LinearLayout) findViewById(R.id.hideLayout);
@@ -483,25 +491,27 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
         mMap = googleMap;
         // today 22.11.2016
 //        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+        buildGoogleApiClient();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         mMap.getUiSettings().setRotateGesturesEnabled(false);
-
+        mMap.setMyLocationEnabled(true);
+        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json1));
         //mMap.getUiSettings().setZoomControlsEnabled(true);
 //        mMap.setMyLocationEnabled(true);
     }
 
 
-    private void setMarket(LatLng currentLocation, String genderType, String riderGender, String methodName) {
-        Log.d(TAG, methodName);
+    private void setMarker(LatLng currentLocation, String genderType, String riderGender, String methodName) {
+        Log.d("setMarket", methodName);
         if (marker != null) {
             marker.remove();
         }
 
         if (firstTime == 1) {
-            LatLng ll = new LatLng(currentLocation.latitude, currentLocation.longitude);
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 17);
+//            LatLng ll = new LatLng(currentLocation.latitude, currentLocation.longitude);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLocation, 17);
             mMap.animateCamera(update);
             firstTime = 0;
         }
@@ -518,12 +528,12 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
             }
         }
 
-
-        LatLng position = new LatLng(currentLocation.latitude, currentLocation.longitude);
-        markerOptionsmylocaiton = new MarkerOptions().position(position).icon(BitmapDescriptorFactory.fromResource(drawable)).title("").anchor(0.5f, 1f);
+        markerImageView.setImageResource(drawable);
+//        LatLng position = new LatLng(currentLocation.latitude, currentLocation.longitude);
+        markerOptionsmylocaiton = new MarkerOptions().position(currentLocation).icon(BitmapDescriptorFactory.fromResource(drawable)).title("").anchor(0.5f, 1f);
         marker = mMap.addMarker(markerOptionsmylocaiton);
-        LatLng latlang = new LatLng(currentLocation.latitude, currentLocation.longitude);
-        animateMarker(marker, latlang, false);
+//        LatLng latlang = new LatLng(currentLocation.latitude, currentLocation.longitude);
+        animateMarker(marker, currentLocation, false);
 
 
         //Today 22.11.16
@@ -579,45 +589,25 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
 
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        if (mCurrentLocation == null) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            mRequestingLocationUpdates = true;
-            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        }
-        if (mRequestingLocationUpdates) {
-            startLocationUpdates();
-        }
-      /*  if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation == null) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, (com.google.android.gms.location.LocationListener) this);
-        } else {
-            handleNewLocation(mLastLocation);
-        }*/
-    }
-
-    protected void startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient, mLocationRequest, this);
-    }
-
     private void handleNewLocation(Location mLastLocation) {
-        currentLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        /*currentLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
         currentLat = String.valueOf(currentLocation.latitude);
-        currentLong = String.valueOf(currentLocation.longitude);
-        setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "", "handleNewLocation");
+        currentLong = String.valueOf(currentLocation.longitude);*/
+        //setMarket(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), prefManager.getGender(), "", "handleNewLocation");
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
 //        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(1000);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
     @Override
@@ -633,23 +623,29 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
-        mCurrentLocation = location;
-        handleNewLocation(mCurrentLocation);
-        Log.d(TAG, mCurrentLocation + "");
+        if (location == null) {
+            setMarker(new LatLng(AppControler.locationInstance().getLocation().latitude, AppControler.locationInstance().getLocation().longitude), prefManager.getGender(), "", "handleNewLocation");
+        } else {
+            mCurrentLocation = location;
+//        handleNewLocation(mCurrentLocation);
+            setMarker(new LatLng(location.getLatitude(), location.getLongitude()), prefManager.getGender(), "", "handleNewLocation");
+            Log.d(TAG, mCurrentLocation + "");
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
+        checkBuildPermission();
+      /*  if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
             startLocationUpdates();
-        }
+        }*/
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             stopLocationUpdates();
         }
     }
@@ -660,14 +656,16 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
 
     @Override
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
         super.onStop();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
+        // mGoogleApiClient.connect();
     }
 
     private void showCourireAlertBox() {

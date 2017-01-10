@@ -72,6 +72,7 @@ public class GoOnline extends CommonNavigstionBar {
                     @Override
                     public void onResponse(JSONObject response) throws JSONException {
                         startActivity(new Intent(GoOnline.this, GoOffline.class));
+//                        startActivity(new Intent(GoOnline.this, MapsActivity.class));
                         finish();
 
                     }
