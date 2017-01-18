@@ -99,6 +99,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
     int firstTime = 1, drawable;
     MarkerOptions markerOptionsmylocaiton;
 
+    private LatLng latLng = new LatLng(11.560873, 78.791537);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -144,6 +145,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
             public void actionCompleted() {
                 showlayout.setVisibility(View.GONE);
                 showStartTrip.setVisibility(View.GONE);
+
                 setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "", "ActionCompletedSingleton");
             }
         });
@@ -223,6 +225,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                                 ridetype = response.getString("ridetype");
                                 CommonMethods.toast(GoOffline.this, response.getString("message"));
                                 flag = true;
+
                                 setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), "tripStart", riderGender, "startSwipeButton");
                                 startTripButton.setVisibility(View.GONE);
                                 showStartTrip.setVisibility(View.VISIBLE);

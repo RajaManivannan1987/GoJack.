@@ -1,11 +1,14 @@
 package com.example.gojack.gojack.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,7 +31,15 @@ public class PractiesActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Hashtable<String, Integer> hashtable = new Hashtable<>();
+        String path = Environment.getDataDirectory().getAbsolutePath().toString() + "/storage/emulated/0/appFolder";
+        File mFolder = new File(path);
+        if (!mFolder.exists()) {
+            mFolder.mkdir();
+        }
+        File Directory = new File("/sdcard/myappFolder/");
+        Directory.mkdirs();
+
+        /*Hashtable<String, Integer> hashtable = new Hashtable<>();
         hashtable.put("Raja", 54);
         hashtable.put("Raja", 7);
         hashtable.put("gf", 7);
@@ -37,7 +48,7 @@ public class PractiesActivity extends AppCompatActivity {
         hashtable.put("fghjkygk", 98);
         hashtable.put("fghjkygk", 90);
         hashtable.put("fghjkygk", 90);
-        hashtable.put("Raja", 6);
+        hashtable.put("Raja", 6);*/
 
 
 //        hashtable.put(null, null);
@@ -45,7 +56,7 @@ public class PractiesActivity extends AppCompatActivity {
         System.out.println(hashtable.get(100));
         System.out.println(hashtable.get(106));
         System.out.println(hashtable.get(99));*/
-        Log.d("MerchatActivity", hashtable.toString());
+        // Log.d("MerchatActivity", hashtable.toString());
     }
 
 

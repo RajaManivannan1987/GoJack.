@@ -7,8 +7,8 @@ public class GoJackServerUrls {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     //    public static String SERVER_URL = "http://imaginetventures.net/sample/gojack/webservice/";
 //    public static String SERVER_URL = "http://www.shoutjack.com/manage/webservice/";
-//    public static String SERVER_URL = "http://www.calljacktech.com/manage/webservice/";
-    public static String SERVER_URL = "http://vvnear.com/gojack/manage/webservice/";
+    public static String SERVER_URL = "http://www.calljacktech.com/manage/webservice/";
+    //    public static String SERVER_URL = "http://vvnear.com/gojack/manage/webservice/";
     public static String LOGIN = SERVER_URL + "pilotlogin";
     public static String REGISTER_LOCATION = SERVER_URL + "updatepilotlocation";
     public static String UPDATE_PILOT_STATUS = SERVER_URL + "updatepilotstatus";

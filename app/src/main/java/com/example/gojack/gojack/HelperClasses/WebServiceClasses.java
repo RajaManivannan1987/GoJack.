@@ -35,7 +35,7 @@ public class WebServiceClasses {
         volleyClass = new VolleyClass(context, TAG);
     }
 
-    public void login(String username, String password, final VolleyResponseListerner listerner) {
+    public void login(Activity activity,String username, String password, final VolleyResponseListerner listerner) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("username", username);
@@ -43,7 +43,7 @@ public class WebServiceClasses {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        volleyClass.volleyPostData(GoJackServerUrls.LOGIN, jsonObject, (Activity) context, new VolleyResponseListerner() {
+        volleyClass.volleyPostData(GoJackServerUrls.LOGIN, jsonObject, activity, new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
                 listerner.onResponse(response);
