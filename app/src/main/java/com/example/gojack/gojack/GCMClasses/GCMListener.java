@@ -1,5 +1,6 @@
 package com.example.gojack.gojack.GCMClasses;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -25,7 +26,7 @@ import java.util.Calendar;
 public class GCMListener extends GcmListenerService {
 
     private static final String TAG = "GCMListener";
-   // private PrefManager prefManager;
+    // private PrefManager prefManager;
 
 
     String senderUUID = "", senderName = "";
@@ -88,27 +89,30 @@ public class GCMListener extends GcmListenerService {
 
     private void newOrderNotification(String message, String type, String rideid, String gender) {
 //        if (type.startsWith("ridecancelledbycustomer")) {
-            //ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted1();
+        //ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted1();
 //        } else {
-            Intent intent = new Intent(this, NotificationAlertActivity.class);
-            intent.putExtra(CommonIntent.typeKey, type);
-            intent.putExtra(CommonIntent.rideId, rideid);
-            intent.putExtra(CommonIntent.gender, gender);
-            intent.putExtra(CommonIntent.message, message);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                    (int) Calendar.getInstance().getTimeInMillis() /* Request code */, intent,
-                    PendingIntent.FLAG_ONE_SHOT);
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.male_pilot_icon)
-                    .setContentTitle(getResources().getString(R.string.app_name))
-                    .setContentText(message)
-                    .setAutoCancel(true)
-                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                    .setContentIntent(pendingIntent);
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify((int) Calendar.getInstance().getTimeInMillis() /* ID of notification */, notificationBuilder.build());
+        Intent intent = new Intent(this, NotificationAlertActivity.class);
+        intent.putExtra(CommonIntent.typeKey, type);
+        intent.putExtra(CommonIntent.rideId, rideid);
+        intent.putExtra(CommonIntent.gender, gender);
+        intent.putExtra(CommonIntent.message, message);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                (int) Calendar.getInstance().getTimeInMillis() /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.male_pilot_icon)
+                .setContentTitle(getResources().getString(R.string.app_name))
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setContentIntent(pendingIntent);
+
+        mBuilder.setAutoCancel(true);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify((int) Calendar.getInstance().getTimeInMillis() /* ID of notification */, mBuilder.build());
 //        }
 
     }

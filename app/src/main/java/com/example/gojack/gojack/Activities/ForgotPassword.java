@@ -9,7 +9,14 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
+import com.example.gojack.gojack.HelperClasses.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.Validation;
+import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
+import com.example.gojack.gojack.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by IM0033 on 8/2/2016.
@@ -30,12 +37,27 @@ public class ForgotPassword extends CommonActionBar {
         forgotButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!userNameEditText.getText().toString().equalsIgnoreCase("")) {
+                if (Validation.isMobileNoValid(userNameEditText.getText().toString())) {
                     userNameEditText.setError(null);
-                    startActivity(new Intent(ForgotPassword.this, CodeConfirmation.class));
+                    new WebServiceClasses(ForgotPassword.this,"ForgotPassword").forgotPassword(userNameEditText.getText().toString(), new VolleyResponseListerner() {
+                        @Override
+                        public void onResponse(JSONObject response) throws JSONException {
+                            if (response.getString("status").equalsIgnoreCase("1")) {
+                                startActivity(new Intent(getApplicationContext(), CodeConfirmation.class).putExtra("customerId", response.getString("userid")));
+                            } else {
+                                CommonMethods.toast(ForgotPassword.this, response.getString("message"));
+                            }
+                        }
+
+                        @Override
+                        public void onError(String message, String title) {
+
+                        }
+                    });
+
                 } else {
                     userNameEditText.requestFocus();
-                    userNameEditText.setError("Enter 10 digit mobile number");
+                    userNameEditText.setError(Validation.mobileNoError);
                 }
 
             }

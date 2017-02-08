@@ -15,7 +15,6 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
 
-
     <permission
         android:name="com.example.gojack.gojack.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -36,7 +35,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Activities.Splash"
-            android:excludeFromRecents="true">
+            android:excludeFromRecents="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -88,7 +87,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.NotificationAlertActivity"
-            android:excludeFromRecents="true"
             android:label=" "
             android:launchMode="singleInstance"
             android:theme="@style/Theme.AppCompat.Dialog" />
@@ -142,6 +140,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

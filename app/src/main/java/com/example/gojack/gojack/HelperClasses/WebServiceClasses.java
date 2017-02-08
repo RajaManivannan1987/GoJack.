@@ -2,6 +2,7 @@ package com.example.gojack.gojack.HelperClasses;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import com.example.gojack.gojack.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.ServiceClass.GPSTracker;
@@ -419,6 +420,68 @@ public class WebServiceClasses {
             @Override
             public void onError(String message, String title) {
                 listerner.onError(message, title);
+            }
+        });
+    }
+    public void forgotPassword(String username, final VolleyResponseListerner listener) {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("username", username);
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        volleyClass.volleyPostData(GoJackServerUrls.FORGOTPASSWORD, jsonObject, (Activity) context, new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+                listener.onResponse(response);
+            }
+
+            @Override
+            public void onError(String message, String title) {
+                listener.onError(message, title);
+            }
+        });
+    }
+
+    public void validateOtp(String customerId, String otp, final VolleyResponseListerner listener) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("driverid", customerId);
+            jsonObject.put("otp", otp);
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        volleyClass.volleyPostData(GoJackServerUrls.VALIDATEOTP, jsonObject, (Activity) context, new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+                listener.onResponse(response);
+            }
+
+            @Override
+            public void onError(String message, String title) {
+                listener.onError(message, title);
+            }
+        });
+    }
+
+    public void changePassword(String customerId, String password, final VolleyResponseListerner listener) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("driverid", customerId);
+            jsonObject.put("password", password);
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        volleyClass.volleyPostData(GoJackServerUrls.UPDATEPASSWORD, jsonObject, (Activity) context, new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+                listener.onResponse(response);
+            }
+
+            @Override
+            public void onError(String message, String title) {
+                listener.onError(message, title);
             }
         });
     }

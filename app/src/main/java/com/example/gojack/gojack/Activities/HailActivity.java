@@ -76,7 +76,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
     protected Boolean mRequestingLocationUpdates;
     private LatLng currentLocation, toAddressLatLng;
     private PrefManager prefManager;
-    private String currentLat, currentLong, toLat, toLang, responseObject, ridetype, rideid, toAddress;
+    private String currentLat, currentLong, toLat, toLang, responseObject, ridetype, rideid, toAddress, rideStatus = "0";
     private SwipeButton startTripButton, endTripButton;
     private TextView hailOnTripTextView;
     private ImageView hailDirectionButton;
@@ -98,7 +98,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
         prefManager = PrefManager.getPrefManager(HailActivity.this);
         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-        autocompleteFragment.setHint("Choose your destination...");
+        autocompleteFragment.setHint("Enter your destination...");
         autocompleteFragment.getView().setBackground(getResources().getDrawable(R.drawable.background_edit_text));
         autocompleteFragment.setOnPlaceSelectedListener(this);
 
@@ -116,7 +116,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                     String lang = String.valueOf(toAddressLatLng.longitude);
                     CommonMethods.locationDirection(HailActivity.this, lat, lang);
                 } else {
-                    CommonMethods.toast(HailActivity.this, "Choose your destination");
+                    CommonMethods.toast(HailActivity.this, "Enter your destination");
                 }
             }
         });
@@ -131,9 +131,12 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                             if (response.getString("status").equalsIgnoreCase("1")) {
                                 rideid = response.getString("rideid");
                                 ridetype = response.getString("ridetype");
+                                rideStatus = response.getString("status");
                                 //  CommonMethods.toast(HailActivity.this, response.getString("message"));
                                 // flag = true;
-                                setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender());
+                                if (mCurrentLocation != null) {
+                                    setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender());
+                                }
                                 startTripButton.setVisibility(View.GONE);
                                 autocompleteFragment.getView().setVisibility(View.GONE);
                                 endTripButton.setVisibility(View.VISIBLE);
@@ -248,19 +251,19 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
         if (marker != null) {
             marker.remove();
         }
-        LatLng ll = new LatLng(currentLocation.latitude, currentLocation.longitude);
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 17);
+        //LatLng ll = new LatLng(currentLocation.latitude, currentLocation.longitude);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLocation, 17);
         hailPageMap.animateCamera(update);
         if (genderType.startsWith("male")) {
             drawable = R.drawable.male_pilot_icon;
         } else {
             drawable = R.drawable.female_pilot_icon;
         }
-        LatLng position = new LatLng(currentLocation.latitude, currentLocation.longitude);
-        markerOptionsmylocaiton = new MarkerOptions().position(position).icon(BitmapDescriptorFactory.fromResource(drawable)).title("").anchor(0.5f, 1f);
+//        LatLng position = new LatLng(currentLocation.latitude, currentLocation.longitude);
+        markerOptionsmylocaiton = new MarkerOptions().position(currentLocation).icon(BitmapDescriptorFactory.fromResource(drawable)).title("").anchor(0.5f, 1f);
         marker = hailPageMap.addMarker(markerOptionsmylocaiton);
-        LatLng latlang = new LatLng(currentLocation.latitude, currentLocation.longitude);
-        animateMarker(marker, latlang, false);
+//        LatLng latlang = new LatLng(currentLocation.latitude, currentLocation.longitude);
+        animateMarker(marker, currentLocation, false);
     }
 
     private void animateMarker(final Marker marker, final LatLng toPosition, final boolean hideMarker) {
@@ -405,5 +408,15 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
     @Override
     public void onError(Status status) {
         Log.e(TAG, "onError: Status = " + status.toString());
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (rideStatus.equalsIgnoreCase("0")) {
+            this.finish();
+            super.onBackPressed();
+        } else {
+//            startActivity(new Intent(getApplicationContext(),HailActivity.class));
+        }
     }
 }

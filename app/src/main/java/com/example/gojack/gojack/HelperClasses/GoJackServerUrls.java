@@ -27,6 +27,8 @@ public class GoJackServerUrls {
     public static String UPDATE_DELIVERY_PERSON = SERVER_URL + "deliveryperson";
     public static String HAIL_START_TRIP = SERVER_URL + "hailrequest";
     public static String HAIL_END_TRIP = SERVER_URL + "hailendrequest";
-    public static String FORGOTPASSWORD = SERVER_URL + "forgotpassword?username=";
+    public static String FORGOTPASSWORD = SERVER_URL + "forgotpasswordpilot";
+    public static String VALIDATEOTP=SERVER_URL+"validateotppilot";
+    public static String UPDATEPASSWORD=SERVER_URL+"updatepasswordpilot";
 }
 

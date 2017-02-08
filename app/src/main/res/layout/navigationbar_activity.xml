@@ -27,19 +27,35 @@
                 app:contentInsetStart="0dp"
                 app:titleTextColor="@color/colorAccent">
 
-                <ImageView
-                    android:id="@+id/navigationIcon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:padding="5dp"
-                    android:src="@drawable/menu_icon" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_gravity="center"
-                    android:padding="5dp"
-                    android:src="@drawable/gojack_logo" />
+                    <ImageView
+                        android:id="@+id/navigationIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="5dp"
+                        android:src="@drawable/menu_icon" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="?attr/actionBarSize"
+                        android:layout_gravity="center"
+                        android:padding="5dp"
+                        android:src="@drawable/gojack_logo" />
+
+                    <ImageView
+                        android:id="@+id/sosIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginRight="10dp"
+                        android:padding="3dp"
+                        android:src="@drawable/sos_icon"
+                        android:visibility="gone" />
+                </RelativeLayout>
             </android.support.v7.widget.Toolbar>
 
             <FrameLayout

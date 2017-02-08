@@ -61,7 +61,8 @@ public class VolleyClass {
         Log.d(TAG, "volleyPostData  data - " + jsonObject.toString());
         if (isOnLline()) {
             if (pDialog != null) {
-                pDialog.show();
+                if (!context.isFinishing())
+                    pDialog.show();
             }
             RequestQueue queue = Volley.newRequestQueue(context);
             JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,

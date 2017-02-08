@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.gojack.gojack.Activities.About;
 import com.example.gojack.gojack.Activities.Account;
+import com.example.gojack.gojack.Activities.EndTripDetailActivity;
 import com.example.gojack.gojack.Activities.GoOffline;
 import com.example.gojack.gojack.Activities.GoOnline;
 import com.example.gojack.gojack.Activities.Help;
@@ -29,11 +30,13 @@ import com.example.gojack.gojack.Activities.LoginActivity;
 import com.example.gojack.gojack.Activities.Settings;
 import com.example.gojack.gojack.AdapterClasses.NavigationBarAdapter;
 import com.example.gojack.gojack.HelperClasses.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.NotifyCustomerSingleton;
 import com.example.gojack.gojack.HelperClasses.PrefManager;
 import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
 import com.example.gojack.gojack.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
 import com.example.gojack.gojack.ServiceClass.LocationService;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,7 +52,7 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
     private DrawerLayout drawerLayout;
     private ListView listView;
     private TextView statusTextView;
-    private ImageView navigationIcon;
+    public ImageView navigationIcon, sosIcon;
     private NavigationBarAdapter adapter;
     private View headerView, footerView;
     //private PrefManager prefManager;
@@ -72,6 +75,7 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
         adapter = new NavigationBarAdapter(this);
         toolbar = (Toolbar) findViewById(R.id.toolBar);
         navigationIcon = (ImageView) toolbar.findViewById(R.id.navigationIcon);
+        sosIcon = (ImageView) findViewById(R.id.sosIcon);
         navigationIcon.setOnClickListener(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
@@ -119,9 +123,7 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
                     TextView textView = (TextView) view.findViewById(R.id.navigationBarListTextView);
                     switch (textView.getText().toString().trim()) {
                         case "GO OFFLINE":
-                            updatePilotStatus();
-                            stopService(setIntent(getBaseContext()));
-                            startActivity(new Intent(CommonNavigstionBar.this, GoOnline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                            checkRideStatus();
                             break;
                         case "DASHBOARD":
                             startActivity(new Intent(CommonNavigstionBar.this, GoOffline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
@@ -146,6 +148,34 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
                         drawerLayout.closeDrawer(Gravity.LEFT);
                     }
                 }
+            }
+        });
+        sosIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonMethods.callFunction(CommonNavigstionBar.this, "+91- 111-111-1111");
+            }
+        });
+    }
+
+    private void checkRideStatus() {
+        WebServiceClasses.getWebServiceClasses(CommonNavigstionBar.this, TAG).checkRideStatus(new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+//                JSONObject jsonObject = response.getJSONObject("data");
+                if (response.getString("status").equalsIgnoreCase("0")) {
+                    updatePilotStatus();
+                    stopService(setIntent(getBaseContext()));
+                    startActivity(new Intent(CommonNavigstionBar.this, GoOnline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                }  else {
+                    CommonMethods.toast(CommonNavigstionBar.this, "Ride sitll not completed so won't go to offline");
+                }
+
+            }
+
+            @Override
+            public void onError(String message, String title) {
+
             }
         });
     }
