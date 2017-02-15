@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.gojack.gojack.Activities.LoginActivity;
+import com.example.gojack.gojack.ApplicationClass.AppControler;
 import com.example.gojack.gojack.Interface.VolleyResponseListerner;
 
 import org.json.JSONException;
@@ -64,7 +65,7 @@ public class VolleyClass {
                 if (!context.isFinishing())
                     pDialog.show();
             }
-            RequestQueue queue = Volley.newRequestQueue(context);
+            //RequestQueue queue = Volley.newRequestQueue(context);
             JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
                     url, jsonObject,
                     new Response.Listener<JSONObject>() {
@@ -112,7 +113,7 @@ public class VolleyClass {
             });
             int MY_SOCKET_TIMEOUT_MS = 30000;
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            queue.add(jsonRequest);
+            AppControler.getsInstance().addToRequestQueue(jsonRequest);
         } else {
             Log.d(TAG, "volleyPostData response - No Internet");
             listerner.onError(parseError, parseErrorTitle);
@@ -123,7 +124,7 @@ public class VolleyClass {
         Log.d(TAG, "volleyPostData  url - " + url);
         Log.d(TAG, "volleyPostData  data - " + jsonObject.toString());
         if (isOnLline()) {
-            RequestQueue queue = Volley.newRequestQueue(context);
+//            RequestQueue queue = Volley.newRequestQueue(context);
             JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
                     url, jsonObject,
                     new Response.Listener<JSONObject>() {
@@ -170,7 +171,8 @@ public class VolleyClass {
             });
             int MY_SOCKET_TIMEOUT_MS = 30000;
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            queue.add(jsonRequest);
+//            queue.add(jsonRequest);
+            AppControler.getsInstance().addToRequestQueue(jsonRequest);
         } else {
             Log.d(TAG, "volleyPostData response - No Internet");
             listerner.onError(parseError, parseErrorTitle);
@@ -181,7 +183,7 @@ public class VolleyClass {
         Log.d(TAG, "volleyPostData  url - " + url);
 
         if (isOnLline()) {
-            RequestQueue queue = Volley.newRequestQueue(context);
+//            RequestQueue queue = Volley.newRequestQueue(context);
             JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
                     url,
                     new Response.Listener<JSONObject>() {
@@ -228,7 +230,8 @@ public class VolleyClass {
             });
             int MY_SOCKET_TIMEOUT_MS = 30000;
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            queue.add(jsonRequest);
+//            queue.add(jsonRequest);
+            AppControler.getsInstance().addToRequestQueue(jsonRequest);
         } else {
             Log.d(TAG, "volleyPostData response - No Internet");
             listerner.onError(parseError, parseErrorTitle);
@@ -239,7 +242,7 @@ public class VolleyClass {
         Log.d(TAG, "volleyPostData  url - " + url);
         Log.d(TAG, "volleyPostData  data - " + jsonObject.toString());
         if (isOnLline()) {
-            RequestQueue queue = Volley.newRequestQueue(context);
+//            RequestQueue queue = Volley.newRequestQueue(context);
             JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
                     url, jsonObject,
                     new Response.Listener<JSONObject>() {
@@ -276,7 +279,8 @@ public class VolleyClass {
             });
             int MY_SOCKET_TIMEOUT_MS = 30000;
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            queue.add(jsonRequest);
+//            queue.add(jsonRequest);
+            AppControler.getsInstance().addToRequestQueue(jsonRequest);
         } else {
             Log.d(TAG, "volleyPostData response - No Internet");
             listerner.onError(parseError, parseErrorTitle);

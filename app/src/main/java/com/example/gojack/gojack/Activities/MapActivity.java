@@ -42,6 +42,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
@@ -56,15 +58,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     Marker marker;
     GoogleApiClient mGoogleApiClient;
     MarkerOptions options;
-    Location prevLoc;
-    Location newLoc;
-    float bearing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps2);
         initMap();
+
     }
 
     private void initMap() {
