@@ -1,5 +1,6 @@
 package com.example.gojack.gojack.Activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
 import com.example.gojack.gojack.GCMClasses.RegistrationIntentService;
+import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.PrefManager;
 import com.example.gojack.gojack.HelperClasses.Validation;
@@ -66,7 +68,7 @@ public class ChangePassword extends CommonActionBar {
 
                         @Override
                         public void onError(String message, String title) {
-
+                            AlertDialogManager.showAlertDialog(ChangePassword.this,title,message,false);
                         }
                     });
                     startActivity(new Intent(ChangePassword.this, GoOffline.class));

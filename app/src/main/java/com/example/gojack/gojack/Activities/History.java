@@ -1,5 +1,6 @@
 package com.example.gojack.gojack.Activities;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.gojack.gojack.AdapterClasses.HistoryAdapter;
 import com.example.gojack.gojack.CommonActivityClasses.CommonNavigstionBar;
+import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
+import com.example.gojack.gojack.HelperClasses.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
 import com.example.gojack.gojack.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.ModelClasses.HistoryModel;
@@ -51,9 +54,14 @@ public class History extends CommonNavigstionBar {
     }
 
     private void getHistoryList() {
+        final ProgressDialog progressBar = new ProgressDialog(History.this);
+        progressBar.setMessage("Fetch data...");
+        progressBar.setCancelable(false);
+        progressBar.show();
         WebServiceClasses.getWebServiceClasses(History.this, TAG).getHistoryList(new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
+                progressBar.dismiss();
                 historyLlist.clear();
                 if (response.getString("status").equalsIgnoreCase("1")) {
                     JSONArray jsonArray = response.getJSONArray("data");
@@ -74,7 +82,8 @@ public class History extends CommonNavigstionBar {
 
             @Override
             public void onError(String message, String title) {
-
+                progressBar.dismiss();
+                AlertDialogManager.showAlertDialog(History.this,title,message,false);
             }
         });
     }

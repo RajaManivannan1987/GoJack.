@@ -8,9 +8,13 @@ import com.example.gojack.gojack.Interface.ActionCompleted;
 public class NotifyCustomerSingleton {
     private ActionCompleted actionCompleted;
     private static NotifyCustomerSingleton completedSingleton = new NotifyCustomerSingleton();
+    private  static NotifyCustomerSingleton cancelNotify=new NotifyCustomerSingleton();
 
     public static NotifyCustomerSingleton actionCompletedSingleton() {
         return completedSingleton;
+    }
+    public static  NotifyCustomerSingleton actionCanceled(){
+        return cancelNotify;
     }
 
     public void setListener(ActionCompleted completed) {

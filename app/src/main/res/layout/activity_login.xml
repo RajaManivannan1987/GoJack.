@@ -31,6 +31,7 @@
                     android:id="@+id/userNameEditText"
                     style="@style/editText"
                     android:drawableLeft="@drawable/user_icon"
+                    android:singleLine="true"
                     android:drawablePadding="10dp"
                     android:hint="@string/username"
                     android:maxLines="1" />
@@ -44,6 +45,8 @@
                     android:drawableLeft="@drawable/lock_icon"
                     android:drawablePadding="10dp"
                     android:hint="@string/password"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:inputType="textPassword" />
             </android.support.design.widget.TextInputLayout>
 

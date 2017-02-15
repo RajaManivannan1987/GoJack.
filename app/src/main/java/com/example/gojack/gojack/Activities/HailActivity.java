@@ -1,6 +1,8 @@
 package com.example.gojack.gojack.Activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -8,6 +10,9 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 
+import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
+import com.example.gojack.gojack.HelperClasses.CommonIntent;
+import com.example.gojack.gojack.HelperClasses.NotifyCustomerSingleton;
 import com.example.gojack.gojack.HelperClasses.PrefManager;
 import com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton;
 import com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButtonCustomItems;
@@ -21,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -76,7 +82,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
     protected Boolean mRequestingLocationUpdates;
     private LatLng currentLocation, toAddressLatLng;
     private PrefManager prefManager;
-    private String currentLat, currentLong, toLat, toLang, responseObject, ridetype, rideid, toAddress, rideStatus = "0";
+    private String currentLat, currentLong, toLat, toLang, responseObject, ridetype, rideid, toAddress, rideStatus = "0", tripStatus = "0";
     private SwipeButton startTripButton, endTripButton;
     private TextView hailOnTripTextView;
     private ImageView hailDirectionButton;
@@ -123,34 +129,47 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
         SwipeButtonCustomItems startSwipeButton = new SwipeButtonCustomItems() {
             @Override
             public void onSwipeConfirm() {
+                ProgressDialog progressBar = new ProgressDialog(HailActivity.this);
+                progressBar.setMessage("fetch address...");
+                progressBar.setCancelable(false);
+                progressBar.show();
                 String address = CommonMethods.getMarkerMovedAddress(HailActivity.this, new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude()));
-                WebServiceClasses.getWebServiceClasses(HailActivity.this, TAG).hailStartTrip(address, new VolleyResponseListerner() {
-                    @Override
-                    public void onResponse(JSONObject response) throws JSONException {
-                        if (response.getString("token_status").equalsIgnoreCase("1")) {
-                            if (response.getString("status").equalsIgnoreCase("1")) {
-                                rideid = response.getString("rideid");
-                                ridetype = response.getString("ridetype");
-                                rideStatus = response.getString("status");
-                                //  CommonMethods.toast(HailActivity.this, response.getString("message"));
-                                // flag = true;
-                                if (mCurrentLocation != null) {
-                                    setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender());
-                                }
-                                startTripButton.setVisibility(View.GONE);
-                                autocompleteFragment.getView().setVisibility(View.GONE);
-                                endTripButton.setVisibility(View.VISIBLE);
-                                hailOnTripTextView.setVisibility(View.VISIBLE);
+                if (!address.equalsIgnoreCase("")) {
+                    progressBar.dismiss();
+                    WebServiceClasses.getWebServiceClasses(HailActivity.this, TAG).hailStartTrip(address, new VolleyResponseListerner() {
+                        @Override
+                        public void onResponse(JSONObject response) throws JSONException {
+                            if (response.getString("token_status").equalsIgnoreCase("1")) {
+                                if (response.getString("status").equalsIgnoreCase("1")) {
+                                    CommonMethods.toast(HailActivity.this, response.getString("message"));
+                                    rideid = response.getString("rideid");
+                                    ridetype = response.getString("ridetype");
+                                    PreferenceManager.getDefaultSharedPreferences(HailActivity.this).edit().putString(CommonIntent.rideId, rideid).commit();
+                                    PreferenceManager.getDefaultSharedPreferences(HailActivity.this).edit().putString(CommonIntent.rideType, ridetype).commit();
+                                    rideStatus = response.getString("status");
+                                    tripStatus = "2";
+                                    //  CommonMethods.toast(HailActivity.this, response.getString("message"));
+                                    // flag = true;
+                                    if (mCurrentLocation != null) {
+                                        setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender());
+                                    }
+                                    startTripButton.setVisibility(View.GONE);
+                                    if (autocompleteFragment.getView().getVisibility() == View.VISIBLE) {
+                                        autocompleteFragment.getView().setVisibility(View.GONE);
+                                    }
+                                    endTripButton.setVisibility(View.VISIBLE);
+                                    hailOnTripTextView.setVisibility(View.VISIBLE);
 
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onError(String message, String title) {
+                        @Override
+                        public void onError(String message, String title) {
 
-                    }
-                });
+                        }
+                    });
+                }
             }
         };
         startSwipeButton.setButtonPressText(">> Slide to Start Trip >>")
@@ -170,29 +189,40 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
 //                if (ridetype.equalsIgnoreCase("courier")) {
 //                    showCourireAlertBox();
 //                }
+                ProgressDialog progressBar = new ProgressDialog(HailActivity.this);
+                progressBar.setMessage("fetch address...");
+                progressBar.setCancelable(false);
+                progressBar.show();
                 String address = CommonMethods.getMarkerMovedAddress(HailActivity.this, new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude()));
+                if (!address.equalsIgnoreCase("")) {
+                    progressBar.dismiss();
+                    final String RideId = PreferenceManager.getDefaultSharedPreferences(HailActivity.this).getString(CommonIntent.rideId, "0");
+                    final String RideType = PreferenceManager.getDefaultSharedPreferences(HailActivity.this).getString(CommonIntent.rideType, "ride");
 
-                WebServiceClasses.getWebServiceClasses(HailActivity.this, TAG).hideEndTrip(rideid, currentLat, currentLong, address, new VolleyResponseListerner() {
-                    @Override
-                    public void onResponse(JSONObject response) throws JSONException {
+                    WebServiceClasses.getWebServiceClasses(HailActivity.this, TAG).hideEndTrip(RideId, currentLat, currentLong, address, new VolleyResponseListerner() {
+                        @Override
+                        public void onResponse(JSONObject response) throws JSONException {
+                            tripStatus = "0";
+                            CommonMethods.toast(HailActivity.this, "Trip completed");
 //                        if (response.getString("status").equalsIgnoreCase("1")) {
 //                            CommonMethods.toast(HailActivity.this, response.getString("message"));
 //                            JSONObject jsonObject = response.getJSONObject("data");
 //                        responseObject = response.toString();
-                        if (!ridetype.equalsIgnoreCase("courier")) {
-                            Intent i = new Intent(HailActivity.this, EndTripDetailActivity.class);
-                            i.putExtra("rideId", rideid);
-                            i.putExtra("EndTrip", response.toString());
-                            startActivity(i);
+                            if (!RideType.equalsIgnoreCase("courier")) {
+                                Intent i = new Intent(HailActivity.this, EndTripDetailActivity.class);
+                                i.putExtra("rideId", RideId);
+                                i.putExtra("EndTrip", response.toString());
+                                startActivity(i);
+                            }
                         }
-                    }
 //                    }
 
-                    @Override
-                    public void onError(String message, String title) {
-
-                    }
-                });
+                        @Override
+                        public void onError(String message, String title) {
+                            AlertDialogManager.showAlertDialog(HailActivity.this,title,message,false);
+                        }
+                    });
+                }
             }
 
         };
@@ -338,6 +368,36 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
     protected void onResume() {
         super.onResume();
         checkBuildPermission();
+        checkRideStatus();
+    }
+
+    private void checkRideStatus() {
+        WebServiceClasses.getWebServiceClasses(HailActivity.this, TAG).checkRideStatus(new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+                JSONObject jsonObject = response.getJSONObject("data");
+                if (response.getString("status").equalsIgnoreCase("1")) {
+                    Log.d("status", "1");
+                } else if (response.getString("status").equalsIgnoreCase("2")) {
+                    tripStatus = response.getString("status");
+                    startTripButton.setVisibility(View.GONE);
+                    autocompleteFragment.getView().setVisibility(View.GONE);
+                    endTripButton.setVisibility(View.VISIBLE);
+                    hailOnTripTextView.setVisibility(View.VISIBLE);
+                } else if (response.getString("status").equalsIgnoreCase("3")) {
+                    Log.d("status", "3");
+
+                } else {
+
+                }
+
+            }
+
+            @Override
+            public void onError(String message, String title) {
+                AlertDialogManager.showAlertDialog(HailActivity.this,title,message,false);
+            }
+        });
     }
 
     @Override
@@ -412,11 +472,16 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
 
     @Override
     public void onBackPressed() {
-        if (rideStatus.equalsIgnoreCase("0")) {
+        if (tripStatus.equalsIgnoreCase("0")) {
             this.finish();
             super.onBackPressed();
-        } else {
+//        } else if (tripStatus.equalsIgnoreCase("0")) {
+//            this.finish();
+//            super.onBackPressed();
 //            startActivity(new Intent(getApplicationContext(),HailActivity.class));
+
+        } else {
+            CommonMethods.toast(HailActivity.this, "Ride sitll not completed so won't go to back");
         }
     }
 }

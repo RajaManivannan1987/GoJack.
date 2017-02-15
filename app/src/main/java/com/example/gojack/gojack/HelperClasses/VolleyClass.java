@@ -38,7 +38,7 @@ public class VolleyClass {
     String timeout = "Response timed out – please try again.";
     String authorizationFailed = "Authorization failed – please try again.";
     String serverNotResponding = "Server not responding – please try again.";
-    String parseError = "Data not received from server – please try again.";
+    String parseError = "Data not received from server – please check your network connection.";
 
     String networkErrorTitle = "Network error";
     String poorNetworkTitle = "Poor Network Connection";

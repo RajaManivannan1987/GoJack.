@@ -3,11 +3,13 @@ package com.example.gojack.gojack.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.gojack.gojack.GCMClasses.RegistrationIntentService;
+import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.PrefManager;
 import com.example.gojack.gojack.HelperClasses.Validation;
@@ -23,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     private LoginActivity activity = LoginActivity.this;
     private EditText userName, password;
     private Button submitButton;
+    private String MobilePattern = "[0-9]{10}";
     // private WebServiceClasses webServiceClasses;
     //private PrefManager prefManager;
 
@@ -61,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginValidate() {
-        if (Validation.isUserNameValid(userName.getText().toString())) {
+        if (Validation.emailPhoneValidation(userName.getText().toString()).equalsIgnoreCase("email") || Validation.emailPhoneValidation(userName.getText().toString()).equalsIgnoreCase("phone")) {
             userName.setError(null);
             if (Validation.isPasswordValid(password.getText().toString())) {
                 password.setError(null);
@@ -71,13 +74,42 @@ public class LoginActivity extends AppCompatActivity {
                 password.requestFocus();
             }
         } else {
-            userName.setError(Validation.userNameError);
+            userName.setError(Validation.emailPhoneValidation(userName.getText().toString()));
             userName.requestFocus();
         }
+   /*     if (userName.getInputType() == InputType.TYPE_CLASS_PHONE) {
+            if (userName.getText().toString().matches(MobilePattern)) {
+                userName.setError(null);
+                if (Validation.isPasswordValid(password.getText().toString())) {
+                    password.setError(null);
+                    login();
+                } else {
+                    password.setError(Validation.passwordError);
+                    password.requestFocus();
+                }
+            } else {
+                userName.setError(Validation.userNameMobileNoError);
+                userName.requestFocus();
+            }
+        } else {
+            if (Validation.isUserNameValid(userName.getText().toString())) {
+                userName.setError(null);
+                if (Validation.isPasswordValid(password.getText().toString())) {
+                    password.setError(null);
+                    login();
+                } else {
+                    password.setError(Validation.passwordError);
+                    password.requestFocus();
+                }
+            } else {
+                userName.setError(Validation.userNameError);
+                userName.requestFocus();
+            }
+        }*/
     }
 
     private void login() {
-        WebServiceClasses.getWebServiceClasses(LoginActivity.this, TAG).login(LoginActivity.this,userName.getText().toString().trim(), password.getText().toString().trim(), new VolleyResponseListerner() {
+        WebServiceClasses.getWebServiceClasses(LoginActivity.this, TAG).login(LoginActivity.this, userName.getText().toString().trim(), password.getText().toString().trim(), new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
                 if (response.getString("status").equalsIgnoreCase("1")) {
@@ -87,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                     JSONObject vehicleDetail = jObject.getJSONObject("Vehicle");
                     PrefManager.getPrefManager(LoginActivity.this).setVehileDetails(vehicleDetail.getString("vehicle_make"), vehicleDetail.getString("vehicle_model"), vehicleDetail.getString("vehicle_registration_number"), vehicleDetail.getString("bike_photo"), vehicleDetail.getString("balance_status"), vehicleDetail.getString("balance_message"));
                     startService(new Intent(LoginActivity.this, RegistrationIntentService.class));
-                    startActivity(new Intent(activity, GoOnline.class));
+                    startActivity(new Intent(activity, GoOnline.class).addCategory(Intent.CATEGORY_HOME).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
                 } else {
                     CommonMethods.toast(LoginActivity.this, response.getString("message"));
@@ -96,8 +128,17 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(String message, String title) {
-
+                AlertDialogManager.showAlertDialog(LoginActivity.this,title,message,false);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
     }
 }

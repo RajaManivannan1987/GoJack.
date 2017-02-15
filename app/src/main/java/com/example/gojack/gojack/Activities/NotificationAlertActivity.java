@@ -1,6 +1,8 @@
 package com.example.gojack.gojack.Activities;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.gojack.gojack.HelperClasses.ActionCompletedSingleton;
+import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.CommonIntent;
 import com.example.gojack.gojack.HelperClasses.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.NotifyCustomerSingleton;
@@ -36,12 +39,14 @@ public class NotificationAlertActivity extends Activity {
     private LinearLayout buttonMainLayout;
     private TextView messageTextView;
     //private PrefManager prefManager;
+    NotificationManager nMgr ;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_alert);
+        nMgr = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         // prefManager = new PrefManager(NotificationAlertActivity.this);
         messageTextView = (TextView) findViewById(R.id.messageTextView);
         // webServiceClasses = new WebServiceClasses(NotificationAlertActivity.this, TAG);
@@ -64,12 +69,15 @@ public class NotificationAlertActivity extends Activity {
                 buttonMainLayout.setVisibility(View.GONE);
 //                ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted();
                 NotifyCustomerSingleton.actionCompletedSingleton().ActionCompleted();
+//                finish();
             } else if (notifiyType.startsWith("ridecancelledbycustomer")) {
                 notificationAcceptButton.setText("Ok");
                 notificationCancelButton.setVisibility(View.GONE);
+//                NotifyCustomerSingleton.actionCanceled().ActionCompleted();
             } else {
                 notificationAcceptButton.setText("Ok");
                 notificationCancelButton.setVisibility(View.GONE);
+//                nMgr.cancelAll();
             }
 
         }
@@ -83,6 +91,7 @@ public class NotificationAlertActivity extends Activity {
             @Override
             public void onClick(View view) {
                 acceptAndCancelRide("0");
+                nMgr.cancelAll();
             }
         });
         notifyCustomerButton.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +100,7 @@ public class NotificationAlertActivity extends Activity {
                 WebServiceClasses.getWebServiceClasses(NotificationAlertActivity.this, TAG).notifyCustomer(rideId, new VolleyResponseListerner() {
                     @Override
                     public void onResponse(JSONObject response) throws JSONException {
+                        nMgr.cancelAll();
                         if (response.getString("token_status").equalsIgnoreCase("1")) {
 //                            ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted();
                             NotifyCustomerSingleton.actionCompletedSingleton().ActionCompleted();
@@ -104,7 +114,7 @@ public class NotificationAlertActivity extends Activity {
 
                     @Override
                     public void onError(String message, String title) {
-
+                        AlertDialogManager.showAlertDialog(NotificationAlertActivity.this,title,message,false);
                     }
                 });
 
@@ -113,6 +123,7 @@ public class NotificationAlertActivity extends Activity {
         notificationAcceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                nMgr.cancelAll();
                 if (notifiyType.startsWith("riderequest")) {
                     acceptAndCancelRide("1");
                 } else if (notifiyType.startsWith("ridecancelledbycustomer")) {
@@ -131,7 +142,7 @@ public class NotificationAlertActivity extends Activity {
             public void onResponse(JSONObject response) throws JSONException {
                 if (response.getString("token_status").equalsIgnoreCase("1")) {
                     if (response.getString("status").equalsIgnoreCase("1")) {
-                        /*ActionCompletedSingleton.getHideHailSingleton().ActionCompleted();*/
+//                        ActionCompletedSingleton.getHideHailSingleton().ActionCompleted();
                         JSONObject jsonObject = response.getJSONObject("data");
                         Intent i = new Intent(getApplicationContext(), GoOffline.class);
                         i.putExtra("riderName", jsonObject.getString("name"));
@@ -165,7 +176,7 @@ public class NotificationAlertActivity extends Activity {
 
             @Override
             public void onError(String message, String title) {
-
+                AlertDialogManager.showAlertDialog(NotificationAlertActivity.this,title,message,false);
             }
         });
     }

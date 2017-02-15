@@ -131,6 +131,7 @@ public class CommonMethods extends AppCompatActivity {
                     stringBuilder.append(returnedAddress.getAddressLine(i));
                 }
                 adres = stringBuilder.toString();
+                Log.d("address",adres);
             }
         } catch (Exception e) {
             e.printStackTrace();

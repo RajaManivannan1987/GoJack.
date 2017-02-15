@@ -1,11 +1,14 @@
 package com.example.gojack.gojack.Activities;
 
+import android.app.ProgressDialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
+import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
+import com.example.gojack.gojack.HelperClasses.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
 import com.example.gojack.gojack.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
@@ -35,10 +38,15 @@ public class HistoryDetails extends CommonActionBar {
     }
 
     private void loadData(String rideId) {
+        final ProgressDialog progressBar = new ProgressDialog(HistoryDetails.this);
+        progressBar.setMessage("Fetch data...");
+        progressBar.setCancelable(false);
+        progressBar.show();
         //webServiceClasses = new WebServiceClasses(activity, TAG);
         WebServiceClasses.getWebServiceClasses(HistoryDetails.this, TAG).getHistoryDetails(rideId, new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
+                progressBar.dismiss();
                 if (response.getString("status").equalsIgnoreCase("1")) {
                     JSONObject jsonObject = response.getJSONObject("data");
                     detailFromLocationTextView.setText(jsonObject.getString("starting_address"));
@@ -51,7 +59,8 @@ public class HistoryDetails extends CommonActionBar {
 
             @Override
             public void onError(String message, String title) {
-
+                progressBar.dismiss();
+                AlertDialogManager.showAlertDialog(HistoryDetails.this,title,message,false);
             }
         });
     }

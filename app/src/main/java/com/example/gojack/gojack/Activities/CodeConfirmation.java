@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
+import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.GoJackServerUrls;
 import com.example.gojack.gojack.HelperClasses.ImcomeSmsReceiver;
@@ -59,7 +60,7 @@ public class CodeConfirmation extends CommonActionBar {
 
                         @Override
                         public void onError(String message, String title) {
-
+                            AlertDialogManager.showAlertDialog(CodeConfirmation.this,title,message,false);
                         }
                     });
                 } else {

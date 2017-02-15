@@ -123,10 +123,11 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
                     TextView textView = (TextView) view.findViewById(R.id.navigationBarListTextView);
                     switch (textView.getText().toString().trim()) {
                         case "GO OFFLINE":
-                            checkRideStatus();
+                            checkRideStatus("goOffline");
                             break;
                         case "DASHBOARD":
-                            startActivity(new Intent(CommonNavigstionBar.this, GoOffline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                            checkRideStatus("dashboard");
+//                            startActivity(new Intent(CommonNavigstionBar.this, GoOffline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                             break;
                         case "HISTORY":
                             startActivity(new Intent(CommonNavigstionBar.this, History.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
@@ -158,7 +159,7 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private void checkRideStatus() {
+    private void checkRideStatus(final String className) {
         WebServiceClasses.getWebServiceClasses(CommonNavigstionBar.this, TAG).checkRideStatus(new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
@@ -166,7 +167,11 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
                 if (response.getString("status").equalsIgnoreCase("0")) {
                     updatePilotStatus();
                     stopService(setIntent(getBaseContext()));
-                    startActivity(new Intent(CommonNavigstionBar.this, GoOnline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                    if (className.equalsIgnoreCase("goOffline")){
+                        startActivity(new Intent(CommonNavigstionBar.this, GoOnline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                    }else {
+                        startActivity(new Intent(CommonNavigstionBar.this, GoOffline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                    }
                 }  else {
                     CommonMethods.toast(CommonNavigstionBar.this, "Ride sitll not completed so won't go to offline");
                 }

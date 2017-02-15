@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonNavigstionBar;
+import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.PrefManager;
 import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
@@ -39,12 +40,13 @@ public class Settings extends CommonNavigstionBar {
                             stopService(setIntent(getBaseContext()));
                             PrefManager.getPrefManager(Settings.this).logout();
                             startActivity(new Intent(Settings.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            finish();
                         }
                     }
 
                     @Override
                     public void onError(String message, String title) {
-
+                        AlertDialogManager.showAlertDialog(Settings.this,title,message,false);
                     }
                 });
             }

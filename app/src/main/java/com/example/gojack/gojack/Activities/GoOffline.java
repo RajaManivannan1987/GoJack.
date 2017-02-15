@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.example.gojack.gojack.ApplicationClass.AppControler;
 import com.example.gojack.gojack.CommonActivityClasses.CommonNavigstionBar;
 import com.example.gojack.gojack.HelperClasses.ActionCompletedSingleton;
+import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.CommonIntent;
 import com.example.gojack.gojack.HelperClasses.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.GoJackServerUrls;
@@ -86,7 +87,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
     private TextView fromAddressTextView, riderNameTextView, showStartTrip, twoAddressTextView, pilotCancelTripTextView;
     private Spinner cancelSpinner;
     private String rideId, start_lat, start_lang, end_lat, end_lang, p_num, riderGender, currentLat, currentLong, responseObject;
-    private static String ridetype;
+    private static String RideType, ridetype;
     private boolean flag = false;
     private List<CancelReason> cancelReasonsList = new ArrayList<CancelReason>();
     private List<String> cancelReasonsListString = new ArrayList<String>();
@@ -114,7 +115,14 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
         findViewById();
         mRequestingLocationUpdates = false;
         initMap();
-
+        if (getIntent().getExtras() != null) {
+            if (showlayout.getVisibility() == View.GONE) {
+                HailButton.setVisibility(View.GONE);
+                showRiderDetails();
+            }
+        } else {
+            checkRideStatus();
+        }
 
         onClickEvents();
 
@@ -125,6 +133,13 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                 startTripButton.setClickable(true);
             }
         });
+       /* NotifyCustomerSingleton.actionCanceled().setListener(new ActionCompleted() {
+            @Override
+            public void actionCompleted() {
+                HailButton.setVisibility(View.VISIBLE);
+                showlayout.setVisibility(View.GONE);
+            }
+        });*/
         ActionCompletedSingleton.getHideHailSingleton().setListener(new ActionCompleted() {
             @Override
             public void actionCompleted() {
@@ -136,7 +151,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
             public void actionCompleted() {
                 showlayout.setVisibility(View.GONE);
                 showStartTrip.setVisibility(View.GONE);
-
+                HailButton.setVisibility(View.VISIBLE);
                 setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "", "ActionCompletedSingleton");
             }
         });
@@ -250,31 +265,11 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
         SwipeButtonCustomItems endSwip = new SwipeButtonCustomItems() {
             @Override
             public void onSwipeConfirm() {
-                String RideType = PreferenceManager.getDefaultSharedPreferences(GoOffline.this).getString(CommonIntent.rideType, "defaultStringIfNothingFound");
+                RideType = PreferenceManager.getDefaultSharedPreferences(GoOffline.this).getString(CommonIntent.rideType, "ride");
                 if (RideType.equalsIgnoreCase("courier")) {
                     showCourireAlertBox();
                 }
-                WebServiceClasses.getWebServiceClasses(GoOffline.this, TAG).endTrip(rideId, currentLat, currentLong, ridetype, new VolleyResponseListerner() {
-                    @Override
-                    public void onResponse(JSONObject response) throws JSONException {
-                        if (response.getString("status").equalsIgnoreCase("1")) {
-                            CommonMethods.toast(GoOffline.this, response.getString("message"));
-                            JSONObject jsonObject = response.getJSONObject("data");
-                            responseObject = jsonObject.toString();
-                            if (!ridetype.equalsIgnoreCase("courier")) {
-                                Intent i = new Intent(GoOffline.this, EndTripDetailActivity.class);
-                                i.putExtra("rideId", rideId);
-                                i.putExtra("EndTrip", responseObject);
-                                startActivity(i);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(String message, String title) {
-
-                    }
-                });
+                    endTripFunction(RideType);
             }
 
         };
@@ -331,7 +326,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                                         CommonMethods.toast(GoOffline.this, response.getString("message"));
                                         showlayout.setVisibility(View.GONE);
                                         showStartTrip.setVisibility(View.GONE);
-                                        showStartTrip.setVisibility(View.GONE);
+                                        HailButton.setVisibility(View.VISIBLE);
                                         alertdialog.dismiss();
                                         setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "", "yes");
                                     }
@@ -339,7 +334,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
 
                                 @Override
                                 public void onError(String message, String title) {
-
+                                    AlertDialogManager.showAlertDialog(GoOffline.this,title,message,false);
                                 }
                             });
                         } else {
@@ -355,6 +350,30 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                 });
                 alertdialog.show();
 
+            }
+        });
+    }
+
+    private void endTripFunction(final String rideType) {
+        WebServiceClasses.getWebServiceClasses(GoOffline.this, TAG).endTrip(rideId, currentLat, currentLong, rideType, new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+                if (response.getString("status").equalsIgnoreCase("1")) {
+                    CommonMethods.toast(GoOffline.this, response.getString("message"));
+                    JSONObject jsonObject = response.getJSONObject("data");
+                    responseObject = jsonObject.toString();
+                    if (!rideType.equalsIgnoreCase("courier")) {
+                        Intent i = new Intent(GoOffline.this, EndTripDetailActivity.class);
+                        i.putExtra("RideType", rideId);
+                        i.putExtra("EndTrip", responseObject);
+                        startActivity(i);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String message, String title) {
+                AlertDialogManager.showAlertDialog(GoOffline.this,title,message,false);
             }
         });
     }
@@ -377,7 +396,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
 
             @Override
             public void onError(String message, String title) {
-
+                AlertDialogManager.showAlertDialog(GoOffline.this,title,message,false);
             }
         });
 
@@ -387,39 +406,44 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
         WebServiceClasses.getWebServiceClasses(GoOffline.this, TAG).checkRideStatus(new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
-                JSONObject jsonObject = response.getJSONObject("data");
-                if (response.getString("status").equalsIgnoreCase("1")) {
-                    HailButton.setVisibility(View.GONE);
-                    getCheckStatusValues(jsonObject, "1");
-                    NotifyCustomerSingleton.actionCompletedSingleton().ActionCompleted();
-                    //ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted();
-                } else if (response.getString("status").equalsIgnoreCase("2")) {
-                    sosIcon.setVisibility(View.VISIBLE);
-                    HailButton.setVisibility(View.GONE);
-                    getCheckStatusValues(jsonObject, "2");
-                    NotifyCustomerSingleton.actionCompletedSingleton().ActionCompleted();
-                    twoAddressTextView.setText(CommonMethods.getMarkerMovedAddress(GoOffline.this, new LatLng(Double.parseDouble(end_lat), Double.parseDouble(end_lang))));
-                    startTripButton.setVisibility(View.GONE);
-                    pilotCancelTripTextView.setVisibility(View.INVISIBLE);
-                    endTripButton.setVisibility(View.VISIBLE);
-                    showStartTrip.setVisibility(View.VISIBLE);
-                } else if (response.getString("status").equalsIgnoreCase("3")) {
-                    HailButton.setVisibility(View.GONE);
-                    Intent i = new Intent(GoOffline.this, EndTripDetailActivity.class);
-                    i.putExtra("EndTrip", jsonObject.toString());
-                    startActivity(i);
+                if (response.getString("ridetype").equalsIgnoreCase("ride")) {
+                    JSONObject jsonObject = response.getJSONObject("data");
+                    if (response.getString("status").equalsIgnoreCase("1")) {
+                        HailButton.setVisibility(View.GONE);
+                        getCheckStatusValues(jsonObject, "1");
+                        NotifyCustomerSingleton.actionCompletedSingleton().ActionCompleted();
+                        //ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted();
+                    } else if (response.getString("status").equalsIgnoreCase("2")) {
+                        sosIcon.setVisibility(View.VISIBLE);
+                        HailButton.setVisibility(View.GONE);
+                        getCheckStatusValues(jsonObject, "2");
+                        NotifyCustomerSingleton.actionCompletedSingleton().ActionCompleted();
+                        twoAddressTextView.setText(CommonMethods.getMarkerMovedAddress(GoOffline.this, new LatLng(Double.parseDouble(end_lat), Double.parseDouble(end_lang))));
+                        startTripButton.setVisibility(View.GONE);
+                        pilotCancelTripTextView.setVisibility(View.INVISIBLE);
+                        endTripButton.setVisibility(View.VISIBLE);
+                        showStartTrip.setVisibility(View.VISIBLE);
+                    } else if (response.getString("status").equalsIgnoreCase("3")) {
+                        HailButton.setVisibility(View.GONE);
+                        Intent i = new Intent(GoOffline.this, EndTripDetailActivity.class);
+                        i.putExtra("EndTrip", jsonObject.toString());
+                        startActivity(i);
+                    } else {
+                        //HailButton.setVisibility(View.VISIBLE);
+                        showlayout.setVisibility(View.GONE);
+                        showStartTrip.setVisibility(View.GONE);
+                        setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "", "checkRideStatus");
+                    }
                 } else {
-                    //HailButton.setVisibility(View.VISIBLE);
-                    showlayout.setVisibility(View.GONE);
-                    showStartTrip.setVisibility(View.GONE);
-                    setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "", "checkRideStatus");
+                    startActivity(new Intent(GoOffline.this, HailActivity.class));
                 }
+
 
             }
 
             @Override
             public void onError(String message, String title) {
-
+                AlertDialogManager.showAlertDialog(GoOffline.this,title,message,false);
             }
         });
     }
@@ -637,14 +661,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
     protected void onResume() {
         super.onResume();
         checkBuildPermission();
-        if (getIntent().getExtras() != null) {
-            if (showlayout.getVisibility() == View.GONE) {
-                HailButton.setVisibility(View.GONE);
-                showRiderDetails();
-            }
-        } else {
-            checkRideStatus();
-        }
+
       /*  if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
             startLocationUpdates();
         }*/
@@ -694,6 +711,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                     WebServiceClasses.getWebServiceClasses(GoOffline.this, "EndTripDetailActivity").deliveryPerson(rideId, personName, new VolleyResponseListerner() {
                         @Override
                         public void onResponse(JSONObject response) throws JSONException {
+                           // endTripFunction(RideType);
                             if (response.getString("token_status").equalsIgnoreCase("1")) {
                                 CommonMethods.toast(GoOffline.this, response.getString("message"));
                                 Intent i = new Intent(GoOffline.this, EndTripDetailActivity.class);
@@ -705,7 +723,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
 
                         @Override
                         public void onError(String message, String title) {
-
+                            AlertDialogManager.showAlertDialog(GoOffline.this,title,message,false);
                         }
                     });
                     alertDialog1.dismiss();

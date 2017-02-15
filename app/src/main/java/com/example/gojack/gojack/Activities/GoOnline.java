@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonNavigstionBar;
+import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.GoJackServerUrls;
 import com.example.gojack.gojack.HelperClasses.PrefManager;
@@ -20,6 +22,7 @@ import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
 import com.example.gojack.gojack.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.ModelClasses.VehicleDetails;
 import com.example.gojack.gojack.R;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +39,7 @@ public class GoOnline extends CommonNavigstionBar {
     private SwipeButton swipeButton;
     private VehicleDetails getData;
     SwipeButtonCustomItems swipeButtonCustomItems;
-    // private PrefManager prefManager;
+    private PrefManager prefManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class GoOnline extends CommonNavigstionBar {
             }
 
         }
-        // prefManager = new PrefManager(GoOnline.this);
+        prefManager = new PrefManager(GoOnline.this);
         getData = VehicleDetails.getVehicleDetails();
         loadVehicleDetails();
         bikeNameTextView.setText(PrefManager.getPrefManager(GoOnline.this).getVehicleMake());
@@ -58,7 +61,7 @@ public class GoOnline extends CommonNavigstionBar {
         bikeNoTextView.setText(PrefManager.getPrefManager(GoOnline.this).getVehicleNumber());
         balanceStatus.setText(PrefManager.getPrefManager(GoOnline.this).getBalanceMessage());
 
-        //Picasso.with(GoOnline.this).load(prefManager.getVehiclePhoto()).into(bikeImageView);
+        Picasso.with(GoOnline.this).load(prefManager.getVehiclePhoto()).into(bikeImageView);
         SwipeButtonCustomItems swipeButtonCustomItems = new SwipeButtonCustomItems() {
 
             @Override
@@ -71,7 +74,7 @@ public class GoOnline extends CommonNavigstionBar {
                 WebServiceClasses.getWebServiceClasses(GoOnline.this, TAG).updateStatus("1", new VolleyResponseListerner() {
                     @Override
                     public void onResponse(JSONObject response) throws JSONException {
-                        startActivity(new Intent(GoOnline.this, GoOffline.class));
+                        startActivity(new Intent(GoOnline.this, GoOffline.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 //                        startActivity(new Intent(GoOnline.this, MapsActivity.class));
                         finish();
 
@@ -79,7 +82,7 @@ public class GoOnline extends CommonNavigstionBar {
 
                     @Override
                     public void onError(String message, String title) {
-
+                        AlertDialogManager.showAlertDialog(GoOnline.this,title,message,false);
                     }
                 });
                 /*startActivity(new Intent(GoOnline.this, GoOffline.class));
@@ -98,6 +101,12 @@ public class GoOnline extends CommonNavigstionBar {
         if (swipeButton != null) {
             swipeButton.setSwipeButtonCustomItems(swipeButtonCustomItems);
         }
+        findViewById(R.id.pilotAccountRechargeButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonMethods.toast(GoOnline.this, "Functionality is pending");
+            }
+        });
     }
 
     @Override

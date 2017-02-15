@@ -83,6 +83,7 @@
                 android:textColor="@color/ColorGray" />
 
             <Button
+                android:id="@+id/pilotAccountRechargeButton"
                 android:layout_width="140dp"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="center"

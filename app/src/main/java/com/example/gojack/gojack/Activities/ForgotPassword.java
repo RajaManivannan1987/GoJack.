@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
+import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.Validation;
 import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
@@ -51,7 +52,7 @@ public class ForgotPassword extends CommonActionBar {
 
                         @Override
                         public void onError(String message, String title) {
-
+                            AlertDialogManager.showAlertDialog(ForgotPassword.this,title,message,false);
                         }
                     });
 

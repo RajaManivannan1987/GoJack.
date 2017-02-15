@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
+import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
 import com.example.gojack.gojack.Interface.VolleyResponseListerner;
@@ -33,7 +34,7 @@ public class EndTripDetailActivity extends CommonActionBar {
         setActionBar();
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         loadData();
-        rideId = getIntent().getExtras().getString("rideId");
+        rideId = getIntent().getExtras().getString("RideType");
         deliverySaveTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,7 +54,7 @@ public class EndTripDetailActivity extends CommonActionBar {
 
                     @Override
                     public void onError(String message, String title) {
-
+                        AlertDialogManager.showAlertDialog(EndTripDetailActivity.this,title,message,false);
                     }
                 });
             }

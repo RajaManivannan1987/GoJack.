@@ -110,9 +110,11 @@ public class GCMListener extends GcmListenerService {
                 .setContentIntent(pendingIntent);
 
         mBuilder.setAutoCancel(true);
+        mBuilder.getNotification().flags |= Notification.FLAG_AUTO_CANCEL;
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify((int) Calendar.getInstance().getTimeInMillis() /* ID of notification */, mBuilder.build());
+        notificationManager.cancel((int) Calendar.getInstance().getTimeInMillis());
 //        }
 
     }
