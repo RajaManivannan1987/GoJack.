@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,9 +38,12 @@ import com.example.gojack.gojack.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
 import com.example.gojack.gojack.ServiceClass.LocationService;
 import com.google.android.gms.maps.model.LatLng;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by IM0033 on 8/1/2016.
@@ -51,11 +55,12 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
     private FrameLayout frameLayout;
     private DrawerLayout drawerLayout;
     private ListView listView;
-    private TextView statusTextView;
+    private TextView pilotNameEditext;
     public ImageView navigationIcon, sosIcon;
+    private CircleImageView pilot_profile_image;
     private NavigationBarAdapter adapter;
     private View headerView, footerView;
-    //private PrefManager prefManager;
+    private PrefManager prefManager;
     private Switch goOfflineSwitch;
     private WebServiceClasses webServiceClasses;
 
@@ -71,25 +76,37 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigationbar_activity);
         webServiceClasses = new WebServiceClasses(CommonNavigstionBar.this, TAG);
-        //prefManager = new PrefManager(CommonNavigstionBar.this);
+        prefManager = new PrefManager(CommonNavigstionBar.this);
         adapter = new NavigationBarAdapter(this);
         toolbar = (Toolbar) findViewById(R.id.toolBar);
+        pilot_profile_image = (CircleImageView) findViewById(R.id.circleImageView);
         navigationIcon = (ImageView) toolbar.findViewById(R.id.navigationIcon);
         sosIcon = (ImageView) findViewById(R.id.sosIcon);
         navigationIcon.setOnClickListener(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
         setNavigationBar();
+        try {
+            Picasso.with(CommonNavigstionBar.this).load(prefManager.getPilotPhoto())
+                    .placeholder(R.drawable.user_icon)
+                    .error(R.drawable.user_photo_icon)
+                    .resize(250, 200).into(pilot_profile_image);
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        }
     }
 
     private void setNavigationBar() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         listView = (ListView) findViewById(R.id.actionBarViewListView);
         headerView = getLayoutInflater().inflate(R.layout.navigation_header, null, false);
-        statusTextView = (TextView) headerView.findViewById(R.id.statusTextView);
+        pilotNameEditext = (TextView) headerView.findViewById(R.id.pilotNameEditext);
+
+        pilotNameEditext.setText(prefManager.getPilotName());
         goOfflineSwitch = (Switch) headerView.findViewById(R.id.goOfflineSwitch);
         goOfflineSwitch.setOnCheckedChangeListener(this);
         //checkStatus();
+
         footerView = getLayoutInflater().inflate(R.layout.navigation_footer, null, false);
         footerView.findViewById(R.id.logoutButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,14 +182,14 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
             public void onResponse(JSONObject response) throws JSONException {
 //                JSONObject jsonObject = response.getJSONObject("data");
                 if (response.getString("status").equalsIgnoreCase("0")) {
-                    updatePilotStatus();
-                    stopService(setIntent(getBaseContext()));
-                    if (className.equalsIgnoreCase("goOffline")){
+                    if (className.equalsIgnoreCase("goOffline")) {
+                        updatePilotStatus();
+                        stopService(setIntent(getBaseContext()));
                         startActivity(new Intent(CommonNavigstionBar.this, GoOnline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-                    }else {
+                    } else {
                         startActivity(new Intent(CommonNavigstionBar.this, GoOffline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                     }
-                }  else {
+                } else {
                     CommonMethods.toast(CommonNavigstionBar.this, "Ride sitll not completed so won't go to offline");
                 }
 

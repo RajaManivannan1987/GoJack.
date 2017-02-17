@@ -141,6 +141,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                         public void onResponse(JSONObject response) throws JSONException {
                             if (response.getString("token_status").equalsIgnoreCase("1")) {
                                 if (response.getString("status").equalsIgnoreCase("1")) {
+                                    sosIcon.setVisibility(View.VISIBLE);
                                     CommonMethods.toast(HailActivity.this, response.getString("message"));
                                     rideid = response.getString("rideid");
                                     ridetype = response.getString("ridetype");
@@ -204,6 +205,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                         public void onResponse(JSONObject response) throws JSONException {
                             tripStatus = "0";
                             CommonMethods.toast(HailActivity.this, "Trip completed");
+                            sosIcon.setVisibility(View.GONE);
 //                        if (response.getString("status").equalsIgnoreCase("1")) {
 //                            CommonMethods.toast(HailActivity.this, response.getString("message"));
 //                            JSONObject jsonObject = response.getJSONObject("data");
@@ -379,6 +381,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                 if (response.getString("status").equalsIgnoreCase("1")) {
                     Log.d("status", "1");
                 } else if (response.getString("status").equalsIgnoreCase("2")) {
+                    sosIcon.setVisibility(View.VISIBLE);
                     tripStatus = response.getString("status");
                     startTripButton.setVisibility(View.GONE);
                     autocompleteFragment.getView().setVisibility(View.GONE);

@@ -17,6 +17,7 @@ public class PrefManager {
     private static final String PILOT_ID = "pilot_id";
     private static final String PILOT_TOKEN = "pilot_token";
     private static final String PILOT_NAME = "pilot_name";
+    private static final String PILOT_PHOTO = "pilot_photo";
     private static final String PILOT_LOCATION = "pilot_location";
     private static final String GENDER = "gender";
     private static final String VEHICLE_MAKE = "vehicle_make";
@@ -51,13 +52,14 @@ public class PrefManager {
         editor.commit();
     }
 
-    public void setVehileDetails(String make, String model, String num, String photo, String b_status, String b_message) {
+    public void setVehileDetails(String make, String model, String num, String photo, String b_status, String b_message, String userPhoto) {
         vehicleEditor.putString(VEHICLE_MAKE, make);
         vehicleEditor.putString(VEHICLE_MODEL, model);
         vehicleEditor.putString(VEHICLE_NUMBER, num);
         vehicleEditor.putString(VEHICLE_PHOTO, photo);
         vehicleEditor.putString(BALANCE_STATUS, b_status);
         vehicleEditor.putString(BALANCE_MESSAGE, b_message);
+        vehicleEditor.putString(PILOT_PHOTO, userPhoto);
         vehicleEditor.commit();
     }
 
@@ -67,6 +69,10 @@ public class PrefManager {
 
     public String getPilotName() {
         return preferences.getString(PILOT_NAME, "");
+    }
+
+    public String getPilotPhoto() {
+        return preferences.getString(PILOT_PHOTO, "");
     }
 
     public String getPilotToken() {

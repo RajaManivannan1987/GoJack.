@@ -117,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                     CommonMethods.toast(LoginActivity.this, response.getString("message"));
                     PrefManager.getPrefManager(LoginActivity.this).setLoginDetails(jObject.getString("token"), jObject.getString("name"), jObject.getString("ping_location"), jObject.getString("driverid"), jObject.getString("gender"));
                     JSONObject vehicleDetail = jObject.getJSONObject("Vehicle");
-                    PrefManager.getPrefManager(LoginActivity.this).setVehileDetails(vehicleDetail.getString("vehicle_make"), vehicleDetail.getString("vehicle_model"), vehicleDetail.getString("vehicle_registration_number"), vehicleDetail.getString("bike_photo"), vehicleDetail.getString("balance_status"), vehicleDetail.getString("balance_message"));
+                    PrefManager.getPrefManager(LoginActivity.this).setVehileDetails(vehicleDetail.getString("vehicle_make"), vehicleDetail.getString("vehicle_model"), vehicleDetail.getString("vehicle_registration_number"), vehicleDetail.getString("bike_photo"), vehicleDetail.getString("balance_status"), vehicleDetail.getString("balance_message"), vehicleDetail.getString("photo"));
                     startService(new Intent(LoginActivity.this, RegistrationIntentService.class));
                     startActivity(new Intent(activity, GoOnline.class).addCategory(Intent.CATEGORY_HOME).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(String message, String title) {
-                AlertDialogManager.showAlertDialog(LoginActivity.this,title,message,false);
+                AlertDialogManager.showAlertDialog(LoginActivity.this, title, message, false);
             }
         });
     }

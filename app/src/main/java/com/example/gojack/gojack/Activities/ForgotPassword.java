@@ -38,9 +38,9 @@ public class ForgotPassword extends CommonActionBar {
         forgotButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Validation.isMobileNoValid(userNameEditText.getText().toString())) {
+                if (Validation.emailPhoneValidation(userNameEditText.getText().toString()).equalsIgnoreCase("email") || Validation.emailPhoneValidation(userNameEditText.getText().toString()).equalsIgnoreCase("phone")) {
                     userNameEditText.setError(null);
-                    new WebServiceClasses(ForgotPassword.this,"ForgotPassword").forgotPassword(userNameEditText.getText().toString(), new VolleyResponseListerner() {
+                    new WebServiceClasses(ForgotPassword.this, "ForgotPassword").forgotPassword(userNameEditText.getText().toString(), new VolleyResponseListerner() {
                         @Override
                         public void onResponse(JSONObject response) throws JSONException {
                             if (response.getString("status").equalsIgnoreCase("1")) {
@@ -52,13 +52,13 @@ public class ForgotPassword extends CommonActionBar {
 
                         @Override
                         public void onError(String message, String title) {
-                            AlertDialogManager.showAlertDialog(ForgotPassword.this,title,message,false);
+                            AlertDialogManager.showAlertDialog(ForgotPassword.this, title, message, false);
                         }
                     });
 
                 } else {
                     userNameEditText.requestFocus();
-                    userNameEditText.setError(Validation.mobileNoError);
+                    userNameEditText.setError(Validation.emailPhoneValidation(userNameEditText.getText().toString()));
                 }
 
             }

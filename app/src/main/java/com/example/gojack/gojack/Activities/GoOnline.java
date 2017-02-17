@@ -60,8 +60,11 @@ public class GoOnline extends CommonNavigstionBar {
         bikeModelTextView.setText(PrefManager.getPrefManager(GoOnline.this).getVehicleModel());
         bikeNoTextView.setText(PrefManager.getPrefManager(GoOnline.this).getVehicleNumber());
         balanceStatus.setText(PrefManager.getPrefManager(GoOnline.this).getBalanceMessage());
-
-        Picasso.with(GoOnline.this).load(prefManager.getVehiclePhoto()).into(bikeImageView);
+        Picasso.with(GoOnline.this).load(prefManager.getVehiclePhoto())
+                .placeholder(R.drawable.user_icon)
+                .error(R.drawable.user_photo_icon)
+                .resize(250, 200).into(bikeImageView);
+//        Picasso.with(GoOnline.this).load(prefManager.getVehiclePhoto()).into(bikeImageView);
         SwipeButtonCustomItems swipeButtonCustomItems = new SwipeButtonCustomItems() {
 
             @Override
@@ -82,7 +85,7 @@ public class GoOnline extends CommonNavigstionBar {
 
                     @Override
                     public void onError(String message, String title) {
-                        AlertDialogManager.showAlertDialog(GoOnline.this,title,message,false);
+                        AlertDialogManager.showAlertDialog(GoOnline.this, title, message, false);
                     }
                 });
                 /*startActivity(new Intent(GoOnline.this, GoOffline.class));

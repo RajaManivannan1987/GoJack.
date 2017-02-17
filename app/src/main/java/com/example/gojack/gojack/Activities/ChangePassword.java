@@ -57,7 +57,7 @@ public class ChangePassword extends CommonActionBar {
                                 CommonMethods.toast(ChangePassword.this, response.getString("message"));
                                 PrefManager.getPrefManager(ChangePassword.this).setLoginDetails(jObject.getString("token"), jObject.getString("name"), jObject.getString("ping_location"), jObject.getString("driverid"), jObject.getString("gender"));
                                 JSONObject vehicleDetail = jObject.getJSONObject("Vehicle");
-                                PrefManager.getPrefManager(ChangePassword.this).setVehileDetails(vehicleDetail.getString("vehicle_make"), vehicleDetail.getString("vehicle_model"), vehicleDetail.getString("vehicle_registration_number"), vehicleDetail.getString("bike_photo"), vehicleDetail.getString("balance_status"), vehicleDetail.getString("balance_message"));
+                                PrefManager.getPrefManager(ChangePassword.this).setVehileDetails(vehicleDetail.getString("vehicle_make"), vehicleDetail.getString("vehicle_model"), vehicleDetail.getString("vehicle_registration_number"), vehicleDetail.getString("bike_photo"), vehicleDetail.getString("balance_status"), vehicleDetail.getString("balance_message"), vehicleDetail.getString("photo"));
                                 startService(new Intent(ChangePassword.this, RegistrationIntentService.class));
                                 startActivity(new Intent(ChangePassword.this, GoOnline.class));
                                 finish();
@@ -68,7 +68,7 @@ public class ChangePassword extends CommonActionBar {
 
                         @Override
                         public void onError(String message, String title) {
-                            AlertDialogManager.showAlertDialog(ChangePassword.this,title,message,false);
+                            AlertDialogManager.showAlertDialog(ChangePassword.this, title, message, false);
                         }
                     });
                     startActivity(new Intent(ChangePassword.this, GoOffline.class));

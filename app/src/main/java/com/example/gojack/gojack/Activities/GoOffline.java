@@ -228,6 +228,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                     public void onResponse(JSONObject response) throws JSONException {
                         if (response.getString("token_status").equalsIgnoreCase("1")) {
                             if (response.getString("status").equalsIgnoreCase("1")) {
+                                sosIcon.setVisibility(View.VISIBLE);
                                 ridetype = response.getString("ridetype");
                                 PreferenceManager.getDefaultSharedPreferences(GoOffline.this).edit().putString(CommonIntent.rideType, response.getString("ridetype")).commit();
                                 CommonMethods.toast(GoOffline.this, response.getString("message"));
@@ -269,7 +270,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                 if (RideType.equalsIgnoreCase("courier")) {
                     showCourireAlertBox();
                 }
-                    endTripFunction(RideType);
+                endTripFunction(RideType);
             }
 
         };
@@ -334,7 +335,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
 
                                 @Override
                                 public void onError(String message, String title) {
-                                    AlertDialogManager.showAlertDialog(GoOffline.this,title,message,false);
+                                    AlertDialogManager.showAlertDialog(GoOffline.this, title, message, false);
                                 }
                             });
                         } else {
@@ -362,6 +363,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                     CommonMethods.toast(GoOffline.this, response.getString("message"));
                     JSONObject jsonObject = response.getJSONObject("data");
                     responseObject = jsonObject.toString();
+                    sosIcon.setVisibility(View.INVISIBLE);
                     if (!rideType.equalsIgnoreCase("courier")) {
                         Intent i = new Intent(GoOffline.this, EndTripDetailActivity.class);
                         i.putExtra("RideType", rideId);
@@ -373,7 +375,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
 
             @Override
             public void onError(String message, String title) {
-                AlertDialogManager.showAlertDialog(GoOffline.this,title,message,false);
+                AlertDialogManager.showAlertDialog(GoOffline.this, title, message, false);
             }
         });
     }
@@ -396,7 +398,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
 
             @Override
             public void onError(String message, String title) {
-                AlertDialogManager.showAlertDialog(GoOffline.this,title,message,false);
+                AlertDialogManager.showAlertDialog(GoOffline.this, title, message, false);
             }
         });
 
@@ -443,7 +445,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
 
             @Override
             public void onError(String message, String title) {
-                AlertDialogManager.showAlertDialog(GoOffline.this,title,message,false);
+                AlertDialogManager.showAlertDialog(GoOffline.this, title, message, false);
             }
         });
     }
@@ -711,7 +713,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                     WebServiceClasses.getWebServiceClasses(GoOffline.this, "EndTripDetailActivity").deliveryPerson(rideId, personName, new VolleyResponseListerner() {
                         @Override
                         public void onResponse(JSONObject response) throws JSONException {
-                           // endTripFunction(RideType);
+                            // endTripFunction(RideType);
                             if (response.getString("token_status").equalsIgnoreCase("1")) {
                                 CommonMethods.toast(GoOffline.this, response.getString("message"));
                                 Intent i = new Intent(GoOffline.this, EndTripDetailActivity.class);
@@ -723,7 +725,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
 
                         @Override
                         public void onError(String message, String title) {
-                            AlertDialogManager.showAlertDialog(GoOffline.this,title,message,false);
+                            AlertDialogManager.showAlertDialog(GoOffline.this, title, message, false);
                         }
                     });
                     alertDialog1.dismiss();

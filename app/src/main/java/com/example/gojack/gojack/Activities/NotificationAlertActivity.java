@@ -39,7 +39,7 @@ public class NotificationAlertActivity extends Activity {
     private LinearLayout buttonMainLayout;
     private TextView messageTextView;
     //private PrefManager prefManager;
-    NotificationManager nMgr ;
+    NotificationManager nMgr;
 
 
     @Override
@@ -102,11 +102,18 @@ public class NotificationAlertActivity extends Activity {
                     public void onResponse(JSONObject response) throws JSONException {
                         nMgr.cancelAll();
                         if (response.getString("token_status").equalsIgnoreCase("1")) {
-//                            ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted();
-                            NotifyCustomerSingleton.actionCompletedSingleton().ActionCompleted();
-                            CommonMethods.toast(NotificationAlertActivity.this, response.getString("message"));
-                            finish();
+                            if (response.getString("status").equalsIgnoreCase("1")) {
+                                NotifyCustomerSingleton.actionCompletedSingleton().ActionCompleted();
+                                CommonMethods.toast(NotificationAlertActivity.this, response.getString("message"));
+                                finish();
+                            } else {
+                                ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted();
+                                CommonMethods.toast(NotificationAlertActivity.this, response.getString("message"));
+                                finish();
+                            }
+
                         } else {
+                            ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted();
                             CommonMethods.toast(NotificationAlertActivity.this, response.getString("message"));
                             finish();
                         }
@@ -114,7 +121,7 @@ public class NotificationAlertActivity extends Activity {
 
                     @Override
                     public void onError(String message, String title) {
-                        AlertDialogManager.showAlertDialog(NotificationAlertActivity.this,title,message,false);
+                        AlertDialogManager.showAlertDialog(NotificationAlertActivity.this, title, message, false);
                     }
                 });
 
@@ -176,7 +183,7 @@ public class NotificationAlertActivity extends Activity {
 
             @Override
             public void onError(String message, String title) {
-                AlertDialogManager.showAlertDialog(NotificationAlertActivity.this,title,message,false);
+                AlertDialogManager.showAlertDialog(NotificationAlertActivity.this, title, message, false);
             }
         });
     }
