@@ -8,9 +8,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.gojack.gojack.GCMClasses.RegistrationIntentService;
-import com.example.gojack.gojack.HelperClasses.CommonMethods;
-import com.example.gojack.gojack.ServiceClass.GPSTracker;
-import com.example.gojack.gojack.ServiceClass.MyLocation;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.InterNet.ConnectivityReceiver;
+import com.example.gojack.gojack.HelperClasses.ServiceClass.GPSTracker;
+import com.example.gojack.gojack.HelperClasses.ServiceClass.MyLocation;
 
 /**
  * Created by IM0033 on 8/2/2016.
@@ -30,11 +31,14 @@ public class AppControler extends MultiDexApplication {
     }
 
     public AppControler() {
-
     }
 
     public static synchronized AppControler getsInstance() {
         return sInstance;
+    }
+
+    public void setConnectivitylistener(ConnectivityReceiver.ConnectivityReceiverListener listener) {
+        ConnectivityReceiver.connectivityReceiverListener = listener;
     }
 
     @Override

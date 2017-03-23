@@ -7,11 +7,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.gojack.gojack.AdapterClasses.HistoryAdapter;
+import com.example.gojack.gojack.ApplicationClass.AppControler;
 import com.example.gojack.gojack.CommonActivityClasses.CommonNavigstionBar;
-import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
-import com.example.gojack.gojack.HelperClasses.CommonMethods;
-import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
-import com.example.gojack.gojack.Interface.VolleyResponseListerner;
+import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
+import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.ModelClasses.HistoryModel;
 import com.example.gojack.gojack.R;
 
@@ -43,6 +43,7 @@ public class History extends CommonNavigstionBar {
     protected void onResume() {
         super.onResume();
         getHistoryList();
+        AppControler.getsInstance().setConnectivitylistener(this);
     }
 
     private void loadData() {

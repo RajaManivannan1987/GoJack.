@@ -9,11 +9,12 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
-import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
-import com.example.gojack.gojack.HelperClasses.CommonMethods;
-import com.example.gojack.gojack.HelperClasses.Validation;
-import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
-import com.example.gojack.gojack.Interface.VolleyResponseListerner;
+import com.example.gojack.gojack.HelperClasses.Common.CommonIntent;
+import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.Validate.Validation;
+import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
 
 import org.json.JSONException;
@@ -44,7 +45,7 @@ public class ForgotPassword extends CommonActionBar {
                         @Override
                         public void onResponse(JSONObject response) throws JSONException {
                             if (response.getString("status").equalsIgnoreCase("1")) {
-                                startActivity(new Intent(getApplicationContext(), CodeConfirmation.class).putExtra("customerId", response.getString("userid")));
+                                startActivity(new Intent(getApplicationContext(), CodeConfirmation.class).putExtra(CommonIntent.customerId, response.getString("userid")));
                             } else {
                                 CommonMethods.toast(ForgotPassword.this, response.getString("message"));
                             }

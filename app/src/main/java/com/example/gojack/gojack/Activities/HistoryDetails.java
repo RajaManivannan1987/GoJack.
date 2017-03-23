@@ -7,10 +7,9 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
-import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
-import com.example.gojack.gojack.HelperClasses.CommonMethods;
-import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
-import com.example.gojack.gojack.Interface.VolleyResponseListerner;
+import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
+import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
 
 import org.json.JSONException;
@@ -53,7 +52,6 @@ public class HistoryDetails extends CommonActionBar {
                     detailToLocationTextView.setText(jsonObject.getString("ending_address"));
                     detailpaymentTypeTextView.setText(jsonObject.getString("payment_mode"));
                     detailFinalRateTextView.setText(getResources().getString(R.string.rs) + " " + jsonObject.getString("final_amount"));
-
                 }
             }
 

@@ -23,7 +23,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-
             android:layout_gravity="center"
             android:visibility="gone" />
 
@@ -50,7 +49,8 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
@@ -68,6 +68,17 @@
                     app:civ_border_width="0.5dp" />
             </FrameLayout>
 
+            <TextView
+                android:id="@+id/riderNameTextView"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#fdfcfc"
+                android:gravity="center"
+                android:text=""
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/contentSizeNormal"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -78,6 +89,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:orientation="horizontal"
                     android:visibility="visible">
 
@@ -97,14 +109,37 @@
                             app:civ_border_width="0.5dp" />
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/riderNameTextView"
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:textSize="@dimen/contentSizeNormal" />
+                        android:orientation="vertical">
 
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/cancelButton"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/cancel_icon"
+                            app:civ_border_color="#f3f3f3"
+                            app:civ_border_width="0.5dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/notifyButton"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/notify_icon"
+                            app:civ_border_color="#f3f3f3"
+                            app:civ_border_width="0.5dp" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -128,6 +163,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -195,6 +231,7 @@
                     android:id="@+id/startTripButton"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:text="@string/startslide"
@@ -205,6 +242,7 @@
                     android:id="@+id/endTripButton"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="10dp"
@@ -224,7 +262,8 @@
                     android:drawableLeft="@drawable/cancel_icon"
                     android:drawablePadding="5dp"
                     android:text="Cancel Trip"
-                    android:textColor="@color/ColorRed" />
+                    android:textColor="@color/ColorRed"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
 

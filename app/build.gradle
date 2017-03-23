@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "com.example.gojack.gojack"
@@ -32,5 +32,6 @@ dependencies {
     compile 'com.android.support:multidex:1.0.0'
     testCompile 'junit:junit:4.12'
     compile files('libs/PGSDK_v1.0.1.jar')
+    compile 'com.google.code.gson:gson:2.7'
 //    compile 'com.google.android.gms:play-services-analytics:10.0.1'
 }

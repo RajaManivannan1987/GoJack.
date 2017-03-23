@@ -1,24 +1,21 @@
 package com.example.gojack.gojack.Activities;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 
-import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
-import com.example.gojack.gojack.HelperClasses.CommonIntent;
-import com.example.gojack.gojack.HelperClasses.NotifyCustomerSingleton;
-import com.example.gojack.gojack.HelperClasses.PrefManager;
+import com.example.gojack.gojack.ApplicationClass.AppControler;
+import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
+import com.example.gojack.gojack.HelperClasses.Common.CommonIntent;
+import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
 import com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton;
 import com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButtonCustomItems;
-import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
-import com.example.gojack.gojack.Interface.VolleyResponseListerner;
-import com.example.gojack.gojack.ServiceClass.GPSTracker;
+import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
+import com.example.gojack.gojack.HelperClasses.ServiceClass.GPSTracker;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 
@@ -41,10 +38,9 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
 import com.example.gojack.gojack.CommonActivityClasses.CommonNavigstionBar;
-import com.example.gojack.gojack.HelperClasses.CommonMethods;
-import com.example.gojack.gojack.HelperClasses.GoJackServerUrls;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.Common.GoJackServerUrls;
 import com.example.gojack.gojack.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -61,14 +57,12 @@ import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Im033 on 12/8/2016.
@@ -82,7 +76,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
     protected Boolean mRequestingLocationUpdates;
     private LatLng currentLocation, toAddressLatLng;
     private PrefManager prefManager;
-    private String currentLat, currentLong, toLat, toLang, responseObject, ridetype, rideid, toAddress, rideStatus = "0", tripStatus = "0";
+    private String currentLat, currentLong, toLat, toLang, responseObject, ridetype = "", rideid, toAddress, rideStatus = "0", tripStatus = "0";
     private SwipeButton startTripButton, endTripButton;
     private TextView hailOnTripTextView;
     private ImageView hailDirectionButton;
@@ -91,12 +85,19 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
     private PlaceAutocompleteFragment autocompleteFragment;
     MarkerOptions markerOptionsmylocaiton;
     private GPSTracker gpsTracker;
+    private ProgressDialog dialog;
+    boolean onTrip = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setView(R.layout.activity_hail);
-
+        dialog = new ProgressDialog(HailActivity.this);
+        dialog.setMessage("Get your location...");
+        dialog.setCancelable(false);
+        if (dialog != null) {
+            dialog.show();
+        }
         initMap();
         // buildGoogleApiClient();
 
@@ -105,11 +106,16 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         autocompleteFragment.setHint("Enter your destination...");
+        LatLngBounds.Builder latLngBounds = LatLngBounds.builder();
+        latLngBounds.include(AppControler.locationInstance().getLocation());
+        autocompleteFragment.setBoundsBias(latLngBounds.build());
+
         autocompleteFragment.getView().setBackground(getResources().getDrawable(R.drawable.background_edit_text));
         autocompleteFragment.setOnPlaceSelectedListener(this);
 
         hailOnTripTextView = (TextView) findViewById(R.id.hailOnTripTextView);
         startTripButton = (SwipeButton) findViewById(R.id.hailStartTripButton);
+        startTripButton.setVisibility(View.GONE);
         endTripButton = (SwipeButton) findViewById(R.id.hailEndTripButton);
         hailDirectionButton = (ImageView) findViewById(R.id.hailDirectionButton);
 
@@ -129,8 +135,8 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
         SwipeButtonCustomItems startSwipeButton = new SwipeButtonCustomItems() {
             @Override
             public void onSwipeConfirm() {
-                ProgressDialog progressBar = new ProgressDialog(HailActivity.this);
-                progressBar.setMessage("fetch address...");
+                final ProgressDialog progressBar = new ProgressDialog(HailActivity.this);
+                progressBar.setMessage("Waiting...");
                 progressBar.setCancelable(false);
                 progressBar.show();
                 String address = CommonMethods.getMarkerMovedAddress(HailActivity.this, new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude()));
@@ -141,6 +147,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                         public void onResponse(JSONObject response) throws JSONException {
                             if (response.getString("token_status").equalsIgnoreCase("1")) {
                                 if (response.getString("status").equalsIgnoreCase("1")) {
+                                    onTrip = true;
                                     sosIcon.setVisibility(View.VISIBLE);
                                     CommonMethods.toast(HailActivity.this, response.getString("message"));
                                     rideid = response.getString("rideid");
@@ -152,16 +159,22 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                                     //  CommonMethods.toast(HailActivity.this, response.getString("message"));
                                     // flag = true;
                                     if (mCurrentLocation != null) {
-                                        setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender());
+                                        setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), "tripStart");
                                     }
+//                                    if (toAddressLatLng == null) {
+//                                        hailDirectionButton.setVisibility(View.GONE);
+//                                    }
                                     startTripButton.setVisibility(View.GONE);
-                                    if (autocompleteFragment.getView().getVisibility() == View.VISIBLE) {
+                                    /*if (autocompleteFragment.getView().getVisibility() == View.VISIBLE) {
                                         autocompleteFragment.getView().setVisibility(View.GONE);
-                                    }
+                                    }*/
                                     endTripButton.setVisibility(View.VISIBLE);
                                     hailOnTripTextView.setVisibility(View.VISIBLE);
 
+                                } else if (response.getString("status").equalsIgnoreCase("0")) {
+                                    CommonMethods.toast(HailActivity.this, response.getString("message"));
                                 }
+
                             }
                         }
 
@@ -191,7 +204,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
 //                    showCourireAlertBox();
 //                }
                 ProgressDialog progressBar = new ProgressDialog(HailActivity.this);
-                progressBar.setMessage("fetch address...");
+                progressBar.setMessage("Waiting for response...");
                 progressBar.setCancelable(false);
                 progressBar.show();
                 String address = CommonMethods.getMarkerMovedAddress(HailActivity.this, new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude()));
@@ -204,7 +217,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                         @Override
                         public void onResponse(JSONObject response) throws JSONException {
                             tripStatus = "0";
-                            CommonMethods.toast(HailActivity.this, "Trip completed");
+                            CommonMethods.toast(HailActivity.this, "Trip Completed");
                             sosIcon.setVisibility(View.GONE);
 //                        if (response.getString("status").equalsIgnoreCase("1")) {
 //                            CommonMethods.toast(HailActivity.this, response.getString("message"));
@@ -215,13 +228,14 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                                 i.putExtra("rideId", RideId);
                                 i.putExtra("EndTrip", response.toString());
                                 startActivity(i);
+                                finish();
                             }
                         }
 //                    }
 
                         @Override
                         public void onError(String message, String title) {
-                            AlertDialogManager.showAlertDialog(HailActivity.this,title,message,false);
+                            AlertDialogManager.showAlertDialog(HailActivity.this, title, message, false);
                         }
                     });
                 }
@@ -268,15 +282,24 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
 
     @Override
     public void onLocationChanged(Location location) {
-        mCurrentLocation = location;
-        handleNewLocation(mCurrentLocation);
+        /*mCurrentLocation = location;
+        handleNewLocation(mCurrentLocation);*/
+        if (location == null) {
+            setMarket(new LatLng(AppControler.locationInstance().getLocation().latitude, AppControler.locationInstance().getLocation().longitude), prefManager.getGender());
+        } else {
+            mCurrentLocation = location;
+            currentLat = String.valueOf(mCurrentLocation.getLatitude());
+            currentLong = String.valueOf(mCurrentLocation.getLongitude());
+//        handleNewLocation(mCurrentLocation);
+            setMarket(new LatLng(location.getLatitude(), location.getLongitude()), prefManager.getGender());
+        }
     }
 
     private void handleNewLocation(Location mCurrentLocation) {
         currentLocation = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         currentLat = String.valueOf(currentLocation.latitude);
         currentLong = String.valueOf(currentLocation.longitude);
-        setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender());
+//        setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender());
     }
 
     private void setMarket(LatLng currentLocation, String genderType) {
@@ -286,10 +309,16 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
         //LatLng ll = new LatLng(currentLocation.latitude, currentLocation.longitude);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLocation, 17);
         hailPageMap.animateCamera(update);
-        if (genderType.startsWith("male")) {
-            drawable = R.drawable.male_pilot_icon;
+
+
+        if (!onTrip) {
+            if (genderType.startsWith("male")) {
+                drawable = R.drawable.male_pilot_icon;
+            } else if (genderType.startsWith("female")) {
+                drawable = R.drawable.female_pilot_icon;
+            }
         } else {
-            drawable = R.drawable.female_pilot_icon;
+            drawable = R.drawable.male_pilot_ride_icon;
         }
 //        LatLng position = new LatLng(currentLocation.latitude, currentLocation.longitude);
         markerOptionsmylocaiton = new MarkerOptions().position(currentLocation).icon(BitmapDescriptorFactory.fromResource(drawable)).title("").anchor(0.5f, 1f);
@@ -328,7 +357,11 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                     if (hideMarker) {
                         marker.setVisible(false);
                     } else {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
                         marker.setVisible(true);
+                        startTripButton.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -384,21 +417,22 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                     sosIcon.setVisibility(View.VISIBLE);
                     tripStatus = response.getString("status");
                     startTripButton.setVisibility(View.GONE);
-                    autocompleteFragment.getView().setVisibility(View.GONE);
+//                    autocompleteFragment.getView().setVisibility(View.GONE);
                     endTripButton.setVisibility(View.VISIBLE);
                     hailOnTripTextView.setVisibility(View.VISIBLE);
+                    onTrip = true;
+//                    setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender());
                 } else if (response.getString("status").equalsIgnoreCase("3")) {
                     Log.d("status", "3");
-
                 } else {
-
+//                    setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender());
                 }
 
             }
 
             @Override
             public void onError(String message, String title) {
-                AlertDialogManager.showAlertDialog(HailActivity.this,title,message,false);
+                AlertDialogManager.showAlertDialog(HailActivity.this, title, message, false);
             }
         });
     }

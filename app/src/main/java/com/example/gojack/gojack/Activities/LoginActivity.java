@@ -1,26 +1,30 @@
 package com.example.gojack.gojack.Activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.example.gojack.gojack.ApplicationClass.AppControler;
 import com.example.gojack.gojack.GCMClasses.RegistrationIntentService;
-import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
-import com.example.gojack.gojack.HelperClasses.CommonMethods;
-import com.example.gojack.gojack.HelperClasses.PrefManager;
-import com.example.gojack.gojack.HelperClasses.Validation;
-import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
-import com.example.gojack.gojack.Interface.VolleyResponseListerner;
+import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.InterNet.ConnectivityReceiver;
+import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
+import com.example.gojack.gojack.HelperClasses.Validate.Validation;
+import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
     private String TAG = "LoginActivity";
     private LoginActivity activity = LoginActivity.this;
     private EditText userName, password;
@@ -66,11 +70,17 @@ public class LoginActivity extends AppCompatActivity {
     private void loginValidate() {
         if (Validation.emailPhoneValidation(userName.getText().toString()).equalsIgnoreCase("email") || Validation.emailPhoneValidation(userName.getText().toString()).equalsIgnoreCase("phone")) {
             userName.setError(null);
-            if (Validation.isPasswordValid(password.getText().toString())) {
+            if (Validation.isPasswordEmpty(password.getText().toString())) {
                 password.setError(null);
-                login();
+                if (Validation.isPasswordValid(password.getText().toString())) {
+                    password.setError(null);
+                    login();
+                } else {
+                    password.setError(Validation.passwordError);
+                    password.requestFocus();
+                }
             } else {
-                password.setError(Validation.passwordError);
+                password.setError(Validation.passwordEmptyMessage);
                 password.requestFocus();
             }
         } else {
@@ -136,9 +146,34 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent a = new Intent(Intent.ACTION_MAIN);
-        a.addCategory(Intent.CATEGORY_HOME);
-        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(a);
+        CommonMethods.closeIntent(LoginActivity.this);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        showSnake(isConnected);
+    }
+
+    private void showSnake(boolean isConnected) {
+        String message = null;
+        int color = 0;
+        if (isConnected) {
+            message = "Good! Connected to Internet";
+            color = Color.WHITE;
+        } else {
+            message = "Sorry! Not connected to internet";
+            color = Color.RED;
+        }
+        Snackbar snackbar = Snackbar.make(userName, message, Snackbar.LENGTH_LONG);
+        View sbView = snackbar.getView();
+        TextView tv = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        tv.setTextColor(color);
+        snackbar.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppControler.getsInstance().setConnectivitylistener(this);
     }
 }

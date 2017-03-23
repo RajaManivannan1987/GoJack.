@@ -7,13 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 
 import com.example.gojack.gojack.Activities.NotificationAlertActivity;
-import com.example.gojack.gojack.HelperClasses.CommonIntent;
-import com.example.gojack.gojack.HelperClasses.PrefManager;
+import com.example.gojack.gojack.HelperClasses.Common.CommonIntent;
+import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
+import com.example.gojack.gojack.HelperClasses.Singleton.NotifyCustomerSingleton;
 import com.example.gojack.gojack.R;
 import com.google.android.gms.gcm.GcmListenerService;
 
@@ -88,34 +90,40 @@ public class GCMListener extends GcmListenerService {
     }
 
     private void newOrderNotification(String message, String type, String rideid, String gender) {
-//        if (type.startsWith("ridecancelledbycustomer")) {
-        //ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted1();
-//        } else {
-        Intent intent = new Intent(this, NotificationAlertActivity.class);
+        if(type.equalsIgnoreCase("ridetaken")){
+            NotifyCustomerSingleton.closActivity().ActionCompleted();
+        }else {
+            Intent intent = getNotificationIntent(message, type, rideid, gender);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                    (int) Calendar.getInstance().getTimeInMillis() /* Request code */, intent,
+                    PendingIntent.FLAG_ONE_SHOT);
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.male_pilot_icon)
+                    .setContentTitle(getResources().getString(R.string.app_name))
+                    .setContentText(message)
+                    .setAutoCancel(true)
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                    .setContentIntent(pendingIntent);
+
+            mBuilder.setAutoCancel(true);
+            mBuilder.getNotification().flags |= Notification.FLAG_AUTO_CANCEL;
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify((int) Calendar.getInstance().getTimeInMillis() /* ID of notification */, mBuilder.build());
+            notificationManager.cancel((int) Calendar.getInstance().getTimeInMillis());
+//        }
+        }
+    }
+
+    @NonNull
+    private Intent getNotificationIntent(String message, String type, String rideid, String gender) {
+        Intent intent = new Intent(GCMListener.this, NotificationAlertActivity.class);
         intent.putExtra(CommonIntent.typeKey, type);
         intent.putExtra(CommonIntent.rideId, rideid);
         intent.putExtra(CommonIntent.gender, gender);
         intent.putExtra(CommonIntent.message, message);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                (int) Calendar.getInstance().getTimeInMillis() /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.male_pilot_icon)
-                .setContentTitle(getResources().getString(R.string.app_name))
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setContentIntent(pendingIntent);
-
-        mBuilder.setAutoCancel(true);
-        mBuilder.getNotification().flags |= Notification.FLAG_AUTO_CANCEL;
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify((int) Calendar.getInstance().getTimeInMillis() /* ID of notification */, mBuilder.build());
-        notificationManager.cancel((int) Calendar.getInstance().getTimeInMillis());
-//        }
-
+        return intent;
     }
 }

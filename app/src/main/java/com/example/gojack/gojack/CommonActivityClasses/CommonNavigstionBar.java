@@ -2,8 +2,10 @@ package com.example.gojack.gojack.CommonActivityClasses;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,28 +18,29 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.gojack.gojack.Activities.About;
-import com.example.gojack.gojack.Activities.Account;
-import com.example.gojack.gojack.Activities.EndTripDetailActivity;
+import com.example.gojack.gojack.Activities.AccountsActivity;
 import com.example.gojack.gojack.Activities.GoOffline;
 import com.example.gojack.gojack.Activities.GoOnline;
+import com.example.gojack.gojack.Activities.HailActivity;
 import com.example.gojack.gojack.Activities.Help;
 import com.example.gojack.gojack.Activities.History;
 import com.example.gojack.gojack.Activities.LoginActivity;
 import com.example.gojack.gojack.Activities.Settings;
 import com.example.gojack.gojack.AdapterClasses.NavigationBarAdapter;
-import com.example.gojack.gojack.HelperClasses.CommonMethods;
-import com.example.gojack.gojack.HelperClasses.NotifyCustomerSingleton;
-import com.example.gojack.gojack.HelperClasses.PrefManager;
-import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
-import com.example.gojack.gojack.Interface.VolleyResponseListerner;
+import com.example.gojack.gojack.ApplicationClass.AppControler;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.InterNet.ConnectivityReceiver;
+import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
+import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
-import com.example.gojack.gojack.ServiceClass.LocationService;
-import com.google.android.gms.maps.model.LatLng;
+import com.example.gojack.gojack.HelperClasses.ServiceClass.LocationService;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -48,10 +51,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by IM0033 on 8/1/2016.
  */
-public class CommonNavigstionBar extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class CommonNavigstionBar extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, ConnectivityReceiver.ConnectivityReceiverListener {
     private String TAG = "CommonNavigstionBar";
     private static Intent locationIntent;
     private Toolbar toolbar;
+    private LinearLayout mainNavigationLayout;
     private FrameLayout frameLayout;
     private DrawerLayout drawerLayout;
     private ListView listView;
@@ -75,6 +79,7 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigationbar_activity);
+        mainNavigationLayout = (LinearLayout) findViewById(R.id.mainNavigationLayout);
         webServiceClasses = new WebServiceClasses(CommonNavigstionBar.this, TAG);
         prefManager = new PrefManager(CommonNavigstionBar.this);
         adapter = new NavigationBarAdapter(this);
@@ -140,17 +145,19 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
                     TextView textView = (TextView) view.findViewById(R.id.navigationBarListTextView);
                     switch (textView.getText().toString().trim()) {
                         case "GO OFFLINE":
-                            checkRideStatus("goOffline");
+                            if (!prefManager.getPilotToken().equalsIgnoreCase(""))
+                                checkRideStatus("goOffline");
                             break;
                         case "DASHBOARD":
-                            checkRideStatus("dashboard");
+                            if (!prefManager.getPilotToken().equalsIgnoreCase(""))
+                                checkRideStatus("dashboard");
 //                            startActivity(new Intent(CommonNavigstionBar.this, GoOffline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                             break;
                         case "HISTORY":
                             startActivity(new Intent(CommonNavigstionBar.this, History.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                             break;
                         case "ACCOUNTS":
-                            startActivity(new Intent(CommonNavigstionBar.this, Account.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                            startActivity(new Intent(CommonNavigstionBar.this, AccountsActivity.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                             break;
                         case "HELP":
                             startActivity(new Intent(CommonNavigstionBar.this, Help.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
@@ -177,21 +184,34 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
     }
 
     private void checkRideStatus(final String className) {
+        Log.d(TAG, className);
         WebServiceClasses.getWebServiceClasses(CommonNavigstionBar.this, TAG).checkRideStatus(new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
 //                JSONObject jsonObject = response.getJSONObject("data");
-                if (response.getString("status").equalsIgnoreCase("0")) {
-                    if (className.equalsIgnoreCase("goOffline")) {
+//                if (response.getString("status").equalsIgnoreCase("0")) {
+                if (className.equalsIgnoreCase("goOffline")) {
+                    if (response.getString("status").equalsIgnoreCase("0")) {
                         updatePilotStatus();
                         stopService(setIntent(getBaseContext()));
                         startActivity(new Intent(CommonNavigstionBar.this, GoOnline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                     } else {
-                        startActivity(new Intent(CommonNavigstionBar.this, GoOffline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                        CommonMethods.toast(CommonNavigstionBar.this, "Ride sitll not completed");
                     }
                 } else {
-                    CommonMethods.toast(CommonNavigstionBar.this, "Ride sitll not completed so won't go to offline");
+                    if (response.getString("status").equalsIgnoreCase("0")) {
+                        startActivity(new Intent(CommonNavigstionBar.this, GoOffline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                    } else {
+                        if (response.getString("ridetype").equalsIgnoreCase("hail")) {
+                            startActivity(new Intent(CommonNavigstionBar.this, HailActivity.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                        } else {
+                            startActivity(new Intent(CommonNavigstionBar.this, GoOffline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                        }
+                    }
                 }
+//                } else {
+//                    CommonMethods.toast(CommonNavigstionBar.this, "Ride sitll not completed");
+//                }
 
             }
 
@@ -260,5 +280,33 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
 
             }
         });
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        showSnack(isConnected);
+    }
+
+    private void showSnack(boolean isConnected) {
+        String message = null;
+        int color = 0;
+        if (!isConnected) {
+            message = "Sorry! Not connected to internet";
+            color = Color.RED;
+        } else {
+            message = "Good! Connected to Internet";
+            color = Color.WHITE;
+        }
+        Snackbar snackbar = Snackbar.make(mainNavigationLayout, message, Snackbar.LENGTH_LONG);
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(color);
+        snackbar.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppControler.getsInstance().setConnectivitylistener(this);
     }
 }

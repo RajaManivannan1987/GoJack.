@@ -9,10 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
-import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
-import com.example.gojack.gojack.HelperClasses.CommonMethods;
-import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
-import com.example.gojack.gojack.Interface.VolleyResponseListerner;
+import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
 
 import org.json.JSONException;
@@ -67,6 +67,7 @@ public class EndTripDetailActivity extends CommonActionBar {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(EndTripDetailActivity.this, GoOffline.class));
+                finish();
             }
         });
         dateAndTimeTextView = (TextView) findViewById(R.id.dateAndTimeTextView);
@@ -82,7 +83,7 @@ public class EndTripDetailActivity extends CommonActionBar {
 
         try {
             JSONObject jsonObject = new JSONObject(getIntent().getExtras().getString("EndTrip"));
-            distanceTextView.setText("Duration " + jsonObject.getString("distance") + " kms, Time " + jsonObject.getString("minutes"));
+            distanceTextView.setText("Distance: " + jsonObject.getString("distance") + " kms, Time: " + jsonObject.getString("minutes"));
             amountTextView.setText(jsonObject.getString("rate"));
             if (jsonObject.has("name")) {
                 riderNameTextView.setText(jsonObject.getString("name"));

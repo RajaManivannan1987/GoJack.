@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.gojack.gojack.HelperClasses.PrefManager;
+import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
 import com.example.gojack.gojack.R;
 
 /**

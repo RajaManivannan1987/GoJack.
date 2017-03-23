@@ -6,13 +6,12 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonNavigstionBar;
-import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
-import com.example.gojack.gojack.HelperClasses.CommonMethods;
-import com.example.gojack.gojack.HelperClasses.PrefManager;
-import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
-import com.example.gojack.gojack.Interface.VolleyResponseListerner;
+import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
+import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
-import com.example.gojack.gojack.ServiceClass.LocationService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,23 +31,41 @@ public class Settings extends CommonNavigstionBar {
         findViewById(R.id.logoutButton1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                webServiceClasses.logout(new VolleyResponseListerner() {
+                WebServiceClasses.getWebServiceClasses(Settings.this, TAG).checkRideStatus(new VolleyResponseListerner() {
                     @Override
                     public void onResponse(JSONObject response) throws JSONException {
-                        if (response.getString("token_status").equalsIgnoreCase("1")) {
-                            CommonMethods.toast(Settings.this, response.getString("message"));
-                            stopService(setIntent(getBaseContext()));
-                            PrefManager.getPrefManager(Settings.this).logout();
-                            startActivity(new Intent(Settings.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                            finish();
+                        if (response.getString("status").equalsIgnoreCase("0")) {
+                            logout();
+                        } else {
+                            CommonMethods.toast(Settings.this, "Ride sitll not completed");
                         }
                     }
 
                     @Override
                     public void onError(String message, String title) {
-                        AlertDialogManager.showAlertDialog(Settings.this,title,message,false);
+
                     }
                 });
+            }
+        });
+    }
+
+    private void logout() {
+        webServiceClasses.logout(new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+                if (response.getString("token_status").equalsIgnoreCase("1")) {
+                    CommonMethods.toast(Settings.this, response.getString("message"));
+                    stopService(setIntent(getBaseContext()));
+                    PrefManager.getPrefManager(Settings.this).logout();
+                    startActivity(new Intent(Settings.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    finish();
+                }
+            }
+
+            @Override
+            public void onError(String message, String title) {
+                AlertDialogManager.showAlertDialog(Settings.this, title, message, false);
             }
         });
     }

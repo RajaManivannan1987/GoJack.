@@ -12,14 +12,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonNavigstionBar;
-import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
-import com.example.gojack.gojack.HelperClasses.CommonMethods;
-import com.example.gojack.gojack.HelperClasses.GoJackServerUrls;
-import com.example.gojack.gojack.HelperClasses.PrefManager;
+import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.Common.GoJackServerUrls;
+import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
 import com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton;
 import com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButtonCustomItems;
-import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
-import com.example.gojack.gojack.Interface.VolleyResponseListerner;
+import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.ModelClasses.VehicleDetails;
 import com.example.gojack.gojack.R;
 import com.squareup.picasso.Picasso;
@@ -60,10 +60,12 @@ public class GoOnline extends CommonNavigstionBar {
         bikeModelTextView.setText(PrefManager.getPrefManager(GoOnline.this).getVehicleModel());
         bikeNoTextView.setText(PrefManager.getPrefManager(GoOnline.this).getVehicleNumber());
         balanceStatus.setText(PrefManager.getPrefManager(GoOnline.this).getBalanceMessage());
-        Picasso.with(GoOnline.this).load(prefManager.getVehiclePhoto())
-                .placeholder(R.drawable.user_icon)
-                .error(R.drawable.user_photo_icon)
-                .resize(250, 200).into(bikeImageView);
+        if (prefManager.getVehiclePhoto().length() != 0 && !prefManager.getVehiclePhoto().equalsIgnoreCase("")) {
+            Picasso.with(GoOnline.this).load(prefManager.getVehiclePhoto())
+                    .placeholder(R.drawable.user_icon)
+                    .error(R.drawable.user_photo_icon)
+                    .resize(250, 200).into(bikeImageView);
+        }
 //        Picasso.with(GoOnline.this).load(prefManager.getVehiclePhoto()).into(bikeImageView);
         SwipeButtonCustomItems swipeButtonCustomItems = new SwipeButtonCustomItems() {
 

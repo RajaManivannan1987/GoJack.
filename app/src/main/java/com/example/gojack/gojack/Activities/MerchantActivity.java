@@ -1,15 +1,13 @@
 package com.example.gojack.gojack.Activities;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.gojack.gojack.HelperClasses.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
 import com.example.gojack.gojack.R;
 import com.paytm.pgsdk.Log;
 import com.paytm.pgsdk.PaytmMerchant;
@@ -17,10 +15,6 @@ import com.paytm.pgsdk.PaytmOrder;
 import com.paytm.pgsdk.PaytmPGService;
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;

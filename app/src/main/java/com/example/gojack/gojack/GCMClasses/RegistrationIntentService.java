@@ -9,8 +9,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.example.gojack.gojack.ApplicationClass.AppControler;
-import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
-import com.example.gojack.gojack.Interface.VolleyResponseListerner;
+import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
+import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -28,6 +29,7 @@ public class RegistrationIntentService extends IntentService {
     private static final String[] TOPICS = {"global"};
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
+    PrefManager prefManager;
 
     public RegistrationIntentService() {
         super(TAG);
@@ -59,7 +61,9 @@ public class RegistrationIntentService extends IntentService {
     }
 
     private void SendDeviceidTOServer(String deviceId, final Context context) {
+        prefManager=new PrefManager(this);
         WebServiceClasses webServiceClasses = new WebServiceClasses(context, TAG);
+        if (!prefManager.getPilotToken().equalsIgnoreCase(""))
         webServiceClasses.updateDeviceId(deviceId, new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {

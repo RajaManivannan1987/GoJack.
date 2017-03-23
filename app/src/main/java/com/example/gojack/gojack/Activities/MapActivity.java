@@ -20,9 +20,9 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
 import com.example.gojack.gojack.ApplicationClass.AppControler;
-import com.example.gojack.gojack.HelperClasses.CommonMethods;
-import com.example.gojack.gojack.HelperClasses.GoJackServerUrls;
-import com.example.gojack.gojack.HelperClasses.SearchLocation;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.Common.GoJackServerUrls;
+import com.example.gojack.gojack.HelperClasses.ServiceClass.SearchLocation;
 import com.example.gojack.gojack.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,8 +42,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 

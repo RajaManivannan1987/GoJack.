@@ -51,7 +51,7 @@
                     android:drawableLeft="@drawable/mobile_icon"
                     android:drawablePadding="25dp"
                     android:hint="@string/bin"
-                    android:maxLength="6"
+                    android:maxLength="4"
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
 
@@ -63,6 +63,14 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/submit"
                 android:theme="@style/button_style" />
+
+            <TextView
+                android:id="@+id/resendTextView"
+                style="@style/textView_Normal"
+                android:layout_marginTop="20dp"
+                android:gravity="right"
+                android:text="@string/reSend"
+                android:textSize="@dimen/contentSizeSmall" />
         </LinearLayout>
     </ScrollView>
 

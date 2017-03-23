@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GoJack Pilot</string>
+    <string name="app_name">CallJack Pilot</string>
     <string name="versionCode">Version 0.2</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -7,7 +7,7 @@
     <string name="forgotpassword"><u>Forgot Your Password?</u></string>
     <string name="forgotpassword1">Forgot Password?</string>
     <string name="forgotcontent1">To reset your password, Please enter your registered email address or mobile number.</string>
-    <string name="forgotcontent2">You will receive an email or sms with a four digit code to reset yout password shortly. Be sure to check you junk folder if you dont receive in 10 minutes.</string>
+    <string name="forgotcontent2">You will receive an email or sms with a four digit code to reset your password shortly. Be sure to check your junk folder if you dont receive in 10 minutes.</string>
     <string name="forgotcontent3">You can always contact us at +91-xxxxx-xxxxx or by email.</string>
     <string name="logout">Logout</string>
     <string name="mobile">Mobile Number / Email</string>
@@ -29,7 +29,8 @@
     <string name="recharge">Recharge</string>
     <string name="title_activity_maps">Map</string>
     <string name="rs">`</string>
-     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+    <string name="reSend"><u>Resend</u></string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
         AIzaSyAqvW1nQYnA5FQEqqfQPyBORKibVJ7SA2M
     </string>
     <string name="google_app_id">569571792316</string>

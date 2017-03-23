@@ -2,6 +2,7 @@ package com.example.gojack.gojack.Activities;
 
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -12,14 +13,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.gojack.gojack.HelperClasses.ActionCompletedSingleton;
-import com.example.gojack.gojack.HelperClasses.AlertDialogManager;
-import com.example.gojack.gojack.HelperClasses.CommonIntent;
-import com.example.gojack.gojack.HelperClasses.CommonMethods;
-import com.example.gojack.gojack.HelperClasses.NotifyCustomerSingleton;
-import com.example.gojack.gojack.HelperClasses.PrefManager;
-import com.example.gojack.gojack.HelperClasses.WebServiceClasses;
-import com.example.gojack.gojack.Interface.VolleyResponseListerner;
+import com.example.gojack.gojack.HelperClasses.Interface.ActionCompleted;
+import com.example.gojack.gojack.HelperClasses.Singleton.ActionCompletedSingleton;
+import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
+import com.example.gojack.gojack.HelperClasses.Common.CommonIntent;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.Singleton.NotifyCustomerSingleton;
+import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
+import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
 
 import org.json.JSONException;
@@ -55,7 +57,14 @@ public class NotificationAlertActivity extends Activity {
         notificationGenderImageView = (CircleImageView) findViewById(R.id.notificationGenderImageView);
         buttonMainLayout = (LinearLayout) findViewById(R.id.buttonMainLayout);
         notifyCustomerButton = (Button) findViewById(R.id.notifyCustomerButton);
-
+        NotifyCustomerSingleton.closActivity().setListener(new ActionCompleted() {
+            @Override
+            public void actionCompleted() {
+                nMgr.cancelAll();
+                CommonMethods.closeIntent(NotificationAlertActivity.this);
+                finish();
+            }
+        });
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             messageTextView.setText(bundle.getString(CommonIntent.message, ""));
@@ -73,6 +82,11 @@ public class NotificationAlertActivity extends Activity {
             } else if (notifiyType.startsWith("ridecancelledbycustomer")) {
                 notificationAcceptButton.setText("Ok");
                 notificationCancelButton.setVisibility(View.GONE);
+//                NotifyCustomerSingleton.actionCanceled().ActionCompleted();
+            } else if (notifiyType.startsWith("ridetaken")) {
+//                notificationAcceptButton.setText("Ok");
+//                notificationCancelButton.setVisibility(View.GONE);
+                nMgr.cancelAll();
 //                NotifyCustomerSingleton.actionCanceled().ActionCompleted();
             } else {
                 notificationAcceptButton.setText("Ok");
@@ -97,9 +111,14 @@ public class NotificationAlertActivity extends Activity {
         notifyCustomerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final ProgressDialog progressBar = new ProgressDialog(NotificationAlertActivity.this);
+                progressBar.setMessage("Fetch data...");
+                progressBar.setCancelable(false);
+                progressBar.show();
                 WebServiceClasses.getWebServiceClasses(NotificationAlertActivity.this, TAG).notifyCustomer(rideId, new VolleyResponseListerner() {
                     @Override
                     public void onResponse(JSONObject response) throws JSONException {
+                        progressBar.dismiss();
                         nMgr.cancelAll();
                         if (response.getString("token_status").equalsIgnoreCase("1")) {
                             if (response.getString("status").equalsIgnoreCase("1")) {
@@ -121,6 +140,7 @@ public class NotificationAlertActivity extends Activity {
 
                     @Override
                     public void onError(String message, String title) {
+                        progressBar.dismiss();
                         AlertDialogManager.showAlertDialog(NotificationAlertActivity.this, title, message, false);
                     }
                 });
@@ -155,6 +175,7 @@ public class NotificationAlertActivity extends Activity {
                         i.putExtra("riderName", jsonObject.getString("name"));
                         i.putExtra("gender", jsonObject.getString("gender"));
                         i.putExtra("p_num", jsonObject.getString("mobilenumber"));
+                        i.putExtra("address", jsonObject.getString("address"));
                         i.putExtra("start_lat", jsonObject.getString("startinglatitude"));
                         i.putExtra("start_lang", jsonObject.getString("startinglongitude"));
                         i.putExtra("end_lat", jsonObject.getString("endinglatitude"));
@@ -163,15 +184,19 @@ public class NotificationAlertActivity extends Activity {
                         i.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                         startActivity(i);
                         NotificationAlertActivity.this.finish();
+                        callAccept(rideId);
                     } else if (response.getString("status").equalsIgnoreCase("2")) {
                         CommonMethods.toast(NotificationAlertActivity.this, response.getString("message"));
-                        NotificationAlertActivity.this.finish();
+//                        CommonMethods.closeIntent(NotificationAlertActivity.this);
+                        finish();
                     } else if (response.getString("status").equalsIgnoreCase("0")) {
                         CommonMethods.toast(NotificationAlertActivity.this, response.getString("message"));
-                        NotificationAlertActivity.this.finish();
-                        finishAffinity();
+//                        CommonMethods.closeIntent(NotificationAlertActivity.this);
+//                        closeIntent();
+                        finish();
                     } else {
-                        NotificationAlertActivity.this.finish();
+                        finish();
+//                        CommonMethods.closeIntent(NotificationAlertActivity.this);
                     }
                 } else {
                     CommonMethods.toast(NotificationAlertActivity.this, response.getString("token_message"));
@@ -188,10 +213,22 @@ public class NotificationAlertActivity extends Activity {
         });
     }
 
+    private void callAccept(String rideId) {
+        WebServiceClasses.getWebServiceClasses(NotificationAlertActivity.this, TAG).callAcceptOnly(rideId, new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+            }
+
+            @Override
+            public void onError(String message, String title) {
+            }
+        });
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
     }
+
 }

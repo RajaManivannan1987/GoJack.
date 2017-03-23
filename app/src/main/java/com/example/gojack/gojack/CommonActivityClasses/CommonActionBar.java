@@ -1,23 +1,33 @@
 package com.example.gojack.gojack.CommonActivityClasses;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.example.gojack.gojack.ApplicationClass.AppControler;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.InterNet.ConnectivityReceiver;
 import com.example.gojack.gojack.R;
 
 /**
  * Created by IM0033 on 8/3/2016.
  */
-public class CommonActionBar extends AppCompatActivity {
+public class CommonActionBar extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
+    LinearLayout commonLayout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.common_actionbar);
+        setContentView(R.layout.common_actionbar);
+        commonLayout = (LinearLayout) findViewById(R.id.commonLayout);
         // Toolbar toolbar = (Toolbar) findViewById(R.id.commonToolBar);
         // setSupportActionBar(toolbar);
     }
@@ -43,5 +53,33 @@ public class CommonActionBar extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        showSnake(isConnected);
+    }
+
+    private void showSnake(boolean isConnected) {
+        String message = null;
+        int color = 0;
+        if (isConnected) {
+            message = "Good! Connected to Internet";
+            color = Color.WHITE;
+        } else {
+            message = "Sorry! Not connected to internet";
+            color = Color.RED;
+        }
+        Snackbar snackbar = Snackbar.make(commonLayout, message, Snackbar.LENGTH_LONG);
+        View sbView = snackbar.getView();
+        TextView tv = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        tv.setTextColor(color);
+        snackbar.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppControler.getsInstance().setConnectivitylistener(this);
     }
 }
