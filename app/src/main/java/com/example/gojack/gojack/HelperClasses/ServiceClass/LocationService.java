@@ -54,7 +54,6 @@ public class LocationService extends Service implements LocationListener {
         prefManager = new PrefManager(LocationService.this);
         timer = new Timer();
         Log.d(TAG, "ServiceStarted");
-
         getCurrentLocation();
     }
 
@@ -82,7 +81,7 @@ public class LocationService extends Service implements LocationListener {
                         if (mLocation != null) {
                             latitude = mLocation.getLatitude();
                             longitude = mLocation.getLongitude();
-                            scheduleTask();
+//                            scheduleTask();
                         }
                     }
                 }
@@ -95,7 +94,7 @@ public class LocationService extends Service implements LocationListener {
                             if (mLocation != null) {
                                 latitude = mLocation.getLatitude();
                                 longitude = mLocation.getLongitude();
-                                scheduleTask();
+//                                scheduleTask();
                                 //sendLocationToServer(latitude, longitude);
                             }
                         }

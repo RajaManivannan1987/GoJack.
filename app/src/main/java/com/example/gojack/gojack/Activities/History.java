@@ -71,8 +71,8 @@ public class History extends CommonNavigstionBar {
                         HistoryModel setValues = new HistoryModel();
                         setValues.setRide_id(object.getString("ride_id"));
                         setValues.setDate_time(object.getString("date_time"));
-                        setValues.setStarting_address(object.getString("starting_address"));
-                        setValues.setEnding_address(object.getString("ending_address"));
+                        setValues.setDriver_s_address(object.getString("driver_s_address"));
+                        setValues.setDriver_e_address(object.getString("driver_e_address"));
                         setValues.setFinal_amount(object.getString("final_amount"));
                         setValues.setRide_type(object.getString("ride_type"));
                         historyLlist.add(setValues);

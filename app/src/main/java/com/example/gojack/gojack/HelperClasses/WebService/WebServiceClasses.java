@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.gojack.gojack.HelperClasses.Common.GoJackServerUrls;
+import com.example.gojack.gojack.HelperClasses.ServiceClass.MyLocation;
 import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
 import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.HelperClasses.ServiceClass.GPSTracker;
@@ -22,7 +23,6 @@ public class WebServiceClasses {
     Context context;
     private VolleyClass volleyClass;
     private GPSTracker gpsTracker;
-
 
     public static WebServiceClasses getWebServiceClasses(Context context, String tag) {
         if (webServiceClasses == null) {

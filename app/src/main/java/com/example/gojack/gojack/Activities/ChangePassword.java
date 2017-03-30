@@ -3,6 +3,7 @@ package com.example.gojack.gojack.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.EditText;
 
@@ -25,6 +26,7 @@ import org.json.JSONObject;
  */
 public class ChangePassword extends CommonActionBar {
     private EditText newPasswordEditText, confirmNewPasswordEditText;
+    private TextInputLayout newPasswordTextInputLayout,confirmNewPasswordTextInputLayout;
     String customerId;
 
     @Override
@@ -35,6 +37,8 @@ public class ChangePassword extends CommonActionBar {
         customerId = getIntent().getExtras().getString(CommonIntent.customerId);
         newPasswordEditText = (EditText) findViewById(R.id.newPasswordEditText);
         confirmNewPasswordEditText = (EditText) findViewById(R.id.confirmNewPasswordEditText);
+        newPasswordTextInputLayout = (TextInputLayout) findViewById(R.id.newPasswordTextInputLayout);
+        confirmNewPasswordTextInputLayout = (TextInputLayout) findViewById(R.id.confirmNewPasswordTextInputLayout);
         findViewById(R.id.changePasswordButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,10 +49,11 @@ public class ChangePassword extends CommonActionBar {
 
     private void setPasswordValidate() {
         if (Validation.isPasswordValid(newPasswordEditText.getText().toString())) {
-            newPasswordEditText.setError(null);
+            newPasswordTextInputLayout.setError(null);
             if (Validation.isPasswordValid(confirmNewPasswordEditText.getText().toString())) {
-                confirmNewPasswordEditText.setError(null);
+                confirmNewPasswordTextInputLayout.setError(null);
                 if (newPasswordEditText.getText().toString().equalsIgnoreCase(confirmNewPasswordEditText.getText().toString())) {
+                    confirmNewPasswordTextInputLayout.setError(null);
                     new WebServiceClasses(ChangePassword.this, "ChangePassword").changePassword(customerId, newPasswordEditText.getText().toString(), new VolleyResponseListerner() {
                         @Override
                         public void onResponse(JSONObject response) throws JSONException {
@@ -73,16 +78,16 @@ public class ChangePassword extends CommonActionBar {
                     });
                     startActivity(new Intent(ChangePassword.this, GoOffline.class));
                 } else {
-                    confirmNewPasswordEditText.setError("Password mismatch");
+                    confirmNewPasswordTextInputLayout.setError("Password mismatch");
                     confirmNewPasswordEditText.requestFocus();
                 }
             } else {
                 confirmNewPasswordEditText.requestFocus();
-                confirmNewPasswordEditText.setError(Validation.passwordError);
+                confirmNewPasswordTextInputLayout.setError(Validation.passwordError);
             }
         } else {
             newPasswordEditText.requestFocus();
-            newPasswordEditText.setError(Validation.passwordError);
+            newPasswordTextInputLayout.setError(Validation.passwordError);
         }
     }
 }

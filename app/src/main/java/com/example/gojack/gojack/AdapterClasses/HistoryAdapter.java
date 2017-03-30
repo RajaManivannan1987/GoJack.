@@ -38,8 +38,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.CustomHo
     public void onBindViewHolder(CustomHolder holder, int position) {
         final HistoryModel getListValue = list.get(position);
         holder.rideDateTextView.setText(getListValue.getDate_time());
-        holder.rideFromLocationTextView.setText(getListValue.getStarting_address());
-        holder.rideToLocationTextView.setText(getListValue.getEnding_address());
+        holder.rideFromLocationTextView.setText(getListValue.getDriver_s_address());
+        holder.rideToLocationTextView.setText(getListValue.getDriver_e_address());
         Typeface face = Typeface.createFromAsset(context.getAssets(), "fonts/rupee_foradian.ttf");
         holder.rideRateTextView.setTypeface(face);
         if (getListValue.getRide_type().equalsIgnoreCase("courier")) {

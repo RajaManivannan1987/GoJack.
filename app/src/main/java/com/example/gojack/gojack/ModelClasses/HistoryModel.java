@@ -20,22 +20,6 @@ public class HistoryModel {
         this.date_time = date_time;
     }
 
-    public String getStarting_address() {
-        return starting_address;
-    }
-
-    public void setStarting_address(String starting_address) {
-        this.starting_address = starting_address;
-    }
-
-    public String getEnding_address() {
-        return ending_address;
-    }
-
-    public void setEnding_address(String ending_address) {
-        this.ending_address = ending_address;
-    }
-
     public String getFinal_amount() {
         return final_amount;
     }
@@ -52,5 +36,27 @@ public class HistoryModel {
         this.ride_type = ride_type;
     }
 
-    private String ride_id,date_time,starting_address,ending_address,final_amount,ride_type;
+    private String ride_id;
+    private String date_time;
+
+    public String getDriver_s_address() {
+        return driver_s_address;
+    }
+
+    public void setDriver_s_address(String driver_s_address) {
+        this.driver_s_address = driver_s_address;
+    }
+
+    public String getDriver_e_address() {
+        return driver_e_address;
+    }
+
+    public void setDriver_e_address(String driver_e_address) {
+        this.driver_e_address = driver_e_address;
+    }
+
+    private String driver_s_address;
+    private String driver_e_address;
+    private String final_amount;
+    private String ride_type;
 }

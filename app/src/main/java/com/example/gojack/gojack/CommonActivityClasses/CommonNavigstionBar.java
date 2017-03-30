@@ -36,6 +36,7 @@ import com.example.gojack.gojack.AdapterClasses.NavigationBarAdapter;
 import com.example.gojack.gojack.ApplicationClass.AppControler;
 import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.InterNet.ConnectivityReceiver;
+import com.example.gojack.gojack.HelperClasses.ServiceClass.GPSTracker;
 import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
 import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
 import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
@@ -70,7 +71,7 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
 
     public static Intent setIntent(Context context) {
         if (locationIntent == null) {
-            locationIntent = new Intent(context, LocationService.class);
+            locationIntent = new Intent(context, GPSTracker.class);
         }
         return locationIntent;
     }
@@ -289,18 +290,16 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
 
     private void showSnack(boolean isConnected) {
         String message = null;
-        int color = 0;
         if (!isConnected) {
             message = "Sorry! Not connected to internet";
-            color = Color.RED;
         } else {
             message = "Good! Connected to Internet";
-            color = Color.WHITE;
         }
         Snackbar snackbar = Snackbar.make(mainNavigationLayout, message, Snackbar.LENGTH_LONG);
         View sbView = snackbar.getView();
+        sbView.setBackgroundColor(Color.RED);
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(color);
+        textView.setTextColor(Color.WHITE);
         snackbar.show();
     }
 

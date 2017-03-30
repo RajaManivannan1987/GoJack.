@@ -49,24 +49,30 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <ImageView
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/rupee_icon" />
+                        android:text="` "
+                        android:gravity="bottom"
+                        android:paddingTop="5dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="18sp"
+                        android:typeface="serif" />
 
                     <TextView
                         android:id="@+id/amountTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:gravity="center"
+                        android:text="150"
                         android:textColor="@color/colorPrimaryDark"
-                        android:textSize="30sp" />
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
@@ -146,8 +152,8 @@
 
             <Button
                 android:id="@+id/dashboardButton"
-                android:layout_width="120dp"
-                android:layout_height="40dp"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="25dp"
                 android:background="@color/colorPrimaryDark"

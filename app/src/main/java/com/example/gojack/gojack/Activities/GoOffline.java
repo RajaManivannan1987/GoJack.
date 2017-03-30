@@ -78,7 +78,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
     private String TAG = "GoOffline";
     private GoogleMap mMap;
     //    private LatLng currentLocation;
-    private Marker marker;
+    private Marker marker, fromLocationMarker;
     private ImageView HailButton, markerImageView;
     private SwipeButton startTripButton, endTripButton;
     private CircleImageView userImageView, directionButton, callButton, cancelButton, notifyButton;
@@ -97,24 +97,24 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
     protected Boolean mRequestingLocationUpdates;
     int firstTime = 1, drawable;
     MarkerOptions markerOptionsmylocaiton;
-
-    private LatLng latLng = new LatLng(11.560873, 78.791537);
+//    boolean isNotified = false;
+    int delay = 10000;
+    private LatLng fromLatlang;
+    boolean onTrip = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setView(R.layout.activity_offline);
-
+        findViewById();
+        initMap();
         if (startService(GoOnline.setIntent(getBaseContext())) != null) {
         } else {
             stopService(setIntent(getBaseContext()));
             startService(setIntent(getBaseContext()));
         }
-
         prefManager = PrefManager.getPrefManager(GoOffline.this);
-        findViewById();
         mRequestingLocationUpdates = false;
-        initMap();
         if (getIntent().getExtras() != null) {
             if (showlayout.getVisibility() == View.GONE) {
                 HailButton.setVisibility(View.GONE);
@@ -124,9 +124,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
             if (!prefManager.getPilotToken().equalsIgnoreCase(""))
                 checkRideStatus();
         }
-
         onClickEvents();
-
         NotifyCustomerSingleton.actionCompletedSingleton().setListener(new ActionCompleted() {
             @Override
             public void actionCompleted() {
@@ -153,7 +151,10 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                 showlayout.setVisibility(View.GONE);
                 showStartTrip.setVisibility(View.GONE);
                 HailButton.setVisibility(View.VISIBLE);
-                setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "");
+                if (fromLocationMarker != null) {
+                    fromLocationMarker.remove();
+                }
+                setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender());
             }
         });
         HailButton.setOnClickListener(new View.OnClickListener() {
@@ -165,29 +166,35 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
         notifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WebServiceClasses.getWebServiceClasses(GoOffline.this, TAG).notifyCustomer(rideId, new VolleyResponseListerner() {
-                    @Override
-                    public void onResponse(JSONObject response) throws JSONException {
-                        if (response.getString("token_status").equalsIgnoreCase("1")) {
-                            if (response.getString("status").equalsIgnoreCase("1")) {
-                                NotifyCustomerSingleton.actionCompletedSingleton().ActionCompleted();
-                                CommonMethods.toast(GoOffline.this, response.getString("message"));
+//                if (!isNotified) {
+                    WebServiceClasses.getWebServiceClasses(GoOffline.this, TAG).notifyCustomer(rideId, new VolleyResponseListerner() {
+                        @Override
+                        public void onResponse(JSONObject response) throws JSONException {
+                            if (response.getString("token_status").equalsIgnoreCase("1")) {
+                                if (response.getString("status").equalsIgnoreCase("1")) {
+//                                    isNotified = true;
+                                    NotifyCustomerSingleton.actionCompletedSingleton().ActionCompleted();
+                                    CommonMethods.toast(GoOffline.this, response.getString("message"));
+                                } else {
+                                    ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted();
+                                    CommonMethods.toast(GoOffline.this, response.getString("message"));
+                                }
+
                             } else {
                                 ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted();
                                 CommonMethods.toast(GoOffline.this, response.getString("message"));
                             }
-
-                        } else {
-                            ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted();
-                            CommonMethods.toast(GoOffline.this, response.getString("message"));
                         }
-                    }
 
-                    @Override
-                    public void onError(String message, String title) {
-                        AlertDialogManager.showAlertDialog(GoOffline.this, title, message, false);
-                    }
-                });
+                        @Override
+                        public void onError(String message, String title) {
+                            AlertDialogManager.showAlertDialog(GoOffline.this, title, message, false);
+                        }
+                    });
+//                } else {
+//                    CommonMethods.toast(GoOffline.this, "Already notified!");
+//                }
+
             }
         });
     }
@@ -262,7 +269,8 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                                 PreferenceManager.getDefaultSharedPreferences(GoOffline.this).edit().putString(CommonIntent.rideType, response.getString("ridetype")).commit();
                                 CommonMethods.toast(GoOffline.this, response.getString("message"));
                                 flag = true;
-                                setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), "tripStart", riderGender);
+                                onTrip = true;
+                                setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), "tripStart");
                                 cancelButton.setVisibility(View.GONE);
                                 notifyButton.setVisibility(View.GONE);
                                 startTripButton.setVisibility(View.GONE);
@@ -355,11 +363,14 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                                 public void onResponse(JSONObject response) throws JSONException {
                                     if (response.getString("status").equalsIgnoreCase("1")) {
                                         CommonMethods.toast(GoOffline.this, response.getString("message"));
+                                        if (fromLocationMarker != null) {
+                                            fromLocationMarker.remove();
+                                        }
                                         showlayout.setVisibility(View.GONE);
                                         showStartTrip.setVisibility(View.GONE);
                                         HailButton.setVisibility(View.VISIBLE);
                                         alertdialog.dismiss();
-                                        setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "");
+                                        setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender());
                                     } else if (response.getString("status").equalsIgnoreCase("0")) {
                                         alertdialog.dismiss();
                                         CommonMethods.toast(GoOffline.this, response.getString("message"));
@@ -447,9 +458,17 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                     if (response.getString("status").equalsIgnoreCase("1")) {
                         HailButton.setVisibility(View.GONE);
                         getCheckStatusValues(jsonObject, "1");
-                        NotifyCustomerSingleton.actionCompletedSingleton().ActionCompleted();
+                        start_lat = response.getJSONObject("data").getString("startinglatitude");
+                        start_lang = response.getJSONObject("data").getString("startinglongitude");
+                        fromLatlang = new LatLng(Double.parseDouble(start_lat), Double.parseDouble(start_lang));
+                        setFromLocation(fromLatlang);
+//                        NotifyCustomerSingleton.actionCompletedSingleton().ActionCompleted();
                         //ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted();
                     } else if (response.getString("status").equalsIgnoreCase("2")) {
+                        start_lat = response.getJSONObject("data").getString("endinglatitude");
+                        start_lang = response.getJSONObject("data").getString("endinglongitude");
+                        fromLatlang = new LatLng(Double.parseDouble(start_lat), Double.parseDouble(start_lang));
+                        setFromLocation(fromLatlang);
                         sosIcon.setVisibility(View.VISIBLE);
                         HailButton.setVisibility(View.GONE);
                         getCheckStatusValues(jsonObject, "2");
@@ -460,6 +479,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                         notifyButton.setVisibility(View.GONE);
                         endTripButton.setVisibility(View.VISIBLE);
                         showStartTrip.setVisibility(View.VISIBLE);
+                        onTrip = true;
                     } else if (response.getString("status").equalsIgnoreCase("3")) {
                         HailButton.setVisibility(View.GONE);
                         Intent i = new Intent(GoOffline.this, EndTripDetailActivity.class);
@@ -469,18 +489,18 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
                         //HailButton.setVisibility(View.VISIBLE);
                         showlayout.setVisibility(View.GONE);
                         showStartTrip.setVisibility(View.GONE);
-                        setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender(), "");
+                        setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), prefManager.getGender());
                     }
                 } else {
                     startActivity(new Intent(GoOffline.this, HailActivity.class));
                 }
 
-
             }
 
             @Override
             public void onError(String message, String title) {
-                AlertDialogManager.showAlertDialog(GoOffline.this, title, message, false);
+                //AlertDialogManager.showAlertDialog(GoOffline.this, title, message, false);
+                CommonMethods.toast(GoOffline.this, message);
             }
         });
     }
@@ -500,7 +520,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
             end_lang = jsonObject.getString("endinglongitude");
             fromAddressTextView.setText(CommonMethods.getMarkerMovedAddress(GoOffline.this, new LatLng(Double.parseDouble(start_lat), Double.parseDouble(start_lang))));
             if (mCurrentLocation != null) {
-                setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), "tripStart", riderGender);
+                setMarker(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), "tripStart");
             } else {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
@@ -517,13 +537,15 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
         pilotCancelTripTextView = (TextView) findViewById(R.id.pilotCancelTripTextView);*/
         riderNameTextView.setText(getIntent().getExtras().getString("riderName"));
         rideId = getIntent().getExtras().getString("rideId");
-        start_lat = getIntent().getExtras().getString("start_lat");
-        start_lang = getIntent().getExtras().getString("start_lang");
         end_lat = getIntent().getExtras().getString("end_lat");
         end_lang = getIntent().getExtras().getString("end_lang");
         p_num = getIntent().getExtras().getString("p_num");
         riderGender = getIntent().getExtras().getString("gender");
         fromAddressTextView.setText(getIntent().getExtras().getString("address"));
+        start_lat = getIntent().getExtras().getString("start_lat");
+        start_lang = getIntent().getExtras().getString("start_lang");
+        fromLatlang = new LatLng(Double.parseDouble(start_lat), Double.parseDouble(start_lang));
+        setFromLocation(fromLatlang);
     }
 
     private void findViewById() {
@@ -559,12 +581,27 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
         mMap.getUiSettings().setRotateGesturesEnabled(false);
         mMap.setMyLocationEnabled(true);
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json1));
+
         //mMap.getUiSettings().setZoomControlsEnabled(true);
 //        mMap.setMyLocationEnabled(true);
     }
 
+    private void setFromLocation(final LatLng fromLocation) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mMap != null && fromLocation != null) {
+                    fromLocationMarker = mMap.addMarker(new MarkerOptions().position(fromLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.to_location_icon)).title("").anchor(0.5f, 1f));
+                } else {
+                    delay = 15000;
+                }
+            }
+        }, delay);
 
-    private void setMarker(LatLng currentLocation, String genderType, String riderGender) {
+    }
+
+    private void setMarker(LatLng currentLocation, String genderType) {
         if (marker != null) {
             marker.remove();
         }
@@ -575,20 +612,17 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
             firstTime = 0;
         }
 
-        if (genderType.startsWith("male")) {
-            drawable = R.drawable.male_pilot_icon;
-        } else if (genderType.startsWith("female")) {
-            drawable = R.drawable.female_pilot_icon;
-        } else {
-            if (riderGender.startsWith("male")) {
-                drawable = R.drawable.male_pilot_ride_icon;
-            } else {
-                drawable = R.drawable.male_pilot_ride_icon;
+        if (!onTrip) {
+            if (genderType.startsWith("male")) {
+                drawable = R.drawable.male_pilot_icon;
+            } else if (genderType.startsWith("female")) {
+                drawable = R.drawable.female_pilot_icon;
             }
+        } else {
+            drawable = R.drawable.male_pilot_ride_icon;
         }
 
         markerImageView.setImageResource(drawable);
-//        LatLng position = new LatLng(currentLocation.latitude, currentLocation.longitude);
         markerOptionsmylocaiton = new MarkerOptions().position(currentLocation).icon(BitmapDescriptorFactory.fromResource(drawable)).title("").anchor(0.5f, 1f);
         marker = mMap.addMarker(markerOptionsmylocaiton);
 //        LatLng latlang = new LatLng(currentLocation.latitude, currentLocation.longitude);
@@ -683,14 +717,13 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location) {
         if (location == null) {
-            setMarker(new LatLng(AppControler.locationInstance().getLocation().latitude, AppControler.locationInstance().getLocation().longitude), prefManager.getGender(), "");
+            setMarker(new LatLng(AppControler.locationInstance().getLocation().latitude, AppControler.locationInstance().getLocation().longitude), prefManager.getGender());
         } else {
             mCurrentLocation = location;
             currentLat = String.valueOf(mCurrentLocation.getLatitude());
             currentLong = String.valueOf(mCurrentLocation.getLongitude());
 //        handleNewLocation(mCurrentLocation);
-            setMarker(new LatLng(location.getLatitude(), location.getLongitude()), prefManager.getGender(), "");
-            Log.d(TAG, mCurrentLocation + "");
+            setMarker(new LatLng(location.getLatitude(), location.getLongitude()), prefManager.getGender());
         }
     }
 
@@ -727,7 +760,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
     @Override
     protected void onStart() {
         super.onStart();
-        // mGoogleApiClient.connect();
+
     }
 
     private void showCourireAlertBox() {

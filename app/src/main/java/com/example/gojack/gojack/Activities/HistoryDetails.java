@@ -48,8 +48,8 @@ public class HistoryDetails extends CommonActionBar {
                 progressBar.dismiss();
                 if (response.getString("status").equalsIgnoreCase("1")) {
                     JSONObject jsonObject = response.getJSONObject("data");
-                    detailFromLocationTextView.setText(jsonObject.getString("starting_address"));
-                    detailToLocationTextView.setText(jsonObject.getString("ending_address"));
+                    detailFromLocationTextView.setText(jsonObject.getString("driver_s_address"));
+                    detailToLocationTextView.setText(jsonObject.getString("driver_e_address"));
                     detailpaymentTypeTextView.setText(jsonObject.getString("payment_mode"));
                     detailFinalRateTextView.setText(getResources().getString(R.string.rs) + " " + jsonObject.getString("final_amount"));
                 }

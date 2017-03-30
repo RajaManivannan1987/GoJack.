@@ -7,7 +7,15 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
+import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
 import com.google.android.gms.maps.model.LatLng;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -20,6 +28,7 @@ public class MyLocation {
     private Context context;
 
 
+
     public MyLocation(Context context) {
         this.context = context;
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -29,7 +38,6 @@ public class MyLocation {
 
     public LatLng getLocation() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
         } else {
             if (locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER) != null)
                 location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -40,11 +48,9 @@ public class MyLocation {
             }
 
         }
-        if (location != null)
+        if (location != null) {
             return new LatLng(location.getLatitude(), location.getLongitude());
-        else
+        } else
             return null;
     }
-
-
 }

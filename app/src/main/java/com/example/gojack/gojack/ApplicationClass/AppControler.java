@@ -9,6 +9,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.gojack.gojack.GCMClasses.RegistrationIntentService;
 import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.Font.FontsOverride;
 import com.example.gojack.gojack.HelperClasses.InterNet.ConnectivityReceiver;
 import com.example.gojack.gojack.HelperClasses.ServiceClass.GPSTracker;
 import com.example.gojack.gojack.HelperClasses.ServiceClass.MyLocation;
@@ -44,6 +45,8 @@ public class AppControler extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/roboto_regular.ttf");
+        FontsOverride.setDefaultFont(this, "SERIF", "fonts/rupee_foradian.ttf");
         new GPSTracker();
         new CommonMethods();
         sInstance = this;

@@ -37,7 +37,9 @@
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout style="@style/inputTextView">
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/passwordTextInputLayout"
+                style="@style/inputTextView">
 
                 <EditText
                     android:id="@+id/passwordEditText"

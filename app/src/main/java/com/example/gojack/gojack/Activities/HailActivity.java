@@ -292,6 +292,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
             currentLong = String.valueOf(mCurrentLocation.getLongitude());
 //        handleNewLocation(mCurrentLocation);
             setMarket(new LatLng(location.getLatitude(), location.getLongitude()), prefManager.getGender());
+            Log.d(TAG, "Lat: "+currentLat + " Lang: "+currentLong);
         }
     }
 

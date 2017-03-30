@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +31,8 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     private LoginActivity activity = LoginActivity.this;
     private EditText userName, password;
     private Button submitButton;
+    private TextInputLayout passwordTextInputLayout;
+    ;
     private String MobilePattern = "[0-9]{10}";
     // private WebServiceClasses webServiceClasses;
     //private PrefManager prefManager;
@@ -65,22 +69,23 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         userName = (EditText) findViewById(R.id.userNameEditText);
         password = (EditText) findViewById(R.id.passwordEditText);
         submitButton = (Button) findViewById(R.id.loginButton);
+        passwordTextInputLayout = (TextInputLayout) findViewById(R.id.passwordTextInputLayout);
     }
 
     private void loginValidate() {
-        if (Validation.emailPhoneValidation(userName.getText().toString()).equalsIgnoreCase("email") || Validation.emailPhoneValidation(userName.getText().toString()).equalsIgnoreCase("phone")) {
+        if (Validation.emailPhoneValidation(userName.getText().toString().trim()).equalsIgnoreCase("email") || Validation.emailPhoneValidation(userName.getText().toString().trim()).equalsIgnoreCase("phone")) {
             userName.setError(null);
-            if (Validation.isPasswordEmpty(password.getText().toString())) {
+            if (Validation.isPasswordEmpty(password.getText().toString().trim())) {
                 password.setError(null);
-                if (Validation.isPasswordValid(password.getText().toString())) {
+                if (Validation.isPasswordValid(password.getText().toString().trim())) {
                     password.setError(null);
                     login();
                 } else {
-                    password.setError(Validation.passwordError);
+                    passwordTextInputLayout.setError(Validation.passwordError);
                     password.requestFocus();
                 }
             } else {
-                password.setError(Validation.passwordEmptyMessage);
+                passwordTextInputLayout.setError(Validation.passwordEmptyMessage);
                 password.requestFocus();
             }
         } else {
