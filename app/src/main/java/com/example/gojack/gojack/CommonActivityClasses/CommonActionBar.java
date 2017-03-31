@@ -67,12 +67,7 @@ public class CommonActionBar extends AppCompatActivity implements ConnectivityRe
         } else {
             message = "Sorry! Not connected to internet";
         }
-        Snackbar snackbar = Snackbar.make(commonLayout, message, Snackbar.LENGTH_LONG);
-        View sbView = snackbar.getView();
-        sbView.setBackgroundColor(Color.RED);
-        TextView tv = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-        tv.setTextColor(Color.WHITE);
-        snackbar.show();
+        CommonMethods.showSnakBar(message,commonLayout);
     }
 
     @Override

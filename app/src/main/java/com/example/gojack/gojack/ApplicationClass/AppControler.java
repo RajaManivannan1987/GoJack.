@@ -47,7 +47,9 @@ public class AppControler extends MultiDexApplication {
         super.onCreate();
         FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/roboto_regular.ttf");
         FontsOverride.setDefaultFont(this, "SERIF", "fonts/rupee_foradian.ttf");
-        new GPSTracker();
+
+//          31/3/2017
+//        new GPSTracker();
         new CommonMethods();
         sInstance = this;
         instanceLocation(this);

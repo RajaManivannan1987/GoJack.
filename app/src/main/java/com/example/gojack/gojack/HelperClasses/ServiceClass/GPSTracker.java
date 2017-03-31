@@ -23,11 +23,13 @@ import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.gojack.gojack.Activities.LoginActivity;
 import com.example.gojack.gojack.ApplicationClass.AppControler;
 import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
@@ -57,6 +59,7 @@ public class GPSTracker extends Service implements LocationListener {
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
     protected LocationManager mLocationManager;
+    RequestQueue queue;
     //    private WebServiceClasses webServiceClasses;
     private Timer timer;
     private TimerTask timerTask;
@@ -81,6 +84,7 @@ public class GPSTracker extends Service implements LocationListener {
         super.onCreate();
 //        webServiceClasses = new WebServiceClasses(this, TAG);
         timer = new Timer();
+        queue = Volley.newRequestQueue(GPSTracker.this);
         Log.d(TAG, "ONCREATE");
         getLocation();
     }
@@ -200,7 +204,8 @@ public class GPSTracker extends Service implements LocationListener {
         });
         int MY_SOCKET_TIMEOUT_MS = 30000;
         jsonRequest.setRetryPolicy(new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppControler.getsInstance().addToRequestQueue(jsonRequest);
+        queue.add(jsonRequest);
+// AppControler.getsInstance().addToRequestQueue(jsonRequest);
     }
 
     public void stopUsingGps() {

@@ -90,7 +90,7 @@ public class CodeConfirmation extends CommonActionBar {
 
                         @Override
                         public void onError(String message, String title) {
-                            AlertDialogManager.showAlertDialog(CodeConfirmation.this, title, message, false);
+                            CommonMethods.showSnakBar(message,userNameEditText );
                         }
                     });
                 } else {

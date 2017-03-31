@@ -143,7 +143,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
 
             @Override
             public void onError(String message, String title) {
-                AlertDialogManager.showAlertDialog(LoginActivity.this, title, message, false);
+                CommonMethods.showSnakBar(message, userName);
             }
         });
     }
@@ -161,19 +161,13 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
 
     private void showSnake(boolean isConnected) {
         String message = null;
-        int color = 0;
+
         if (isConnected) {
             message = "Good! Connected to Internet";
-            color = Color.WHITE;
         } else {
             message = "Sorry! Not connected to internet";
-            color = Color.RED;
         }
-        Snackbar snackbar = Snackbar.make(userName, message, Snackbar.LENGTH_LONG);
-        View sbView = snackbar.getView();
-        TextView tv = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-        tv.setTextColor(color);
-        snackbar.show();
+        CommonMethods.showSnakBar(message, userName);
     }
 
     @Override

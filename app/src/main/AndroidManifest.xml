@@ -71,6 +71,9 @@
             android:name=".Activities.HailActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".Activities.HailTrip"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".Activities.About"
             android:screenOrientation="portrait" />
         <activity

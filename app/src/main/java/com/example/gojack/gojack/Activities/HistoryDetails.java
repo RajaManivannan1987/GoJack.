@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
 import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
@@ -58,7 +59,7 @@ public class HistoryDetails extends CommonActionBar {
             @Override
             public void onError(String message, String title) {
                 progressBar.dismiss();
-                AlertDialogManager.showAlertDialog(HistoryDetails.this,title,message,false);
+                CommonMethods.showSnakBar(message, detailFinalRateTextView);
             }
         });
     }

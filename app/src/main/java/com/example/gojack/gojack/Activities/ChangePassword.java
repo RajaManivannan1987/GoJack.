@@ -48,9 +48,9 @@ public class ChangePassword extends CommonActionBar {
     }
 
     private void setPasswordValidate() {
-        if (Validation.isPasswordValid(newPasswordEditText.getText().toString())) {
+        if (Validation.isPasswordValid(newPasswordEditText.getText().toString().trim())) {
             newPasswordTextInputLayout.setError(null);
-            if (Validation.isPasswordValid(confirmNewPasswordEditText.getText().toString())) {
+            if (Validation.isPasswordValid(confirmNewPasswordEditText.getText().toString().trim())) {
                 confirmNewPasswordTextInputLayout.setError(null);
                 if (newPasswordEditText.getText().toString().equalsIgnoreCase(confirmNewPasswordEditText.getText().toString())) {
                     confirmNewPasswordTextInputLayout.setError(null);
@@ -73,7 +73,7 @@ public class ChangePassword extends CommonActionBar {
 
                         @Override
                         public void onError(String message, String title) {
-                            AlertDialogManager.showAlertDialog(ChangePassword.this, title, message, false);
+                            CommonMethods.showSnakBar(message,confirmNewPasswordTextInputLayout );
                         }
                     });
                     startActivity(new Intent(ChangePassword.this, GoOffline.class));

@@ -54,7 +54,7 @@ public class EndTripDetailActivity extends CommonActionBar {
 
                     @Override
                     public void onError(String message, String title) {
-                        AlertDialogManager.showAlertDialog(EndTripDetailActivity.this,title,message,false);
+                        CommonMethods.showSnakBar(message,deliveredByEditText );
                     }
                 });
             }

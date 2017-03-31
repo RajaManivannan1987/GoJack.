@@ -141,7 +141,7 @@ public class NotificationAlertActivity extends Activity {
                     @Override
                     public void onError(String message, String title) {
                         progressBar.dismiss();
-                        AlertDialogManager.showAlertDialog(NotificationAlertActivity.this, title, message, false);
+                        CommonMethods.showSnakBar(message, messageTextView);
                     }
                 });
 
@@ -208,7 +208,7 @@ public class NotificationAlertActivity extends Activity {
 
             @Override
             public void onError(String message, String title) {
-                AlertDialogManager.showAlertDialog(NotificationAlertActivity.this, title, message, false);
+                CommonMethods.showSnakBar(message, messageTextView);
             }
         });
     }

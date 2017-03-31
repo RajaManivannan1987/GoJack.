@@ -53,7 +53,7 @@ public class ForgotPassword extends CommonActionBar {
 
                         @Override
                         public void onError(String message, String title) {
-                            AlertDialogManager.showAlertDialog(ForgotPassword.this, title, message, false);
+                            CommonMethods.showSnakBar(message, userNameEditText);
                         }
                     });
 

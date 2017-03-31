@@ -75,7 +75,7 @@ public class AccountsActivity extends CommonNavigstionBar {
 
             @Override
             public void onError(String message, String title) {
-
+                CommonMethods.showSnakBar(message, amountTextView);
             }
         });
     }

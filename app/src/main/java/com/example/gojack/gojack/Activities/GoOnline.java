@@ -87,7 +87,7 @@ public class GoOnline extends CommonNavigstionBar {
 
                     @Override
                     public void onError(String message, String title) {
-                        AlertDialogManager.showAlertDialog(GoOnline.this, title, message, false);
+                        CommonMethods.showSnakBar(message, bikeModelTextView);
                     }
                 });
                 /*startActivity(new Intent(GoOnline.this, GoOffline.class));

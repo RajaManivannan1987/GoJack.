@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import com.example.gojack.gojack.AdapterClasses.HistoryAdapter;
 import com.example.gojack.gojack.ApplicationClass.AppControler;
 import com.example.gojack.gojack.CommonActivityClasses.CommonNavigstionBar;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
 import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
@@ -84,7 +85,7 @@ public class History extends CommonNavigstionBar {
             @Override
             public void onError(String message, String title) {
                 progressBar.dismiss();
-                AlertDialogManager.showAlertDialog(History.this,title,message,false);
+                CommonMethods.showSnakBar(message, history_RecyclerView);
             }
         });
     }

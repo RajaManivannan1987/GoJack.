@@ -200,14 +200,14 @@ public class WebServiceClasses {
         });
     }
 
-    public void startTrip(String rideId, final VolleyResponseListerner listerner) {
+    public void startTrip(String rideId, String lat, String lang, final VolleyResponseListerner listerner) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("token", PrefManager.getPrefManager(context).getPilotToken());
             jsonObject.put("driverid", PrefManager.getPrefManager(context).getPilotId());
             jsonObject.put("rideid", rideId);
-            jsonObject.put("slatitude", gpsTracker.getLatitude());
-            jsonObject.put("slongitude", gpsTracker.getLongitude());
+            jsonObject.put("slatitude", lat);
+            jsonObject.put("slongitude", lang);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -225,13 +225,13 @@ public class WebServiceClasses {
 
     }
 
-    public void hailStartTrip(String address, final VolleyResponseListerner listerner) {
+    public void hailStartTrip(String address, String lat, String lang, final VolleyResponseListerner listerner) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("token", PrefManager.getPrefManager(context).getPilotToken());
             jsonObject.put("driverid", PrefManager.getPrefManager(context).getPilotId());
-            jsonObject.put("startinglatitude", gpsTracker.getLatitude());
-            jsonObject.put("startinglongitude", gpsTracker.getLongitude());
+            jsonObject.put("startinglatitude", lat);
+            jsonObject.put("startinglongitude", lang);
             jsonObject.put("startingaddress", address);
         } catch (JSONException e) {
             e.printStackTrace();
