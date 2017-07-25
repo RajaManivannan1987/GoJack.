@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.location.Location;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -13,7 +14,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
@@ -41,21 +41,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
-
-    boolean gps_enabled = false;
-    boolean network_enabled = false;
-    private final int MY_LOCATION = 1;
     private GoogleMap mMap;
-    private SearchLocation searchLocation;
-    private View.OnClickListener currentLocation;
-    private FloatingActionButton locationFloatingActionButton;
     ImageView markerImage;
     Marker marker;
     GoogleApiClient mGoogleApiClient;
     MarkerOptions options;
-    Location prevLoc;
-    Location newLoc;
-    float bearing;
     int init_loc = 0, final_loc = -300;
 
     @Override
@@ -75,9 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
-
         final CountDownTimer timer = new CountDownTimer(300, 300) {
             @Override
             public void onTick(long millisUntilFinished) {

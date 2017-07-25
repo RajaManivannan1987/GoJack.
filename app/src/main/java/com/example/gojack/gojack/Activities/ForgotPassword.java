@@ -10,11 +10,10 @@ import android.widget.SeekBar;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
 import com.example.gojack.gojack.HelperClasses.Common.CommonIntent;
-import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.HelperClasses.Validate.Validation;
 import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
-import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
 
 import org.json.JSONException;
@@ -34,17 +33,19 @@ public class ForgotPassword extends CommonActionBar {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot);
         userNameEditText = (EditText) findViewById(R.id.userNameEditText);
-        setActionBar();
+//        setActionBar();
         forgotButton = (Button) findViewById(R.id.forgotButton);
         forgotButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 if (Validation.emailPhoneValidation(userNameEditText.getText().toString()).equalsIgnoreCase("email") || Validation.emailPhoneValidation(userNameEditText.getText().toString()).equalsIgnoreCase("phone")) {
                     userNameEditText.setError(null);
                     new WebServiceClasses(ForgotPassword.this, "ForgotPassword").forgotPassword(userNameEditText.getText().toString(), new VolleyResponseListerner() {
                         @Override
                         public void onResponse(JSONObject response) throws JSONException {
                             if (response.getString("status").equalsIgnoreCase("1")) {
+                                CommonMethods.hideKeyboard(ForgotPassword.this, view);
+                                userNameEditText.setText("");
                                 startActivity(new Intent(getApplicationContext(), CodeConfirmation.class).putExtra(CommonIntent.customerId, response.getString("userid")));
                             } else {
                                 CommonMethods.toast(ForgotPassword.this, response.getString("message"));

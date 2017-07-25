@@ -182,6 +182,8 @@ public class NotificationAlertActivity extends Activity {
                         i.putExtra("end_lang", jsonObject.getString("endinglongitude"));
                         i.putExtra("rideId", rideId);
                         i.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(i);
                         NotificationAlertActivity.this.finish();
                         callAccept(rideId);

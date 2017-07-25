@@ -23,14 +23,15 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="50dp"
             android:background="@drawable/rectange_style"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/bikeImageView"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 app:civ_border_color="#f3f3f3"
                 app:civ_border_width="0.5dp" />
 
@@ -59,28 +60,45 @@
             <com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton
                 android:id="@+id/my_swipe_button"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
+                android:drawableLeft="@drawable/right_arrows"
+                android:minHeight="50dp"
+                android:textSize="@dimen/contentSizeLarge"
                 android:text="@string/onlineslide"
                 android:textColor="@color/colorPrimary"
-                android:theme="@style/button_style_transprent" />
+                android:theme="@style/button_style_transprent"
+                android:visibility="visible" />
 
             <View
+                android:id="@+id/onLineView"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="10dp"
-                android:background="@color/ColorGray"></View>
+                android:background="@color/ColorGray"
+                android:visibility="gone"></View>
+
+            <TextView
+                android:id="@+id/onLinePageBalanceTextView"
+                style="@style/textView_Normal"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/ColorBlack"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/balanceStatus"
                 style="@style/textView_Normal"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:textColor="@color/ColorGray" />
+                android:textColor="@color/ColorGray"
+                android:visibility="visible" />
 
             <Button
                 android:id="@+id/pilotAccountRechargeButton"
@@ -90,7 +108,8 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/recharge"
-                android:theme="@style/button_style_redcolor" />
+                android:theme="@style/button_style_redcolor"
+                android:visibility="gone" />
 
         </LinearLayout>
     </LinearLayout>

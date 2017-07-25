@@ -23,25 +23,23 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.gojack.gojack.Activities.About;
 import com.example.gojack.gojack.Activities.AccountsActivity;
 import com.example.gojack.gojack.Activities.GoOffline;
 import com.example.gojack.gojack.Activities.GoOnline;
 import com.example.gojack.gojack.Activities.HailActivity;
-import com.example.gojack.gojack.Activities.Help;
 import com.example.gojack.gojack.Activities.History;
 import com.example.gojack.gojack.Activities.LoginActivity;
+import com.example.gojack.gojack.Activities.PaymentActivity;
 import com.example.gojack.gojack.Activities.Settings;
 import com.example.gojack.gojack.AdapterClasses.NavigationBarAdapter;
 import com.example.gojack.gojack.ApplicationClass.AppControler;
 import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.InterNet.ConnectivityReceiver;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.HelperClasses.ServiceClass.GPSTracker;
 import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
 import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
-import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
-import com.example.gojack.gojack.HelperClasses.ServiceClass.LocationService;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -66,7 +64,7 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
     private NavigationBarAdapter adapter;
     private View headerView, footerView;
     private PrefManager prefManager;
-    private Switch goOfflineSwitch;
+    //    private Switch goOfflineSwitch;
     private WebServiceClasses webServiceClasses;
 
     public static Intent setIntent(Context context) {
@@ -80,6 +78,7 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigationbar_activity);
+
         mainNavigationLayout = (LinearLayout) findViewById(R.id.mainNavigationLayout);
         webServiceClasses = new WebServiceClasses(CommonNavigstionBar.this, TAG);
         prefManager = new PrefManager(CommonNavigstionBar.this);
@@ -109,8 +108,8 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
         pilotNameEditext = (TextView) headerView.findViewById(R.id.pilotNameEditext);
 
         pilotNameEditext.setText(prefManager.getPilotName());
-        goOfflineSwitch = (Switch) headerView.findViewById(R.id.goOfflineSwitch);
-        goOfflineSwitch.setOnCheckedChangeListener(this);
+   /*     goOfflineSwitch = (Switch) headerView.findViewById(R.id.goOfflineSwitch);
+        goOfflineSwitch.setOnCheckedChangeListener(this);*/
         //checkStatus();
 
         footerView = getLayoutInflater().inflate(R.layout.navigation_footer, null, false);
@@ -147,7 +146,7 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
                     switch (textView.getText().toString().trim()) {
                         case "GO OFFLINE":
                             if (!prefManager.getPilotToken().equalsIgnoreCase(""))
-                                checkRideStatus("goOffline");
+                            checkRideStatus("goOffline");
                             break;
                         case "DASHBOARD":
                             if (!prefManager.getPilotToken().equalsIgnoreCase(""))
@@ -155,23 +154,25 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
 //                            startActivity(new Intent(CommonNavigstionBar.this, GoOffline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                             break;
                         case "HISTORY":
+//                            startActivity(new Intent(CommonNavigstionBar.this, History1.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                             startActivity(new Intent(CommonNavigstionBar.this, History.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                             break;
                         case "ACCOUNTS":
                             startActivity(new Intent(CommonNavigstionBar.this, AccountsActivity.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                             break;
-                        case "HELP":
+                        /*case "HELP":
                             startActivity(new Intent(CommonNavigstionBar.this, Help.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-                            break;
+                            break;*/
                         case "SETTINGS":
                             startActivity(new Intent(CommonNavigstionBar.this, Settings.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                             break;
-                        case "ABOUT":
-                            startActivity(new Intent(CommonNavigstionBar.this, About.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                        case "PAYTM":
+                            startActivity(new Intent(CommonNavigstionBar.this, PaymentActivity.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                             break;
                     }
                     if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
                         drawerLayout.closeDrawer(Gravity.LEFT);
+
                     }
                 }
             }
@@ -186,15 +187,15 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
 
     private void checkRideStatus(final String className) {
         Log.d(TAG, className);
-        WebServiceClasses.getWebServiceClasses(CommonNavigstionBar.this, TAG).checkRideStatus(new VolleyResponseListerner() {
+        webServiceClasses.getWebServiceClasses(CommonNavigstionBar.this, TAG).checkRideStatus(new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
 //                JSONObject jsonObject = response.getJSONObject("data");
 //                if (response.getString("status").equalsIgnoreCase("0")) {
                 if (className.equalsIgnoreCase("goOffline")) {
                     if (response.getString("status").equalsIgnoreCase("0")) {
-                        updatePilotStatus();
                         stopService(setIntent(getBaseContext()));
+                        updatePilotStatus();
                         startActivity(new Intent(CommonNavigstionBar.this, GoOnline.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                     } else {
                         CommonMethods.toast(CommonNavigstionBar.this, "Ride sitll not completed");
@@ -248,9 +249,11 @@ public class CommonNavigstionBar extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.navigationIcon:
+                CommonMethods.hideKeyboard(CommonNavigstionBar.this, view);
                 if (!drawerLayout.isDrawerOpen(Gravity.LEFT))
                     drawerLayout.openDrawer(Gravity.LEFT);
                 else
+
                     drawerLayout.closeDrawer(Gravity.LEFT);
                 adapter.notifyDataSetChanged();
         }

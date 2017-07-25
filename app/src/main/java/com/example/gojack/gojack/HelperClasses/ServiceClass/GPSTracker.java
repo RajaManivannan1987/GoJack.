@@ -48,6 +48,7 @@ import java.util.TimerTask;
  * Created by IM0033 on 8/4/2016.
  */
 public class GPSTracker extends Service implements LocationListener {
+    public static final String MY_SERVICE = "com.example.gojack.gojack.HelperClasses.ServiceClass.GPSTracker";
     private static final String TAG = "GPSTracker";
     private static String Network = "NetWork";
     private static String gpsEnable = "gps Enable";
@@ -231,6 +232,15 @@ public class GPSTracker extends Service implements LocationListener {
         return longitude;
     }
 
+    public void stoptimer() {
+        if (timer != null && timerTask != null) {
+            timerTask.cancel();
+            timer.cancel();
+            timer.purge();
+        }
+
+    }
+
     public String getAddress() {
         String address = CommonMethods.getMarkerMovedAddress(this, new LatLng(getLatitude(), getLongitude()));
         return address;
@@ -302,7 +312,32 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     @Override
+    public boolean stopService(Intent name) {
+        Log.d(TAG, "stopService");
+        if (timer != null && timerTask != null) {
+            timer.cancel();
+            timerTask.cancel();
+            stopSelf();
+            if (mLocationManager != null)
+                mLocationManager.removeUpdates(this);
+        }
+        return super.stopService(name);
+    }
+    @Override
     public void onDestroy() {
         super.onDestroy();
+        if (timer != null)
+            timer.cancel();
+        if (timerTask != null)
+            timerTask.cancel();
+        stopSelf();
+        Log.v(TAG, "stopService");
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        if (mLocationManager != null)
+            mLocationManager.removeUpdates(this);
     }
+
+
 }

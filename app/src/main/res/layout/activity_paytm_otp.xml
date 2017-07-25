@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#d3d3d3"
+        android:gravity="center"
+        android:text="Paytm OTP"
+        android:textColor="@color/ColorBlack"
+        android:textSize="18sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <android.support.design.widget.TextInputLayout style="@style/inputTextView">
+
+                <EditText
+                    android:id="@+id/paytmotpEditText"
+                    style="@style/editText"
+                    android:drawableLeft="@drawable/paytm_mobile_icon"
+                    android:drawablePadding="25dp"
+                    android:hint="Enter OTP"
+                    android:inputType="number"
+                    android:maxLength="6" />
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/paytmotpButton"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="@string/submit"
+                android:textSize="@dimen/contentSizeLarge"
+                android:textColor="@android:color/white"
+                android:theme="@style/button_style" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

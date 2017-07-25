@@ -103,6 +103,26 @@ public class WebServiceClasses {
             }
         });
     }
+    public void getPilotStatus( final VolleyResponseListerner listerner) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("token", PrefManager.getPrefManager(context).getPilotToken());
+            jsonObject.put("driverid", PrefManager.getPrefManager(context).getPilotId());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        volleyClass.volleyNoProgressPostData(GoJackServerUrls.GET_PILOT_STATUS, jsonObject, new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+                listerner.onResponse(response);
+            }
+
+            @Override
+            public void onError(String message, String title) {
+                listerner.onError(message, title);
+            }
+        });
+    }
 
     public void updateDeviceId(String deviceid, final VolleyResponseListerner listerner) {
         JSONObject jsonObject = new JSONObject();
@@ -125,6 +145,89 @@ public class WebServiceClasses {
                 listerner.onError(message, title);
             }
         });
+    }
+
+    public void verifyPaytmOTP(final String otp, String state, final VolleyResponseListerner listener) {
+        String url = GoJackServerUrls.GetAccessToken;
+        String Authorization = GoJackServerUrls.PaytmAuthorization;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("otp", otp);
+            jsonObject.put("state", state);
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        setPaytmListerner(listener, url, "Authorization", Authorization, jsonObject);
+    }
+
+    public void SendOTP(String mobileNo, String emailId, final VolleyResponseListerner listener) {
+        String url = GoJackServerUrls.SendOTP;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("email", emailId);
+            jsonObject.put("phone", mobileNo);
+            jsonObject.put("clientId", "merchant-calljacktech-staging");
+            jsonObject.put("scope", "wallet");
+            jsonObject.put("responseType", "token");
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        setListerner(url, listener, context, jsonObject);
+    }
+
+    public void checkBalance(String tokenHeader, final VolleyResponseListerner listener) {
+        String url = "http://trust-uat.paytm.in/wallet-web/checkBalance";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("mid", GoJackServerUrls.paytmMID);
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        setPaytmListerner(listener, url, "ssotoken", tokenHeader, jsonObject);
+    }
+
+    public void generateAddmoneyChecksum(String orderId, String custId, String amount, String requestType, String paytmtoken, final VolleyResponseListerner listener) {
+        JSONObject jsonObject = new JSONObject();
+        String url = "http://calljacktech.com/generateChecksum.php";
+        try {
+            jsonObject.put("MID", "CallJa65607497328098");
+            jsonObject.put("ORDER_ID", orderId);
+            jsonObject.put("CUST_ID", custId);
+            jsonObject.put("INDUSTRY_TYPE_ID", "Retail");
+            jsonObject.put("CHANNEL_ID", "WAP");
+            jsonObject.put("TXN_AMOUNT", amount);
+            jsonObject.put("WEBSITE", "APP_STAGING");
+            jsonObject.put("CALLBACK_URL", "https://pguat.paytm.com/paytmchecksum/paytmCallback.jsp");
+            jsonObject.put("REQUEST_TYPE", requestType);
+            jsonObject.put("SSO_TOKEN", paytmtoken);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        setListerner(url, listener, context, jsonObject);
+    }
+
+    public void generateWithDrawChecksum(String orderId, String custId, String amount, String requestType, String paytmtoken, String deviceId, final VolleyResponseListerner listener) {
+        JSONObject jsonObject = new JSONObject();
+        String url = "http://calljacktech.com/generateWithdrawChecksum.php";
+        try {
+            jsonObject.put("AppIP", "127.0.0.1");
+            jsonObject.put("MID", "CallJa65607497328098");
+            jsonObject.put("OrderId", orderId);
+            jsonObject.put("CustId", custId);
+            jsonObject.put("IndustryType", "Retail");
+            jsonObject.put("Channel", "WEB");
+            jsonObject.put("TxnAmount", amount);
+            jsonObject.put("ReqType", requestType);
+            jsonObject.put("Currency", "INR");
+            jsonObject.put("DeviceId", deviceId);
+            jsonObject.put("SSOToken", paytmtoken);
+            jsonObject.put("PaymentMode", "PPI");
+            jsonObject.put("AuthMode", "USRPWD");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        setListerner(url, listener, context, jsonObject);
     }
 
     public void checkStatus(final VolleyResponseListerner listerner) {
@@ -225,7 +328,7 @@ public class WebServiceClasses {
 
     }
 
-    public void hailStartTrip(String address, String lat, String lang, final VolleyResponseListerner listerner) {
+    public void hailStartTrip(String address, String lat, String lang, String endlat, String endlang, String endaddress, final VolleyResponseListerner listerner) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("token", PrefManager.getPrefManager(context).getPilotToken());
@@ -233,6 +336,9 @@ public class WebServiceClasses {
             jsonObject.put("startinglatitude", lat);
             jsonObject.put("startinglongitude", lang);
             jsonObject.put("startingaddress", address);
+            jsonObject.put("endinglatitude", endlat);
+            jsonObject.put("endinglongitude", endlang);
+            jsonObject.put("endingaddress", endaddress);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -333,6 +439,28 @@ public class WebServiceClasses {
             @Override
             public void onError(String message, String title) {
                 listerner.onError(message, title);
+            }
+        });
+    }
+
+    public void updatePaytmToken(String paytmtoken, final VolleyResponseListerner listener) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("token", PrefManager.getPrefManager(context).getPilotToken());
+            jsonObject.put("driverid", PrefManager.getPrefManager(context).getPilotId());
+            jsonObject.put("paytm_token", paytmtoken);
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        volleyClass.volleyPostData(GoJackServerUrls.UPDATE_PAYTMTOKEN, jsonObject, (Activity) context, new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+                listener.onResponse(response);
+            }
+
+            @Override
+            public void onError(String message, String title) {
+                listener.onError(message, title);
             }
         });
     }
@@ -585,6 +713,34 @@ public class WebServiceClasses {
             e.printStackTrace();
         }
         volleyClass.volleyNoProgressPostData(GoJackServerUrls.ACCEPT_ONLY, jsonObject, new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+                listerner.onResponse(response);
+            }
+
+            @Override
+            public void onError(String message, String title) {
+                listerner.onError(message, title);
+            }
+        });
+    }
+
+    private void setPaytmListerner(final VolleyResponseListerner listerner, String url, String key, String header, JSONObject jsonObject) {
+        volleyClass.volleyPaytmPostData(url, jsonObject, key, header, new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+                listerner.onResponse(response);
+            }
+
+            @Override
+            public void onError(String message, String title) {
+                listerner.onError(message, title);
+            }
+        });
+    }
+
+    private void setListerner(String url, final VolleyResponseListerner listerner, Context context, JSONObject jsonObject) {
+        volleyClass.volleyPostData(url, jsonObject, (Activity) context, new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
                 listerner.onResponse(response);

@@ -6,11 +6,11 @@ package com.example.gojack.gojack.HelperClasses.SwipeButtonStyle;
 public abstract class SwipeButtonCustomItems {
     public int gradientColor1 = 0xFF333333;
     public int gradientColor2 = 0xFF666666;
-    public int gradientColor2Width = 50;
+    public int gradientColor2Width = 55;
     public int gradientColor3 = 0xFF549fd0;
     public int postConfirmationColor = 0xFF549fd0;
     public double actionConfirmDistanceFraction = 0.8;
-    public String buttonPressText = ">>   SWIPE TO CONFIRM   >> ";
+    public String buttonPressText = "SWIPE TO CONFIRM   >> ";
     public String actionConfirmText = null;
 
     public int getGradientColor1() {

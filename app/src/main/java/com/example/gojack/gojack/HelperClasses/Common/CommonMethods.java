@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -152,11 +153,13 @@ public class CommonMethods extends AppCompatActivity {
         return adres;
     }
 
-    public static void closeIntent(Context activity) {
+    public static void closeIntent(Activity activity) {
         Intent a = new Intent(Intent.ACTION_MAIN);
         a.addCategory(Intent.CATEGORY_HOME);
         a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(a);
+        activity.finish();
+        System.exit(0);
     }
 
     public static void showSnakBar(String message, View view) {
@@ -166,6 +169,10 @@ public class CommonMethods extends AppCompatActivity {
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
         textView.setTextColor(Color.WHITE);
         snackbar.show();
+    }
+    public static void hideKeyboard(Context context, View v) {
+        InputMethodManager input = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        input.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 }
 

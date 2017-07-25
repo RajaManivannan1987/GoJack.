@@ -72,7 +72,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
     protected Location mCurrentLocation;
     private LatLng currentLocation, toAddressLatLng;
     private PrefManager prefManager;
-    private String currentLat, currentLong, ridetype = "", rideid, toAddress, rideStatus = "0", tripStatus = "0";
+    private String currentLat, currentLong, ridetype = "", rideid, toAddress, rideStatus = "0", tripStatus = "0", endlat = "0.0", endlang = "0.0", endaddress = "";
     private SwipeButton startTripButton, endTripButton;
     private TextView hailOnTripTextView;
     private ImageView hailDirectionButton;
@@ -88,6 +88,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setView(R.layout.activity_hail);
         dialog = new ProgressDialog(HailActivity.this);
         dialog.setMessage("Get your location...");
@@ -139,7 +140,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                 if (mCurrentLocation != null) {
                     String address = CommonMethods.getMarkerMovedAddress(HailActivity.this, new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
                     progressBar.dismiss();
-                    WebServiceClasses.getWebServiceClasses(HailActivity.this, TAG).hailStartTrip(address, currentLat, currentLong,
+                    WebServiceClasses.getWebServiceClasses(HailActivity.this, TAG).hailStartTrip(address, currentLat, currentLong, endlat, endlang, endaddress,
                             new VolleyResponseListerner() {
                                 @Override
                                 public void onResponse(JSONObject response) throws JSONException {
@@ -188,7 +189,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
 
             }
         };
-        startSwipeButton.setButtonPressText(">> Slide to Start Trip >>")
+        startSwipeButton.setButtonPressText(" Swipe To Start Trip ")
                 .setGradientColor1(0xFF549fd0)
                 .setGradientColor2(0xFF666666)
                 .setGradientColor2Width(45)
@@ -209,8 +210,9 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                 progressBar.setMessage("Waiting for response...");
                 progressBar.setCancelable(false);
                 progressBar.show();
-                if (mCurrentLocation != null) {
-                    String address = CommonMethods.getMarkerMovedAddress(HailActivity.this, new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
+
+                String address = CommonMethods.getMarkerMovedAddress(HailActivity.this, new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
+                if (mCurrentLocation != null && !address.equalsIgnoreCase("")) {
                     progressBar.dismiss();
                     final String RideId = PreferenceManager.getDefaultSharedPreferences(HailActivity.this).getString(CommonIntent.rideId, "0");
                     final String RideType = PreferenceManager.getDefaultSharedPreferences(HailActivity.this).getString(CommonIntent.rideType, "ride");
@@ -229,6 +231,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                                 Intent i = new Intent(HailActivity.this, EndTripDetailActivity.class);
                                 i.putExtra("rideId", RideId);
                                 i.putExtra("EndTrip", response.toString());
+                                i.putExtra("activityName", "Hail");
                                 startActivity(i);
                                 finish();
                             }
@@ -247,7 +250,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
 
 
         };
-        endSwip.setButtonPressText(">> Trip End >>")
+        endSwip.setButtonPressText(" Swipe To Trip End ")
                 .setGradientColor1(0xFFf03131)
                 .setGradientColor2(0xFF666666)
                 .setGradientColor2Width(45)
@@ -315,7 +318,6 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLocation, 17);
         hailPageMap.animateCamera(update);
 
-
         if (!onTrip) {
             if (genderType.startsWith("male")) {
                 drawable = R.drawable.male_pilot_icon;
@@ -356,7 +358,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
 
                 if (t < 1.0) {
                     // Post again 16ms later.
-                    handler.postDelayed(this, 17);
+                    handler.postDelayed(this, 10);
                 }
                 {
                     if (hideMarker) {
@@ -373,7 +375,6 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
         });
     }
 
-
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = LocationRequest.create();
@@ -384,7 +385,6 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
         } else {
             buildGoogleApiClient();
         }
-
     }
 
     private void startLocationUpdates() {
@@ -518,6 +518,9 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
             sb.setSpan(new AbsoluteSizeSpan((int) getResources().getDimension(R.dimen.contentSizeSmall)), 0, toAddress.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);//resize size
             if (autocompleteFragment != null) {
                 autocompleteFragment.setText(sb);
+                endlat = String.valueOf(toAddressLatLng.latitude);
+                endlang = String.valueOf(toAddressLatLng.longitude);
+                endaddress = String.valueOf(sb);
             }
         }
     }

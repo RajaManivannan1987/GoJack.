@@ -7,12 +7,18 @@ import android.support.multidex.MultiDexApplication;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.example.gojack.gojack.CommonActivityClasses.CommonNavigstionBar;
 import com.example.gojack.gojack.GCMClasses.RegistrationIntentService;
 import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.Font.FontsOverride;
 import com.example.gojack.gojack.HelperClasses.InterNet.ConnectivityReceiver;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.HelperClasses.ServiceClass.GPSTracker;
 import com.example.gojack.gojack.HelperClasses.ServiceClass.MyLocation;
+import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by IM0033 on 8/2/2016.
@@ -53,8 +59,26 @@ public class AppControler extends MultiDexApplication {
         new CommonMethods();
         sInstance = this;
         instanceLocation(this);
-        startService(new Intent(AppControler.this, GPSTracker.class));
+//        updatePilotStatus();
         startService(new Intent(AppControler.this, RegistrationIntentService.class));
+    }
+
+    private void updatePilotStatus() {
+        WebServiceClasses.getWebServiceClasses(this, "AppControler").getPilotStatus( new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+                if (response.getString("token_status").equalsIgnoreCase("1")&&response.getString("status").equalsIgnoreCase("1")){
+                    startService(new Intent(AppControler.this, GPSTracker.class));
+                }
+
+            }
+
+            @Override
+            public void onError(String message, String title) {
+
+            }
+        });
+
     }
 
     public RequestQueue getmRequestQueue() {

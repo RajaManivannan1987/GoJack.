@@ -21,11 +21,14 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.gojack.gojack.Activities.LoginActivity;
 import com.example.gojack.gojack.ApplicationClass.AppControler;
 import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
-import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
 import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
+import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IM0033 on 8/2/2016.
@@ -302,7 +305,77 @@ public class VolleyClass {
             listerner.onError(parseError, parseErrorTitle);
         }
     }
+    public void volleyPaytmPostData(final String url, JSONObject jsonObject, final String key, final String header, final VolleyResponseListerner listener) {
+        final ProgressDialog pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
+        Log.d(TAG, "volleyPostData request url - " + url);
+        Log.d(TAG, "volleyPostData request data - " + jsonObject.toString());
+        if (isOnLline()) {
+            try {
+                pDialog.show();
+            } catch (Exception e) {
+                Log.d(TAG, e.getMessage());
+            }
+            JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                    url, jsonObject,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d(TAG, "volleyPostData response - " + response.toString());
+                            try {
+                                listener.onResponse(response);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                pDialog.dismiss();
+                            } catch (Exception e) {
+                                Log.d(TAG, e.getMessage());
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    try {
+                        pDialog.dismiss();
+                    } catch (Exception e) {
+                        Log.d(TAG, e.getMessage());
+                    }
+                    if (error instanceof TimeoutError) {
+                        listener.onError(timeout, timeoutTitle);
+                    } else if (error instanceof NoConnectionError) {
+                        listener.onError(poorNetwork, poorNetworkTitle);
+                    } else if (error instanceof AuthFailureError) {
+                        listener.onError(authorizationFailed, authorizationFailedTitle);
+                    } else if (error instanceof ServerError) {
+                        listener.onError(serverNotResponding, serverNotRespondingTitle);
+                    } else if (error instanceof NetworkError) {
+                        listener.onError(networkErrorMessage, networkErrorTitle);
+                    } else if (error instanceof ParseError) {
+                        listener.onError(parseError, parseErrorTitle);
+                    }
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put(key, header);
+                    Log.d(key, header);
+                    return headers;
+                }
 
+            };
+            int MY_SOCKET_TIMEOUT_MS = 30000;
+            jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            AppControler.getsInstance().addToRequestQueue(jsonObjReq);
+        } else {
+            Log.d(TAG, "volleyPostData response - No Internet");
+            listener.onError(networkErrorMessage, networkErrorMessage);
+        }
+    }
     public boolean isOnLline() {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();

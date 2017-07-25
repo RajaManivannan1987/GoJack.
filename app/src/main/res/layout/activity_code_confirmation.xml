@@ -40,6 +40,7 @@
             <TextView
                 style="@style/textView_Normal"
                 android:layout_marginTop="20dp"
+                android:visibility="gone"
                 android:text="@string/forgotcontent3"
                 android:textSize="@dimen/contentSizeSmall" />
 

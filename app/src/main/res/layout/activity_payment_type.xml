@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="Wallet Balance"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/paytmWalletBalanceEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:text="Rs."
+            android:textColor="@android:color/holo_green_light"
+            android:textSize="36sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="50dp"
+            android:background="@color/ColorGray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Rs"
+                android:textColor="@color/ColorBlack"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/amountEditText"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:inputType="number"
+                android:textColorHint="@color/ColorGray"
+                android:maxLength="4"
+                android:text="150"
+                android:textSize="34sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/addmoneyButton"
+            android:layout_width="250dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="ADD TO WALLET"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

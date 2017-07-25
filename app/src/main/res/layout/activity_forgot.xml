@@ -41,7 +41,8 @@
                 style="@style/textView_Normal"
                 android:layout_marginTop="20dp"
                 android:text="@string/forgotcontent3"
-                android:textSize="@dimen/contentSizeSmall" />
+                android:textSize="@dimen/contentSizeSmall"
+                android:visibility="gone" />
 
             <android.support.design.widget.TextInputLayout style="@style/inputTextView">
 
@@ -55,22 +56,23 @@
 
             <Button
                 android:id="@+id/forgotButton"
-                android:layout_width="match_parent"
-                android:layout_height="?android:actionBarSize"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:text="@string/submit"
-                android:theme="@style/button_style"/>
+                android:theme="@style/button_style" />
+
             <SeekBar
                 android:id="@+id/myseek"
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:clickable="false"
-                android:visibility="gone"
                 android:max="100"
                 android:progressDrawable="@android:color/transparent"
-                android:thumb="@drawable/cancel_icon" />
+                android:thumb="@drawable/cancel_icon"
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 

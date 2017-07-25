@@ -48,28 +48,34 @@
         <com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton
             android:id="@+id/hailStartTripButton"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="50dp"
             android:layout_gravity="bottom"
             android:layout_marginBottom="15dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:background="@color/ColorGreen"
+            android:drawableLeft="@drawable/right_arrows"
+            android:drawablePadding="5dp"
             android:text="@string/startslide"
             android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/contentSizeLarge"
             android:theme="@style/button_style_transprent" />
 
         <com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton
             android:id="@+id/hailEndTripButton"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="50dp"
             android:layout_gravity="bottom"
             android:layout_marginBottom="15dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
             android:background="@color/ColorRed"
+            android:drawableLeft="@drawable/right_arrows"
+            android:drawablePadding="5dp"
             android:text="@string/endslide"
             android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/contentSizeLarge"
             android:theme="@style/button_style_transprent"
             android:visibility="gone" />
     </FrameLayout>

@@ -9,19 +9,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
 import com.example.gojack.gojack.HelperClasses.Common.CommonIntent;
-import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.Common.GoJackServerUrls;
+import com.example.gojack.gojack.HelperClasses.Interface.ImComeSms;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.HelperClasses.Sms.ImcomeSmsReceiver;
 import com.example.gojack.gojack.HelperClasses.Validate.Validation;
 import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
-import com.example.gojack.gojack.HelperClasses.Interface.ImComeSms;
-import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
 
 import org.json.JSONException;
@@ -42,7 +40,7 @@ public class CodeConfirmation extends CommonActionBar {
         customerId = getIntent().getExtras().getString(CommonIntent.customerId);
         userNameEditText = (EditText) findViewById(R.id.userNameEditText);
         resendTextView = (TextView) findViewById(R.id.resendTextView);
-        setActionBar();
+//        setActionBar();
         ImcomeSmsReceiver.bindMessageListener(new ImComeSms() {
             @Override
             public void messageReceived(String messageText) {
@@ -75,13 +73,15 @@ public class CodeConfirmation extends CommonActionBar {
         });
         findViewById(R.id.codeSendButton).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 if (Validation.isOtpValid(userNameEditText.getText().toString())) {
                     userNameEditText.setError(null);
                     new WebServiceClasses(CodeConfirmation.this, "CodeConfirm").validateOtp(customerId, userNameEditText.getText().toString(), new VolleyResponseListerner() {
                         @Override
                         public void onResponse(JSONObject response) throws JSONException {
                             if (response.getString("status").equalsIgnoreCase("1")) {
+                                CommonMethods.hideKeyboard(CodeConfirmation.this, view);
+                                userNameEditText.setText("");
                                 startActivity(new Intent(getApplicationContext(), ChangePassword.class).putExtra(CommonIntent.customerId, response.getString("userid")));
                             } else {
                                 CommonMethods.toast(CodeConfirmation.this, response.getString("message"));
@@ -90,7 +90,7 @@ public class CodeConfirmation extends CommonActionBar {
 
                         @Override
                         public void onError(String message, String title) {
-                            CommonMethods.showSnakBar(message,userNameEditText );
+                            CommonMethods.showSnakBar(message, userNameEditText);
                         }
                     });
                 } else {

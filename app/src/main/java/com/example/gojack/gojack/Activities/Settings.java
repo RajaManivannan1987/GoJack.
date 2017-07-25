@@ -9,6 +9,7 @@ import android.widget.Button;
 import com.example.gojack.gojack.CommonActivityClasses.CommonNavigstionBar;
 import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.ServiceClass.GPSTracker;
 import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
 import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
 import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
@@ -59,7 +60,8 @@ public class Settings extends CommonNavigstionBar {
             public void onResponse(JSONObject response) throws JSONException {
                 if (response.getString("token_status").equalsIgnoreCase("1")) {
                     CommonMethods.toast(Settings.this, response.getString("message"));
-                    stopService(setIntent(getBaseContext()));
+//                    stopService(setIntent(getBaseContext()));
+                    stopService(new Intent(Settings.this, GPSTracker.class));
                     PrefManager.getPrefManager(Settings.this).logout();
                     startActivity(new Intent(Settings.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();

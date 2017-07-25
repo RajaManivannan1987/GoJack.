@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.gojack.gojack.ApplicationClass.AppControler;
@@ -32,18 +33,12 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     private EditText userName, password;
     private Button submitButton;
     private TextInputLayout passwordTextInputLayout;
-    ;
-    private String MobilePattern = "[0-9]{10}";
-    // private WebServiceClasses webServiceClasses;
-    //private PrefManager prefManager;
-
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //webServiceClasses = new WebServiceClasses(this, TAG);
-        //prefManager = new PrefManager(this);
         findViewById();
         onClickMethod();
     }
@@ -59,13 +54,18 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         findViewById(R.id.forgotTextView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                userName.setText("");
+                password.setText("");
+                CommonMethods.hideKeyboard(LoginActivity.this, view);
                 startActivity(new Intent(activity, ForgotPassword.class));
-//                startActivity(new Intent(activity, NotificationAlertActivity.class));
             }
         });
     }
 
     private void findViewById() {
+        scrollView = (ScrollView) findViewById(R.id.loginScrollView);
+        scrollView.setVerticalScrollBarEnabled(false);
+        scrollView.setHorizontalScrollBarEnabled(false);
         userName = (EditText) findViewById(R.id.userNameEditText);
         password = (EditText) findViewById(R.id.passwordEditText);
         submitButton = (Button) findViewById(R.id.loginButton);
@@ -92,35 +92,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             userName.setError(Validation.emailPhoneValidation(userName.getText().toString()));
             userName.requestFocus();
         }
-   /*     if (userName.getInputType() == InputType.TYPE_CLASS_PHONE) {
-            if (userName.getText().toString().matches(MobilePattern)) {
-                userName.setError(null);
-                if (Validation.isPasswordValid(password.getText().toString())) {
-                    password.setError(null);
-                    login();
-                } else {
-                    password.setError(Validation.passwordError);
-                    password.requestFocus();
-                }
-            } else {
-                userName.setError(Validation.userNameMobileNoError);
-                userName.requestFocus();
-            }
-        } else {
-            if (Validation.isUserNameValid(userName.getText().toString())) {
-                userName.setError(null);
-                if (Validation.isPasswordValid(password.getText().toString())) {
-                    password.setError(null);
-                    login();
-                } else {
-                    password.setError(Validation.passwordError);
-                    password.requestFocus();
-                }
-            } else {
-                userName.setError(Validation.userNameError);
-                userName.requestFocus();
-            }
-        }*/
     }
 
     private void login() {
@@ -130,11 +101,14 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                 if (response.getString("status").equalsIgnoreCase("1")) {
                     JSONObject jObject = response.getJSONObject("data");
                     CommonMethods.toast(LoginActivity.this, response.getString("message"));
-                    PrefManager.getPrefManager(LoginActivity.this).setLoginDetails(jObject.getString("token"), jObject.getString("name"), jObject.getString("ping_location"), jObject.getString("driverid"), jObject.getString("gender"));
+                    PrefManager.getPrefManager(LoginActivity.this).setLoginDetails(jObject.getString("token"), jObject.getString("name"), jObject.getString("ping_location"), jObject.getString("driverid"), jObject.getString("gender"), jObject.getString("paytm_token"));
                     JSONObject vehicleDetail = jObject.getJSONObject("Vehicle");
                     PrefManager.getPrefManager(LoginActivity.this).setVehileDetails(vehicleDetail.getString("vehicle_make"), vehicleDetail.getString("vehicle_model"), vehicleDetail.getString("vehicle_registration_number"), vehicleDetail.getString("bike_photo"), vehicleDetail.getString("balance_status"), vehicleDetail.getString("balance_message"), vehicleDetail.getString("photo"));
+                    userName.setText("");
+                    password.setText("");
                     startService(new Intent(LoginActivity.this, RegistrationIntentService.class));
                     startActivity(new Intent(activity, GoOnline.class).addCategory(Intent.CATEGORY_HOME).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    CommonMethods.hideKeyboard(LoginActivity.this, userName);
                     finish();
                 } else {
                     CommonMethods.toast(LoginActivity.this, response.getString("message"));

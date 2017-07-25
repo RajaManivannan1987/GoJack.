@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <permission
         android:name="com.example.gojack.gojack.permission.C2D_MESSAGE"
@@ -29,7 +30,7 @@
     <application
         android:name=".ApplicationClass.AppControler"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/gojack_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -47,6 +48,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.ForgotPassword"
+            android:screenOrientation="portrait"
+            android:theme="@style/SettingsTheme" />
+        <activity
+            android:name=".Activities.CheckBalanceActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SettingsTheme" />
         <activity
@@ -97,6 +102,20 @@
             android:name=".Activities.HistoryDetails"
             android:screenOrientation="portrait"
             android:theme="@style/SettingsTheme" />
+        <activity
+            android:name=".Activities.LocationCheckActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.PaytmLogin"
+            android:screenOrientation="portrait"
+            android:theme="@style/SettingsTheme" />
+        <activity
+            android:name=".Activities.PaytmOtpActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SettingsTheme" />
+        <activity
+            android:name=".Activities.PaymentActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -115,6 +134,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
         <service
             android:name=".GCMClasses.GCMListener"
             android:exported="false">
@@ -134,7 +154,11 @@
             android:exported="false" />
         <service
             android:name=".HelperClasses.ServiceClass.GPSTracker"
-            android:enabled="true" />
+            android:enabled="true">
+            <intent-filter android:label="@string/app_name">
+                <action android:name="com.example.gojack.gojack.HelperClasses.ServiceClass.GPSTracker" />
+            </intent-filter>
+        </service>
         <service
             android:name=".HelperClasses.ServiceClass.LocationService"
             android:enabled="true" />

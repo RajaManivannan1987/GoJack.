@@ -159,7 +159,7 @@ public class HailTrip extends CommonNavigstionBar implements GoogleApiClient.Con
                 if (mCurrentLocation != null) {
                     String address = CommonMethods.getMarkerMovedAddress(HailTrip.this, new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
                     progressBar.dismiss();
-                    WebServiceClasses.getWebServiceClasses(HailTrip.this, TAG).hailStartTrip(address, currentLat, currentLong, new VolleyResponseListerner() {
+                    WebServiceClasses.getWebServiceClasses(HailTrip.this, TAG).hailStartTrip(address, currentLat, currentLong,"","","", new VolleyResponseListerner() {
                         @Override
                         public void onResponse(JSONObject response) throws JSONException {
                             if (response.getString("token_status").equalsIgnoreCase("1")) {
@@ -231,6 +231,7 @@ public class HailTrip extends CommonNavigstionBar implements GoogleApiClient.Con
                                 Intent i = new Intent(HailTrip.this, EndTripDetailActivity.class);
                                 i.putExtra("rideId", RideId);
                                 i.putExtra("EndTrip", response.toString());
+                                i.putExtra("activityName", "Hail");
                                 startActivity(i);
                                 finish();
                             }

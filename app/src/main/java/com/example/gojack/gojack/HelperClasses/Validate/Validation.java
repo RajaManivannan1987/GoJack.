@@ -17,6 +17,8 @@ public class Validation {
     public static String passwordError = "Password must be minimum 6 character";
     public static String mobileNoError = "Enter 10 digit mobile number or EmailId";
     public static String otpError = "Enter Valid OTP";
+    public static String paytmEmailidError = "Enter EmailId";
+    public static String paytmMobiledError = "Enter Mobile No";
 
     public static boolean isUserNameValid(String text) {
         return !TextUtils.isEmpty(text) && Patterns.EMAIL_ADDRESS.matcher(text).matches();
@@ -35,6 +37,9 @@ public class Validation {
 
     public static boolean isOtpValid(String text) {
         return !TextUtils.isEmpty(text) && text.length() >= 4;
+    }
+    public static boolean isPaytmOtpValid(String text) {
+        return !TextUtils.isEmpty(text) && text.length() >= 6;
     }
 
     public static String emailPhoneValidation(String string) {

@@ -1,24 +1,31 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'dialjackpilot'
+            keyPassword 'dialjackpilot'
+            storeFile file('D:/Raja/New Folder/D/Android/GoJack/dialjackPilot.jks')
+            storePassword 'dialjackpilot'
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion '25.0.0'
-
     defaultConfig {
-        applicationId "com.example.gojack.gojack"
+        applicationId "com.dialjack.pilot"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "1.0.3"
         multiDexEnabled true
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
-
 }
 
 dependencies {
@@ -31,7 +38,9 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support:multidex:1.0.0'
     testCompile 'junit:junit:4.12'
-    compile files('libs/PGSDK_v1.0.1.jar')
+    //    compile files('libs/PGSDK_V2.0.jar')
+    compile files('libs/PGSDK_V2.0.jar')
     compile 'com.google.code.gson:gson:2.7'
-//    compile 'com.google.android.gms:play-services-analytics:10.0.1'
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    //    compile 'com.google.android.gms:play-services-analytics:10.0.1'
 }

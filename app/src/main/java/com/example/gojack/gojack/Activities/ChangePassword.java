@@ -10,12 +10,11 @@ import android.widget.EditText;
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
 import com.example.gojack.gojack.GCMClasses.RegistrationIntentService;
 import com.example.gojack.gojack.HelperClasses.Common.CommonIntent;
-import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
 import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
+import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
 import com.example.gojack.gojack.HelperClasses.Validate.Validation;
 import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
-import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.R;
 
 import org.json.JSONException;
@@ -26,14 +25,14 @@ import org.json.JSONObject;
  */
 public class ChangePassword extends CommonActionBar {
     private EditText newPasswordEditText, confirmNewPasswordEditText;
-    private TextInputLayout newPasswordTextInputLayout,confirmNewPasswordTextInputLayout;
+    private TextInputLayout newPasswordTextInputLayout, confirmNewPasswordTextInputLayout;
     String customerId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
-        setActionBar();
+//        setActionBar();
         customerId = getIntent().getExtras().getString(CommonIntent.customerId);
         newPasswordEditText = (EditText) findViewById(R.id.newPasswordEditText);
         confirmNewPasswordEditText = (EditText) findViewById(R.id.confirmNewPasswordEditText);
@@ -42,6 +41,7 @@ public class ChangePassword extends CommonActionBar {
         findViewById(R.id.changePasswordButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CommonMethods.hideKeyboard(ChangePassword.this, view);
                 setPasswordValidate();
             }
         });
@@ -60,7 +60,7 @@ public class ChangePassword extends CommonActionBar {
                             if (response.getString("status").equalsIgnoreCase("1")) {
                                 JSONObject jObject = response.getJSONObject("data");
                                 CommonMethods.toast(ChangePassword.this, response.getString("message"));
-                                PrefManager.getPrefManager(ChangePassword.this).setLoginDetails(jObject.getString("token"), jObject.getString("name"), jObject.getString("ping_location"), jObject.getString("driverid"), jObject.getString("gender"));
+                                PrefManager.getPrefManager(ChangePassword.this).setLoginDetails(jObject.getString("token"), jObject.getString("name"), jObject.getString("ping_location"), jObject.getString("driverid"), jObject.getString("gender"), jObject.getString("paytm_token"));
                                 JSONObject vehicleDetail = jObject.getJSONObject("Vehicle");
                                 PrefManager.getPrefManager(ChangePassword.this).setVehileDetails(vehicleDetail.getString("vehicle_make"), vehicleDetail.getString("vehicle_model"), vehicleDetail.getString("vehicle_registration_number"), vehicleDetail.getString("bike_photo"), vehicleDetail.getString("balance_status"), vehicleDetail.getString("balance_message"), vehicleDetail.getString("photo"));
                                 startService(new Intent(ChangePassword.this, RegistrationIntentService.class));
@@ -73,7 +73,7 @@ public class ChangePassword extends CommonActionBar {
 
                         @Override
                         public void onError(String message, String title) {
-                            CommonMethods.showSnakBar(message,confirmNewPasswordTextInputLayout );
+                            CommonMethods.showSnakBar(message, confirmNewPasswordTextInputLayout);
                         }
                     });
                     startActivity(new Intent(ChangePassword.this, GoOffline.class));

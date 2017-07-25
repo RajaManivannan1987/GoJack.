@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.example.gojack.gojack.AdapterClasses.HelperViewPagerAdapter;
 import com.example.gojack.gojack.CommonActivityClasses.CommonNavigstionBar;
-import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
 import com.example.gojack.gojack.R;
 
 import java.util.ArrayList;

@@ -16,8 +16,14 @@ import com.example.gojack.gojack.R;
 public class NavigationBarAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
-    private String[] listItemNames = {"GO OFFLINE", "DASHBOARD", "HISTORY", "ACCOUNTS", "HELP", "SETTINGS", "ABOUT"};
-    private int[] listItemImages = {R.drawable.offline_menu_icon, R.drawable.dashboard_menu_icon, R.drawable.history_menu_icon, R.drawable.accounts_menu_icon, R.drawable.help_menu_icon, R.drawable.setttings_menu_icon, R.drawable.about_menu_icon};
+    private String[] listItemNames = {"GO OFFLINE", "DASHBOARD", "HISTORY", "ACCOUNTS", "PAYTM", "SETTINGS"};
+    private int[] listItemImages = {
+            R.drawable.offline_menu_icon,
+            R.drawable.dashboard_menu_icon,
+            R.drawable.history_menu_icon,
+            R.drawable.accounts_menu_icon,
+            R.drawable.wallet,
+            R.drawable.setttings_menu_icon};
 
     public NavigationBarAdapter(Context context) {
         this.context = context;

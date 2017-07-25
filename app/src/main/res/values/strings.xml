@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">CallJack Pilot</string>
-    <string name="versionCode">Version 0.2</string>
+    <string name="app_name">Dial Jack Pilot</string>
+    <string name="versionCode">Version 0.15</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
@@ -13,27 +13,30 @@
     <string name="mobile">Mobile Number / Email</string>
     <string name="submit">Submit</string>
     <string name="bin">Enter OTP</string>
-    <string name="codesend">Code Send</string>
-    <string name="codesendcontent1">Four digit code send to your email/mobile. This code is valid for next 2 hours.</string>
+    <string name="codesend">Code Sent</string>
+    <string name="codesendcontent1">Four digit code sent to your email/mobile. This code is valid for next 2 hours.</string>
     <string name="codesendcontent2">Once you receive your code, please enter in the section below.</string>
     <string name="newpassword">Enter New Password</string>
     <string name="confirmpassword">Confirm Password</string>
     <string name="confirmpasswordcontent1">Please enter a new password below.</string>
-    <string name="confirmpasswordcontent2">Your password must be at least 8, but no more then 20 characters. It must also contain a capital letter(Uppercase letter)and one number.</string>
+    <string name="confirmpasswordcontent2">Your password must be at least 6 characters.</string>
     <string name="changepassword">Change Password</string>
-    <string name="onlineslide">> Slide to Go Online</string>
-    <string name="offlineslide">> Slide to Go Offline</string>
-    <string name="startslide">> Slide to Start Trip</string>
-    <string name="endslide">> Slide to End Trip</string>
+    <string name="onlineslide"> Swipe To Go Online</string>
+    <string name="offlineslide">> Swipe To Go Offline</string>
+    <string name="startslide">Swipe To Start Trip</string>
+    <string name="endslide"> Swipe To End Trip</string>
     <string name="balance">Your balance is low.<br /> Please recharge your account.</string>
-    <string name="recharge">Recharge</string>
+    <string name="recharge">Add Money</string>
     <string name="title_activity_maps">Map</string>
     <string name="rs">`</string>
     <string name="reSend"><u>Resend</u></string>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
-        AIzaSyAqvW1nQYnA5FQEqqfQPyBORKibVJ7SA2M
+        <!--AIzaSyAqvW1nQYnA5FQEqqfQPyBORKibVJ7SA2M-->
+        //For Live
+        AIzaSyAT6m-uh4_D9zjMAtLcDkmRz18hWPDaKm0
     </string>
     <string name="google_app_id">569571792316</string>
+
 
     //---------Paytm String----
 

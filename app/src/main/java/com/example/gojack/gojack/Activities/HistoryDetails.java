@@ -8,9 +8,8 @@ import android.widget.TextView;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
 import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
-import com.example.gojack.gojack.HelperClasses.DialogBox.AlertDialogManager;
-import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
 import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
+import com.example.gojack.gojack.HelperClasses.WebService.WebServiceClasses;
 import com.example.gojack.gojack.R;
 
 import org.json.JSONException;
@@ -28,9 +27,16 @@ public class HistoryDetails extends CommonActionBar {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history_details);
-        setActionBar();
-        findViewById();
+//        setActionBar();
+        setView(R.layout.activity_history_details);
+//        findViewById();
+        detailFromLocationTextView = (TextView) findViewById(R.id.detailFromTextView);
+        detailToLocationTextView = (TextView) findViewById(R.id.detailToLocationTextView);
+        detailFinalRateTextView = (TextView) findViewById(R.id.detailFinalRateTextView);
+        detailpaymentTypeTextView = (TextView) findViewById(R.id.detailpaymentTextView);
+        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/rupee_foradian.ttf");
+        detailFinalRateTextView.setTypeface(face);
+
         String rideId = getIntent().getExtras().getString("rideId");
         if (getIntent().getExtras().getString("rideId") != null) {
             loadData(rideId);
@@ -50,9 +56,10 @@ public class HistoryDetails extends CommonActionBar {
                 if (response.getString("status").equalsIgnoreCase("1")) {
                     JSONObject jsonObject = response.getJSONObject("data");
                     detailFromLocationTextView.setText(jsonObject.getString("driver_s_address"));
+//                    detailFromLocationTextView.setText("Raja");
                     detailToLocationTextView.setText(jsonObject.getString("driver_e_address"));
                     detailpaymentTypeTextView.setText(jsonObject.getString("payment_mode"));
-                    detailFinalRateTextView.setText(getResources().getString(R.string.rs) + " " + jsonObject.getString("final_amount"));
+                    detailFinalRateTextView.setText( "Rs " + jsonObject.getString("final_amount"));
                 }
             }
 
@@ -65,11 +72,8 @@ public class HistoryDetails extends CommonActionBar {
     }
 
     private void findViewById() {
-        detailFromLocationTextView = (TextView) findViewById(R.id.detailFromLocationTextView);
-        detailToLocationTextView = (TextView) findViewById(R.id.detailToLocationTextView);
-        detailFinalRateTextView = (TextView) findViewById(R.id.detailFinalRateTextView);
-        detailpaymentTypeTextView = (TextView) findViewById(R.id.detailpaymentTypeTextView);
-        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/rupee_foradian.ttf");
-        detailFinalRateTextView.setTypeface(face);
+
+//        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/rupee_foradian.ttf");
+//        detailFinalRateTextView.setTypeface(face);
     }
 }

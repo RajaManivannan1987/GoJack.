@@ -36,8 +36,6 @@ public class HistoryModel {
         this.ride_type = ride_type;
     }
 
-    private String ride_id;
-    private String date_time;
 
     public String getDriver_s_address() {
         return driver_s_address;
@@ -54,7 +52,8 @@ public class HistoryModel {
     public void setDriver_e_address(String driver_e_address) {
         this.driver_e_address = driver_e_address;
     }
-
+    private String ride_id;
+    private String date_time;
     private String driver_s_address;
     private String driver_e_address;
     private String final_amount;

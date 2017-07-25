@@ -10,11 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.example.gojack.gojack.Activities.HistoryDetails;
 import com.example.gojack.gojack.ModelClasses.HistoryModel;
 import com.example.gojack.gojack.R;
-
 import java.util.ArrayList;
 
 /**
@@ -47,7 +45,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.CustomHo
         } else {
             holder.rideTypeImageView.setImageResource(R.drawable.bike_icon);
         }
-        holder.rideRateTextView.setText(context.getResources().getString(R.string.rs) + " " + getListValue.getFinal_amount());
+        holder.rideRateTextView.setText("Rs " + getListValue.getFinal_amount());
         holder.historyMainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

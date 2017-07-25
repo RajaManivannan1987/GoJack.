@@ -62,7 +62,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps2);
         initMap();
-
     }
 
     private void initMap() {

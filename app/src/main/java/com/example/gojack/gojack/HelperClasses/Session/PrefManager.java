@@ -21,6 +21,7 @@ public class PrefManager {
     private static final String PILOT_NAME = "pilot_name";
     private static final String PILOT_PHOTO = "pilot_photo";
     private static final String PILOT_LOCATION = "pilot_location";
+    private static final String PILOT_PAYTMTOKEN = "pilot_paytm_token";
     private static final String GENDER = "gender";
     private static final String VEHICLE_MAKE = "vehicle_make";
     private static final String VEHICLE_MODEL = "vehicle_model";
@@ -44,13 +45,14 @@ public class PrefManager {
         vehicleEditor = preferences.edit();
     }
 
-    public void setLoginDetails(String token, String pilotName, String pilotlocation, String pilotId, String gender) {
+    public void setLoginDetails(String token, String pilotName, String pilotlocation, String pilotId, String gender, String paytmToken) {
         editor.putBoolean(IS_LOGIN, true);
         editor.putString(PILOT_TOKEN, token);
         editor.putString(PILOT_NAME, pilotName);
         editor.putString(PILOT_LOCATION, pilotlocation);
         editor.putString(PILOT_ID, pilotId);
         editor.putString(GENDER, gender);
+        editor.putString(PILOT_PAYTMTOKEN, paytmToken);
         editor.commit();
     }
 
@@ -83,6 +85,15 @@ public class PrefManager {
 
     public String getPilotLocation() {
         return preferences.getString(PILOT_LOCATION, "");
+    }
+
+    public String getPilotPaytmtoken() {
+        return preferences.getString(PILOT_PAYTMTOKEN, "");
+    }
+
+    public void setPaytmtoken(String token) {
+        editor.putString(this.PILOT_PAYTMTOKEN, token);
+        editor.commit();
     }
 
     public String getGender() {

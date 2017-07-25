@@ -97,6 +97,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:padding="3dp"
                         android:orientation="vertical">
 
                         <de.hdodenhof.circleimageview.CircleImageView
@@ -113,6 +114,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:padding="3dp"
                         android:orientation="vertical">
 
                         <de.hdodenhof.circleimageview.CircleImageView
@@ -129,6 +131,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:padding="3dp"
                         android:orientation="vertical">
 
                         <de.hdodenhof.circleimageview.CircleImageView
@@ -145,6 +148,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:padding="3dp"
                         android:orientation="vertical">
 
                         <de.hdodenhof.circleimageview.CircleImageView
@@ -230,10 +234,13 @@
                 <com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton
                     android:id="@+id/startTripButton"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="50dp"
                     android:layout_marginBottom="5dp"
+                    android:drawableLeft="@drawable/right_arrows"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
+                    android:drawablePadding="5dp"
+                    android:textSize="@dimen/contentSizeLarge"
                     android:text="@string/startslide"
                     android:textColor="@color/colorPrimary"
                     android:theme="@style/button_style_transprent" />
@@ -241,11 +248,13 @@
                 <com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton
                     android:id="@+id/endTripButton"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="50dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/right_arrows"
+                    android:drawablePadding="5dp"
                     android:background="@color/ColorRed"
                     android:text="@string/endslide"
                     android:textColor="@color/colorPrimary"

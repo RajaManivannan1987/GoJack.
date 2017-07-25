@@ -91,19 +91,14 @@ public class MerchantActivity extends Activity {
                 "http://imaginetventures.me/sample/steptest/generateChecksum.php",
                 "http://imaginetventures.me/sample/steptest/verifyChecksum.php");
 
-        Service.initialize(Order, Merchant, null);
+        Service.initialize(Order, null);
 
         Service.startPaymentTransaction(this, true, true, new PaytmPaymentTransactionCallback() {
-            @Override
-            public void onTransactionSuccess(Bundle inResponse) {
-                Log.d("MerchantActivity", "Payment Transaction is successful " + inResponse);
-                Toast.makeText(getApplicationContext(), "Payment Transaction is successful ", Toast.LENGTH_LONG).show();
-            }
+
 
             @Override
-            public void onTransactionFailure(String s, Bundle inErrorMessage) {
-                Log.d("MerchantActivity", "Payment Transaction Failed " + inErrorMessage);
-                CommonMethods.toast(MerchantActivity.this, "onErrorLoadingWebPage " + s);
+            public void onTransactionResponse(Bundle bundle) {
+                
             }
 
             @Override
@@ -132,6 +127,11 @@ public class MerchantActivity extends Activity {
             @Override
             public void onBackPressedCancelTransaction() {
                 Log.d("MerchantActivity", "Payment onBackPressedCancelTransaction");
+            }
+
+            @Override
+            public void onTransactionCancel(String s, Bundle bundle) {
+
             }
         });
     }
