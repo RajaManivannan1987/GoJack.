@@ -61,8 +61,11 @@ public class CheckBalanceActivity extends CommonActionBar {
         WebServiceClasses.getWebServiceClasses(CheckBalanceActivity.this, "").checkBalance(pilotPaytmtoken, new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
-                paytmBalance = Float.parseFloat(response.getJSONObject("response").getString("amount"));
+                paytmBalance = Float.parseFloat(response.getJSONObject("response").getString("paytmWalletBalance"));
+                // For Live 10/8/2017
                 if (paytmBalance < 300) {
+                // For Testing 10/8/2017
+//                if (paytmBalance <= 5) {
                     startActivity(new Intent(CheckBalanceActivity.this, GoOnline.class));
                     finish();
                 } else {

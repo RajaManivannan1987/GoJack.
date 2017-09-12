@@ -44,15 +44,15 @@ public class HistoryDetails extends CommonActionBar {
     }
 
     private void loadData(String rideId) {
-        final ProgressDialog progressBar = new ProgressDialog(HistoryDetails.this);
+       /* final ProgressDialog progressBar = new ProgressDialog(HistoryDetails.this);
         progressBar.setMessage("Fetch data...");
         progressBar.setCancelable(false);
-        progressBar.show();
+        progressBar.show();*/
         //webServiceClasses = new WebServiceClasses(activity, TAG);
         WebServiceClasses.getWebServiceClasses(HistoryDetails.this, TAG).getHistoryDetails(rideId, new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
-                progressBar.dismiss();
+//                progressBar.dismiss();
                 if (response.getString("status").equalsIgnoreCase("1")) {
                     JSONObject jsonObject = response.getJSONObject("data");
                     detailFromLocationTextView.setText(jsonObject.getString("driver_s_address"));
@@ -65,7 +65,7 @@ public class HistoryDetails extends CommonActionBar {
 
             @Override
             public void onError(String message, String title) {
-                progressBar.dismiss();
+//                progressBar.dismiss();
                 CommonMethods.showSnakBar(message, detailFinalRateTextView);
             }
         });

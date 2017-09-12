@@ -4,81 +4,110 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/ColorGrayLight"
+        android:gravity="center"
+        android:text="Paytm Balance"
+        android:textColor="@color/ColorBlack"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:text="Wallet Balance"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/paytmWalletBalanceEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:minHeight="50dp"
-            android:text="Rs."
-            android:textColor="@android:color/holo_green_light"
-            android:textSize="36sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="50dp"
-            android:background="@color/ColorGray" />
+        android:layout_margin="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginLeft="35dp"
-            android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:text="Rs"
-                android:textColor="@color/ColorBlack"
-                android:textSize="24sp" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:text="Wallet Balance"
+                android:textSize="14sp" />
 
-            <EditText
-                android:id="@+id/amountEditText"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:inputType="number"
-                android:textColorHint="@color/ColorGray"
-                android:maxLength="4"
-                android:text="150"
-                android:textSize="34sp"
+            <TextView
+                android:id="@+id/paytmWalletBalanceEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:minHeight="50dp"
+                android:text="Rs."
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="36sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="50dp"
+                android:background="@color/ColorGray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:text="Rs"
+                    android:textColor="@color/ColorBlack"
+                    android:textSize="24sp" />
+
+                <EditText
+                    android:id="@+id/amountEditText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:text="150"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textColorHint="@color/ColorGray"
+                    android:textSize="34sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/addmoneyButton"
+                android:layout_width="220dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="40dp"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center"
+                android:text="ADD TO WALLET"
+                android:textColor="@color/whiteColor"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
+    </android.support.v7.widget.CardView>
 
-        <TextView
-            android:id="@+id/addmoneyButton"
-            android:layout_width="250dp"
-            android:layout_height="55dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:background="@color/colorPrimaryDark"
-            android:gravity="center"
-            android:text="ADD TO WALLET"
-            android:textColor="#ffffff"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
+    <TextView
+        android:id="@+id/unLinkPaytm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="10sp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:minHeight="30dp"
+        android:text="@string/unlink_paytm"
+        android:textColor="@color/ColorBlack"
+        android:textSize="14sp"
+        android:textStyle="normal" />
 </LinearLayout>

@@ -4,6 +4,7 @@
     android:id="@+id/locationCheckRelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/ColorAppBackground"
     tools:context="com.example.gojack.gojack.Activities.LocationCheckActivity">
 
     <ImageView

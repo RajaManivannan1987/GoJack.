@@ -40,7 +40,7 @@ public class ForgotPassword extends CommonActionBar {
             public void onClick(final View view) {
                 if (Validation.emailPhoneValidation(userNameEditText.getText().toString()).equalsIgnoreCase("email") || Validation.emailPhoneValidation(userNameEditText.getText().toString()).equalsIgnoreCase("phone")) {
                     userNameEditText.setError(null);
-                    new WebServiceClasses(ForgotPassword.this, "ForgotPassword").forgotPassword(userNameEditText.getText().toString(), new VolleyResponseListerner() {
+                    WebServiceClasses.getWebServiceClasses(ForgotPassword.this, "ForgotPassword").forgotPassword(userNameEditText.getText().toString(), new VolleyResponseListerner() {
                         @Override
                         public void onResponse(JSONObject response) throws JSONException {
                             if (response.getString("status").equalsIgnoreCase("1")) {

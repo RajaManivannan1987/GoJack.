@@ -138,9 +138,12 @@ public class GoOnline extends CommonNavigstionBar {
         webServices.checkBalance(pilotPaytmtoken, new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
-                paytmBalance = Float.parseFloat(response.getJSONObject("response").getString("amount"));
-                balanceTextView.setText("Wallet Balance is: Rs." + response.getJSONObject("response").getString("amount"));
-//                paytmBalance=350;
+                // For Live 10/8/2017
+                paytmBalance = Float.parseFloat(response.getJSONObject("response").getString("paytmWalletBalance"));
+                balanceTextView.setText("Wallet Balance is: Rs." + response.getJSONObject("response").getString("paytmWalletBalance"));
+                // For Testing 10/8/2017
+//                paytmBalance = 400;
+
                 if (paytmBalance < 300) {
                     swipeButton.setVisibility(View.GONE);
                     balanceTextView.setVisibility(View.VISIBLE);

@@ -54,7 +54,7 @@ public class ChangePassword extends CommonActionBar {
                 confirmNewPasswordTextInputLayout.setError(null);
                 if (newPasswordEditText.getText().toString().equalsIgnoreCase(confirmNewPasswordEditText.getText().toString())) {
                     confirmNewPasswordTextInputLayout.setError(null);
-                    new WebServiceClasses(ChangePassword.this, "ChangePassword").changePassword(customerId, newPasswordEditText.getText().toString(), new VolleyResponseListerner() {
+                    WebServiceClasses.getWebServiceClasses(ChangePassword.this, "ChangePassword").changePassword(customerId, newPasswordEditText.getText().toString(), new VolleyResponseListerner() {
                         @Override
                         public void onResponse(JSONObject response) throws JSONException {
                             if (response.getString("status").equalsIgnoreCase("1")) {

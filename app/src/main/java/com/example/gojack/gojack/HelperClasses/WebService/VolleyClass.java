@@ -10,6 +10,7 @@ import android.util.Log;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
@@ -305,7 +306,9 @@ public class VolleyClass {
             listerner.onError(parseError, parseErrorTitle);
         }
     }
-    public void volleyPaytmPostData(final String url, JSONObject jsonObject, final String key, final String header, final VolleyResponseListerner listener) {
+
+    public void volleyPaytmPostData(String type, final String url, JSONObject jsonObject, final String key, final String header, final VolleyResponseListerner listener) {
+        int posttype;
         final ProgressDialog pDialog = new ProgressDialog(context);
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(false);
@@ -317,7 +320,12 @@ public class VolleyClass {
             } catch (Exception e) {
                 Log.d(TAG, e.getMessage());
             }
-            JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+            if (type.equalsIgnoreCase("delete")) {
+                posttype = Request.Method.DELETE;
+            } else {
+                posttype = Request.Method.POST;
+            }
+            JsonObjectRequest jsonObjReq = new JsonObjectRequest(posttype,
                     url, jsonObject,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -376,6 +384,64 @@ public class VolleyClass {
             listener.onError(networkErrorMessage, networkErrorMessage);
         }
     }
+
+    public void volleyPaytmGETData(final String url, JSONObject jsonObject, final String key, final String header, final VolleyResponseListerner listener) {
+        Log.d(TAG, "volleyPostData request url - " + url);
+        Log.d(TAG, "volleyPostData request data - " + jsonObject.toString());
+        if (isOnLline()) {
+            JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+                    url, jsonObject,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d(TAG, "volleyPostData response - " + response.toString());
+                            try {
+                                listener.onResponse(response);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (error instanceof TimeoutError) {
+                        listener.onError(timeout, timeoutTitle);
+                    } else if (error instanceof NoConnectionError) {
+                        listener.onError(poorNetwork, poorNetworkTitle);
+                    } else if (error instanceof AuthFailureError) {
+                        listener.onError(authorizationFailed, authorizationFailedTitle);
+                    } else if (error instanceof ServerError) {
+                        listener.onError(serverNotResponding, serverNotRespondingTitle);
+                    } else if (error instanceof NetworkError) {
+                        listener.onError(networkErrorMessage, networkErrorTitle);
+                    } else if (error instanceof ParseError) {
+                        listener.onError(parseError, parseErrorTitle);
+                    }
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put(key, header);
+                    Log.d(key, header);
+                    return headers;
+                }
+
+
+            };
+            int MY_SOCKET_TIMEOUT_MS = 30000;
+            jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//            queue.add(jsonObjReq);
+            AppControler.getsInstance().addToRequestQueue(jsonObjReq);
+        } else {
+            Log.d(TAG, "volleyPostData response - No Internet");
+            listener.onError(networkErrorMessage, networkErrorMessage);
+        }
+    }
+
     public boolean isOnLline() {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();

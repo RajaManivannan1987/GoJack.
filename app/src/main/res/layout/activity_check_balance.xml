@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/ColorAppBackground"
     android:orientation="vertical">
 
     <ProgressBar
@@ -16,6 +17,6 @@
         android:layout_below="@+id/checkProgressBar"
         android:layout_marginTop="15sp"
         android:gravity="center"
-        android:text="Please wait \n Check your Paytm wallet..." />
+        android:text="Please wait \n Checking your Paytm wallet..." />
 
 </RelativeLayout>

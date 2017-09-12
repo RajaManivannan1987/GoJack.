@@ -29,14 +29,12 @@ public class AccountsActivity extends CommonNavigstionBar {
     private RecyclerView acountRecyclerView;
     private AccountAdapter adapter;
     private ArrayList<AccountsModel> list = new ArrayList<>();
-    private WebServiceClasses webServiceClasses;
     private Gson gson = new Gson();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setView(R.layout.activity_account);
-        webServiceClasses = new WebServiceClasses(AccountsActivity.this, TAG);
         amountTextView = (TextView) findViewById(R.id.amountTextView);
         tripstTextView = (TextView) findViewById(R.id.tripstTextView);
         commissionTextView = (TextView) findViewById(R.id.commissionTextView);
@@ -53,7 +51,7 @@ public class AccountsActivity extends CommonNavigstionBar {
     }
 
     private void getTodayAccount() {
-        webServiceClasses.getTodayDetails(new VolleyResponseListerner() {
+        WebServiceClasses.getWebServiceClasses(AccountsActivity.this, TAG).getTodayDetails(new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
                 if (response.getString("token_status").equalsIgnoreCase("1")) {
@@ -81,7 +79,7 @@ public class AccountsActivity extends CommonNavigstionBar {
     }
 
     private void getTables() {
-        webServiceClasses.getTableDetails(new VolleyResponseListerner() {
+        WebServiceClasses.getWebServiceClasses(AccountsActivity.this, TAG).getTableDetails(new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
                 list.clear();

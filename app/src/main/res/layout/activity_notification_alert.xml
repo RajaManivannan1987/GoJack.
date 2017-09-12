@@ -12,8 +12,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/notificationGenderImageView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             app:civ_border_color="#f3f3f3"
@@ -58,8 +58,8 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="35dp"
-                android:visibility="gone"
-                android:background="@color/ColorGrayLight" />
+                android:background="@color/ColorGrayLight"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/notificationAcceptButton"

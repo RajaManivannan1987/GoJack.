@@ -7,7 +7,8 @@
 
     <color name="ColorButtonBg">#0372ba</color>
     <color name="ColorTextView">#549fd0</color>
-    <color name="ColorGrayLight">#d3d3d3</color>
+    <color name="ColorGrayLight">#feffff</color>
+    <color name="ColorAppBackground">#FFEBF0F4</color>
     <color name="ColorGray">#909090</color>
     <color name="ColorBlack">#000000</color>
     <color name="ColorRed">#f03131</color>

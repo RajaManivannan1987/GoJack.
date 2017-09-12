@@ -57,11 +57,12 @@ public class Splash extends AppCompatActivity {
         super.onBackPressed();
         finish();
     }
+
     private void updatePilotStatus() {
-        WebServiceClasses.getWebServiceClasses(this, "AppControler").getPilotStatus( new VolleyResponseListerner() {
+        WebServiceClasses.getWebServiceClasses(this, "AppControler").getPilotStatus(new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
-                if (response.getString("token_status").equalsIgnoreCase("1")&&response.getString("status").equalsIgnoreCase("1")){
+                if (response.getString("token_status").equalsIgnoreCase("1") && response.getString("status").equalsIgnoreCase("1")) {
                     startService(new Intent(Splash.this, GPSTracker.class));
                 }
                 if (PrefManager.getPrefManager(Splash.this).isLogin()) {

@@ -76,7 +76,7 @@ public class CodeConfirmation extends CommonActionBar {
             public void onClick(final View view) {
                 if (Validation.isOtpValid(userNameEditText.getText().toString())) {
                     userNameEditText.setError(null);
-                    new WebServiceClasses(CodeConfirmation.this, "CodeConfirm").validateOtp(customerId, userNameEditText.getText().toString(), new VolleyResponseListerner() {
+                    WebServiceClasses.getWebServiceClasses(CodeConfirmation.this, "CodeConfirmation").validateOtp(customerId, userNameEditText.getText().toString(), new VolleyResponseListerner() {
                         @Override
                         public void onResponse(JSONObject response) throws JSONException {
                             if (response.getString("status").equalsIgnoreCase("1")) {

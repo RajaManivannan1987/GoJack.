@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Interpolator;
@@ -81,7 +82,8 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
     private ImageView HailButton, markerImageView;
     private SwipeButton startTripButton, endTripButton;
     private CircleImageView userImageView, directionButton, callButton, cancelButton, notifyButton;
-    private LinearLayout showlayout, hideLayout;
+    private LinearLayout  hideLayout;
+    private CardView showlayout;
     private PrefManager prefManager;
     private TextView fromAddressTextView, riderNameTextView, showStartTrip, twoAddressTextView;
     private Spinner cancelSpinner;
@@ -94,7 +96,6 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
     protected LocationRequest mLocationRequest;
     protected Location mCurrentLocation;
     protected Boolean mRequestingLocationUpdates;
-    private WebServiceClasses webServices;
     int firstTime = 1, drawable;
     MarkerOptions markerOptionsmylocaiton;
     boolean doubleBackToExitPressedOnce = false;
@@ -112,7 +113,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
         initMap();
 
         prefManager = PrefManager.getPrefManager(GoOffline.this);
-        webServices = new WebServiceClasses(GoOffline.this, TAG);
+
         mRequestingLocationUpdates = false;
         if (getIntent().getExtras() != null) {
             if (showlayout.getVisibility() == View.GONE) {
@@ -567,7 +568,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
         notifyButton = (CircleImageView) findViewById(R.id.notifyButton);
         markerImageView = (ImageView) findViewById(R.id.markerImageView);
         userImageView = (CircleImageView) findViewById(R.id.userImageView);
-        showlayout = (LinearLayout) findViewById(R.id.showlayout);
+        showlayout = (CardView) findViewById(R.id.showlayout);
         hideLayout = (LinearLayout) findViewById(R.id.hideLayout);
         fromAddressTextView = (TextView) findViewById(R.id.fromAddressTextView);
         riderNameTextView = (TextView) findViewById(R.id.riderNameTextView);
@@ -757,7 +758,7 @@ public class GoOffline extends CommonNavigstionBar implements OnMapReadyCallback
     }
 
     private void checkBalance() {
-        webServices.checkBalance(prefManager.getPilotPaytmtoken(), new VolleyResponseListerner() {
+        WebServiceClasses.getWebServiceClasses(GoOffline.this, TAG).checkBalance(prefManager.getPilotPaytmtoken(), new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
               float paytmBalance = Float.parseFloat(response.getJSONObject("response").getString("amount"));

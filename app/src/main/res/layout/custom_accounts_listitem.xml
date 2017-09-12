@@ -17,8 +17,9 @@
             android:background="@drawable/account_textview_style"
             android:gravity="center"
             android:text=""
-            android:textColor="@android:color/black"
-            android:textAppearance="?android:textAppearanceSmall" />
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@android:color/black" />
+
         <TextView
             android:id="@+id/accountTripsTextView"
             android:layout_width="0dp"
@@ -27,8 +28,9 @@
             android:background="@drawable/account_textview_style"
             android:gravity="center"
             android:text=""
-            android:textColor="@android:color/black"
-            android:textAppearance="?android:textAppearanceSmall" />
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@android:color/black" />
+
         <TextView
             android:id="@+id/accountCommisionTextView"
             android:layout_width="0dp"
@@ -37,8 +39,8 @@
             android:background="@drawable/account_textview_style"
             android:gravity="center"
             android:text=""
-            android:textColor="@android:color/black"
-            android:textAppearance="?android:textAppearanceSmall"/>
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@android:color/black" />
 
         <TextView
             android:id="@+id/accountAmtTextView"
@@ -48,8 +50,8 @@
             android:background="@drawable/account_textview_style"
             android:gravity="center"
             android:text=""
-            android:textColor="@android:color/black"
-            android:textAppearance="?android:textAppearanceSmall" />
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@android:color/black" />
     </LinearLayout>
 
 </LinearLayout>

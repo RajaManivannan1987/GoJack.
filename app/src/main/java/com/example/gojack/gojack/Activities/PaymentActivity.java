@@ -5,8 +5,10 @@ package com.example.gojack.gojack.Activities;
  */
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,9 +34,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class PaymentActivity extends CommonNavigstionBar {
+public class PaymentActivity extends CommonActionBar {
     private String TAG = "PaymentActivity";
-    private TextView paymentTypeBalanceTextView, addMoneyButton;
+    private TextView paymentTypeBalanceTextView, addMoneyButton, unLinkPaytm;
     private static float paytmBalance;
     private PrefManager prefManager;
     private String orderId, checksums = "";
@@ -53,13 +55,41 @@ public class PaymentActivity extends CommonNavigstionBar {
         paymentTypeBalanceTextView = (TextView) findViewById(R.id.paytmWalletBalanceEditText);
         amountEditText = (EditText) findViewById(R.id.amountEditText);
         addMoneyButton = (TextView) findViewById(R.id.addmoneyButton);
+        unLinkPaytm = (TextView) findViewById(R.id.unLinkPaytm);
+        unLinkPaytm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(PaymentActivity.this);
+                dialog.setTitle("Paytm");
+                dialog.setMessage("Unlink Paytm from DialJack?");
+                dialog.setCancelable(false);
+                dialog.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        logoutDialJackServer();
+                        dialog.dismiss();
+                    }
+                });
+                dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alertDialog = dialog.create();
+                alertDialog.show();
+
+            }
+        });
         addMoneyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!amountEditText.getText().toString().equalsIgnoreCase("")) {
                     amountValue = Integer.parseInt(amountEditText.getText().toString());
+                    // For Live 10/8/2017
                     if (amountValue >= 150) {
-//                    if (amountValue >= 10) {
+                        // For Testing 10/8/2017
+//                    if (amountValue >= 1) {
                         generateChecksum();
                     } else {
                         Toast.makeText(PaymentActivity.this, "Add a minimum of Rs.150 to wallet", Toast.LENGTH_LONG).show();
@@ -67,6 +97,39 @@ public class PaymentActivity extends CommonNavigstionBar {
                 } else {
                     Toast.makeText(PaymentActivity.this, "Enter amount", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+    }
+
+    private void unLinkPaytm() {
+        webServices.logoutPaytm(new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+//                logoutDialJackServer();
+            }
+
+            @Override
+            public void onError(String message, String title) {
+
+            }
+        });
+    }
+
+    private void logoutDialJackServer() {
+        webServices.unLinkPaytm(new VolleyResponseListerner() {
+            @Override
+            public void onResponse(JSONObject response) throws JSONException {
+                unLinkPaytm();
+                if (response.getString("token_status").equalsIgnoreCase("1")) {
+                    prefManager.setPaytmtoken("", "", "");
+                    startActivity(new Intent(getApplicationContext(), PaytmLogin.class));
+                    finish();
+                }
+            }
+
+            @Override
+            public void onError(String message, String title) {
+
             }
         });
     }
@@ -85,8 +148,8 @@ public class PaymentActivity extends CommonNavigstionBar {
         webServices.checkBalance(access_token, new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
-                paytmBalance = Float.parseFloat(response.getJSONObject("response").getString("amount"));
-                paymentTypeBalanceTextView.setText("Rs " + response.getJSONObject("response").getString("amount"));
+                paytmBalance = Float.parseFloat(response.getJSONObject("response").getString("paytmWalletBalance"));
+                paymentTypeBalanceTextView.setText("Rs " + response.getJSONObject("response").getString("paytmWalletBalance"));
             }
 
             @Override
@@ -98,19 +161,21 @@ public class PaymentActivity extends CommonNavigstionBar {
 
     public void addBalance(int amount, String checksums) {
 
-        PaytmPGService Service = PaytmPGService.getStagingService();
-//        PaytmPGService Service = PaytmPGService.getProductionService();
+//        PaytmPGService Service = PaytmPGService.getStagingService();
+        PaytmPGService Service = PaytmPGService.getProductionService();
 
         Map<String, String> paramMap = new HashMap<String, String>();
-        paramMap.put("MID", "CallJa65607497328098");
+        paramMap.put("MID", GoJackServerUrls.paytmMID);
         paramMap.put("ORDER_ID", orderId);
         paramMap.put("CUST_ID", prefManager.getPilotId());
-        paramMap.put("INDUSTRY_TYPE_ID", "Retail");
-        paramMap.put("CHANNEL_ID", "WAP");
+        paramMap.put("INDUSTRY_TYPE_ID", GoJackServerUrls.paytmIndustry_type_ID);
+        paramMap.put("CHANNEL_ID", GoJackServerUrls.paytmChannel_ID);
         paramMap.put("TXN_AMOUNT", String.valueOf(amount));
-        paramMap.put("WEBSITE", "APP_STAGING");
-        paramMap.put("CALLBACK_URL", GoJackServerUrls.ADDMONET_CALLBACKURL);
+        paramMap.put("WEBSITE", GoJackServerUrls.paytmWebsite);
+        paramMap.put("CALLBACK_URL", GoJackServerUrls.CALLBACKURL);
         paramMap.put("REQUEST_TYPE", GoJackServerUrls.ADDMONET_RQUESTTYPE);
+        paramMap.put("EMAIL", prefManager.getPilotPaytmemail());
+        paramMap.put("MOBILE_NO", prefManager.getPilotPaytmmobile());
         paramMap.put("SSO_TOKEN", prefManager.getPilotPaytmtoken());
         paramMap.put("CHECKSUMHASH", checksums);
         PaytmOrder Order = new PaytmOrder(paramMap);
@@ -123,7 +188,7 @@ public class PaymentActivity extends CommonNavigstionBar {
                 if (bundle.getString("STATUS").equalsIgnoreCase("TXN_SUCCESS")) {
                     Toast.makeText(getApplicationContext(), "Payment Transaction Successful", Toast.LENGTH_LONG).show();
                     onResume();
-                }else {
+                } else {
                     Toast.makeText(getApplicationContext(), bundle.getString("RESPMSG") + " Your transaction is : " + bundle.getString("TXNID"), Toast.LENGTH_LONG).show();
                 }
 
@@ -167,9 +232,9 @@ public class PaymentActivity extends CommonNavigstionBar {
     private void generateChecksum() {
         Random r = new Random(System.currentTimeMillis());
         orderId = "dialjackpilot" + (1 + r.nextInt(2)) * 10000
-                + r.nextInt(100);
+                + r.nextInt(100) + "add";
 
-        new WebServiceClasses(PaymentActivity.this, TAG).generateAddmoneyChecksum(orderId, prefManager.getPilotId(), amountEditText.getText().toString(), GoJackServerUrls.ADDMONET_RQUESTTYPE, prefManager.getPilotPaytmtoken(), new VolleyResponseListerner() {
+        new WebServiceClasses(PaymentActivity.this, TAG).generateAddmoneyChecksum(orderId, prefManager.getPilotId(), amountEditText.getText().toString(), GoJackServerUrls.ADDMONET_RQUESTTYPE, prefManager.getPilotPaytmemail(), prefManager.getPilotPaytmmobile(), prefManager.getPilotPaytmtoken(), new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
                 String checksumgenerate = response.getString("CHECKSUMHASH");

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F1f1f1"
     android:orientation="vertical">
 
     <ScrollView
@@ -22,110 +23,125 @@
                 android:text="TRIP DETAILS"
                 android:textSize="@dimen/contentSizeLarge"
                 android:textStyle="bold" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
 
-            <TextView
-                android:id="@+id/dateAndTimeTextView"
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:textSize="@dimen/contentSizeSmall" />
-
-            <LinearLayout
-                android:id="@+id/payModeLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/cashCollectTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:gravity="center"
-                    android:text="Please collect the following amount from customer"
-                    android:textSize="@dimen/contentSizeNormal" />
+                android:layout_margin="7dp">
 
                 <LinearLayout
+                    android:id="@+id/payModeLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/dateAndTimeTextView"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="bottom"
-                        android:paddingTop="5dp"
-                        android:text="Rs "
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="18sp"
-                        android:typeface="serif" />
+                        android:layout_marginTop="15dp"
+                        android:gravity="center"
+                        android:textSize="@dimen/contentSizeSmall" />
 
                     <TextView
-                        android:id="@+id/amountTextView"
+                        android:id="@+id/cashCollectTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center"
+                        android:text="Please collect the following amount from customer"
+                        android:textSize="@dimen/contentSizeNormal" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="bottom"
+                            android:paddingTop="5dp"
+                            android:text="Rs "
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="18sp"
+                            android:typeface="serif" />
+
+                        <TextView
+                            android:id="@+id/amountTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="30sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/distanceTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="30sp"
-                        android:textStyle="bold" />
+                        android:layout_gravity="center"
+                        android:layout_marginTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:textSize="@dimen/contentSizeSmall" />
                 </LinearLayout>
+            </android.support.v7.widget.CardView>
 
-                <TextView
-                    android:id="@+id/distanceTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="15dp"
-                    android:paddingBottom="15dp"
-                    android:textSize="@dimen/contentSizeSmall" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/deliverLayout"
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:layout_margin="5dp">
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/deliverLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="Delivered To:"
-                    android:textSize="@dimen/contentSizeNormal" />
+                    android:orientation="vertical"
+                    android:padding="5dp"
+                    android:visibility="gone">
 
-                <EditText
-                    android:id="@+id/deliveredByEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp"
-                    android:cursorVisible="true"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="0dp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:text="Delivered To:"
+                        android:textSize="@dimen/contentSizeNormal" />
 
-                <TextView
-                    android:id="@+id/deliverySaveTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:gravity="right"
-                    android:paddingRight="20dp"
-                    android:text="Save"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="16sp" />
-            </LinearLayout>
+                    <EditText
+                        android:id="@+id/deliveredByEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:cursorVisible="true"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="0dp" />
+
+                    <TextView
+                        android:id="@+id/deliverySaveTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:gravity="right"
+                        android:paddingRight="20dp"
+                        android:text="Save"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
             <LinearLayout
                 android:id="@+id/userLayout"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="15dp"
                 android:background="@color/ColorGrayLight"
                 android:gravity="center"
                 android:orientation="horizontal">

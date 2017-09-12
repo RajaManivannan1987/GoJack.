@@ -7,6 +7,7 @@ package com.example.gojack.gojack.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,14 +25,14 @@ import com.paytm.pgsdk.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PaytmLogin extends CommonNavigstionBar {
+public class PaytmLogin extends AppCompatActivity {
     private EditText paytmMobileNodEditText, paytmMailIdEditText;
     private Button paytmLoginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setView(R.layout.activity_paytm_login);
+        setContentView(R.layout.activity_paytm_login);
         paytmLoginButton = (Button) findViewById(R.id.paytmLoginButton);
         paytmMobileNodEditText = (EditText) findViewById(R.id.paytmMobileNodEditText);
         paytmMailIdEditText = (EditText) findViewById(R.id.paytmMailIdEditText);
@@ -58,7 +59,7 @@ public class PaytmLogin extends CommonNavigstionBar {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
                 if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
-                    startActivity(new Intent(PaytmLogin.this, PaytmOtpActivity.class).putExtra("paytmstate", response.getString("state")));
+                    startActivity(new Intent(PaytmLogin.this, PaytmOtpActivity.class).putExtra("paytmstate", response.getString("state")).putExtra("mobileno", paytmMobileNodEditText.getText().toString().trim()).putExtra("mailid", paytmMailIdEditText.getText().toString().trim()));
                     finish();
                 } else {
                     if (response.getString("responseCode").equalsIgnoreCase("430")) {

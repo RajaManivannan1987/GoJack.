@@ -22,6 +22,8 @@ public class PrefManager {
     private static final String PILOT_PHOTO = "pilot_photo";
     private static final String PILOT_LOCATION = "pilot_location";
     private static final String PILOT_PAYTMTOKEN = "pilot_paytm_token";
+    private static final String PILOT_PAYTMEMAIL = "pilot_paytm_email";
+    private static final String PILOT_PAYTMMOBILE = "pilot_paytm_mobile";
     private static final String GENDER = "gender";
     private static final String VEHICLE_MAKE = "vehicle_make";
     private static final String VEHICLE_MODEL = "vehicle_model";
@@ -91,10 +93,21 @@ public class PrefManager {
         return preferences.getString(PILOT_PAYTMTOKEN, "");
     }
 
-    public void setPaytmtoken(String token) {
+    public String getPilotPaytmemail() {
+        return preferences.getString(PILOT_PAYTMEMAIL, "");
+    }
+
+    public String getPilotPaytmmobile() {
+        return preferences.getString(PILOT_PAYTMMOBILE, "");
+    }
+
+    public void setPaytmtoken(String token, String emailId, String mobile) {
         editor.putString(this.PILOT_PAYTMTOKEN, token);
+        editor.putString(this.PILOT_PAYTMEMAIL, emailId);
+        editor.putString(this.PILOT_PAYTMMOBILE, mobile);
         editor.commit();
     }
+
 
     public String getGender() {
         return preferences.getString(GENDER, "");

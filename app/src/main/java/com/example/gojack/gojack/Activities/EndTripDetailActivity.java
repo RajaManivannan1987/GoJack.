@@ -30,7 +30,6 @@ public class EndTripDetailActivity extends CommonActionBar {
     private String rideId = "", activityName = "";
     private EditText deliveredByEditText;
     private LinearLayout payModeLayout, userLayout, deliverLayout;
-    private WebServiceClasses webService;
     private PrefManager prefManager;
 
 
@@ -38,7 +37,6 @@ public class EndTripDetailActivity extends CommonActionBar {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setView(R.layout.activity_end_trip);
-        webService = new WebServiceClasses(EndTripDetailActivity.this, "EndTripDetailActivity");
         prefManager = new PrefManager(this);
 //        setActionBar();
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -50,7 +48,7 @@ public class EndTripDetailActivity extends CommonActionBar {
             @Override
             public void onClick(View view) {
                 String personName = deliveredByEditText.getText().toString();
-                webService.getWebServiceClasses(EndTripDetailActivity.this, "EndTripDetailActivity").deliveryPerson(rideId, personName, new VolleyResponseListerner() {
+                WebServiceClasses.getWebServiceClasses(EndTripDetailActivity.this, "EndTripDetailActivity").getWebServiceClasses(EndTripDetailActivity.this, "EndTripDetailActivity").deliveryPerson(rideId, personName, new VolleyResponseListerner() {
                     @Override
                     public void onResponse(JSONObject response) throws JSONException {
                         if (response.getString("token_status").equalsIgnoreCase("1")) {
@@ -98,7 +96,7 @@ public class EndTripDetailActivity extends CommonActionBar {
             amountTextView.setText(jsonObject.getString("rate"));
             if (jsonObject.has("name")) {
                 riderNameTextView.setText(jsonObject.getString("name"));
-            }else {
+            } else {
                 riderNameTextView.setText("Hail User");
             }
             dateAndTimeTextView.setText(jsonObject.getString("datetime"));
@@ -110,13 +108,19 @@ public class EndTripDetailActivity extends CommonActionBar {
                 userLayout.setVisibility(View.VISIBLE);
             }
             if (activityName.equalsIgnoreCase("Hail") && payMode.startsWith("cash")) {
+                //  For Live
                 withDrawAmount(jsonObject.getString("commission"));
+                //  For Testing
+//                withDrawAmount("0.50");
             }
             if (!payMode.startsWith("cash")) {
                 payModeLayout.setBackground(getResources().getDrawable(R.drawable.paytm_bg));
             } else {
                 if (!activityName.equalsIgnoreCase("Hail"))
-                    withDrawAmount(jsonObject.getString("commission"));
+                    //  For Live
+                withDrawAmount(jsonObject.getString("commission"));
+                    //  For Testing
+//                    withDrawAmount("0.50");
             }
 
         } catch (JSONException e) {
@@ -130,7 +134,7 @@ public class EndTripDetailActivity extends CommonActionBar {
         orderId = "dialjack" + (1 + r.nextInt(2)) * 10000
                 + r.nextInt(100);
         String order = rideId + "p";
-        webService.generateWithDrawChecksum(order, prefManager.getPilotId(), cash, GoJackServerUrls.WITHDRAW_RQUESTTYPE, prefManager.getPilotPaytmtoken(), "9865132365", new VolleyResponseListerner() {
+        WebServiceClasses.getWebServiceClasses(EndTripDetailActivity.this, "EndTripDetailActivity").generateWithDrawChecksum(order, prefManager.getPilotId(), cash, GoJackServerUrls.WITHDRAW_RQUESTTYPE, prefManager.getPilotPaytmtoken(), "9865132365", new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
                 CommonMethods.toast(EndTripDetailActivity.this, response.getString("ResponseMessage"));

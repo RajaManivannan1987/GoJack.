@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/ColorAppBackground"
     android:orientation="vertical">
 
     <TextView
@@ -40,9 +41,9 @@
             <TextView
                 style="@style/textView_Normal"
                 android:layout_marginTop="20dp"
-                android:visibility="gone"
                 android:text="@string/forgotcontent3"
-                android:textSize="@dimen/contentSizeSmall" />
+                android:textSize="@dimen/contentSizeSmall"
+                android:visibility="gone" />
 
             <android.support.design.widget.TextInputLayout style="@style/inputTextView">
 
