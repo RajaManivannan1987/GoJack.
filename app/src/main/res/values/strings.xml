@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">Dial Jack Pilot</string>
-    <string name="versionCode">Version 1.0</string>
+    <string name="versionCode">Version 1.0.6</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="forgotpassword"><u>Forgot Your Password?</u></string>
     <string name="unlink_paytm"><u>Unlink Paytm</u></string>
+    <string name="canceltrip"><u>Cancel Trip</u></string>
     <string name="forgotpassword1">Forgot Password?</string>
     <string name="forgotcontent1">To reset your password, Please enter your registered email address or mobile number.</string>
     <string name="forgotcontent2">You will receive an email or sms with a four digit code to reset your password shortly. Be sure to check your junk folder if you dont receive in 10 minutes.</string>

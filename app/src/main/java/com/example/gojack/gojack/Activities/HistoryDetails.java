@@ -21,15 +21,12 @@ import org.json.JSONObject;
 public class HistoryDetails extends CommonActionBar {
     private String TAG = "HistoryDetails";
     private HistoryDetails activity = HistoryDetails.this;
-    //private WebServiceClasses webServiceClasses;
     private TextView detailFromLocationTextView, detailToLocationTextView, detailFinalRateTextView, detailpaymentTypeTextView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setActionBar();
         setView(R.layout.activity_history_details);
-//        findViewById();
         detailFromLocationTextView = (TextView) findViewById(R.id.detailFromTextView);
         detailToLocationTextView = (TextView) findViewById(R.id.detailToLocationTextView);
         detailFinalRateTextView = (TextView) findViewById(R.id.detailFinalRateTextView);
@@ -44,19 +41,12 @@ public class HistoryDetails extends CommonActionBar {
     }
 
     private void loadData(String rideId) {
-       /* final ProgressDialog progressBar = new ProgressDialog(HistoryDetails.this);
-        progressBar.setMessage("Fetch data...");
-        progressBar.setCancelable(false);
-        progressBar.show();*/
-        //webServiceClasses = new WebServiceClasses(activity, TAG);
         WebServiceClasses.getWebServiceClasses(HistoryDetails.this, TAG).getHistoryDetails(rideId, new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
-//                progressBar.dismiss();
                 if (response.getString("status").equalsIgnoreCase("1")) {
                     JSONObject jsonObject = response.getJSONObject("data");
                     detailFromLocationTextView.setText(jsonObject.getString("driver_s_address"));
-//                    detailFromLocationTextView.setText("Raja");
                     detailToLocationTextView.setText(jsonObject.getString("driver_e_address"));
                     detailpaymentTypeTextView.setText(jsonObject.getString("payment_mode"));
                     detailFinalRateTextView.setText( "Rs " + jsonObject.getString("final_amount"));
@@ -65,15 +55,9 @@ public class HistoryDetails extends CommonActionBar {
 
             @Override
             public void onError(String message, String title) {
-//                progressBar.dismiss();
                 CommonMethods.showSnakBar(message, detailFinalRateTextView);
             }
         });
     }
 
-    private void findViewById() {
-
-//        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/rupee_foradian.ttf");
-//        detailFinalRateTextView.setTypeface(face);
-    }
 }

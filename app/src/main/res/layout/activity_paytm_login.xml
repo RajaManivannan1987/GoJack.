@@ -10,7 +10,8 @@
         android:background="@color/ColorGrayLight"
         android:gravity="center"
         android:text="Link your Paytm account"
-        android:textColor="@color/ColorBlack"
+        android:textColor="#000080"
+        android:textStyle="bold"
         android:textSize="18sp" />
 
     <ScrollView

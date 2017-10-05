@@ -14,12 +14,19 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="mytheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">85%</item>
+    </style>
+
     <style name="inputTextView" parent="@android:style/TextAppearance">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_marginTop">10dp</item>
     </style>
+
 
     <style name="editText" parent="Widget.AppCompat.EditText">
         <item name="android:layout_width">match_parent</item>

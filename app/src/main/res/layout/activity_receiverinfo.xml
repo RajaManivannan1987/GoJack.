@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whiteColor"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ReceiverLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:minHeight="45dp"
+            android:text="Receiver Details"
+            android:textColor="@color/whiteColor"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="3dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:minHeight="35dp"
+                android:text="Name:"
+                android:textColor="@color/ColorBlack" />
+
+            <TextView
+                android:id="@+id/receiverNameText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:minHeight="35dp"
+                android:text="Raja"
+                android:textColor="@color/colorPrimaryDark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="3dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:minHeight="35dp"
+                android:text="Mobile No:"
+                android:textColor="@color/ColorBlack" />
+
+            <TextView
+                android:id="@+id/receiverPhoneText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:minHeight="35dp"
+                android:text="Receiver Name:"
+                android:textColor="@color/colorPrimaryDark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="3dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:minHeight="35dp"
+                android:text="Landmark:"
+                android:textColor="@color/ColorBlack" />
+
+            <TextView
+                android:id="@+id/receiverLandmarkText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:minHeight="35dp"
+                android:text="Receiver Name:"
+                android:textColor="@color/colorPrimaryDark" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:background="#FFDED9D9"
+            android:gravity="center"
+            android:minHeight="35dp"
+            android:text="Delivery Instructions"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/InstructionDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:minHeight="35dp"
+            android:padding="5dp"
+            android:text="vjsdfjvbldfjbkljrfgnjglkj"
+            android:textColor="@color/ColorBlack"
+            android:textSize="14sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#00000000" />
+    </LinearLayout>
+
+</LinearLayout>

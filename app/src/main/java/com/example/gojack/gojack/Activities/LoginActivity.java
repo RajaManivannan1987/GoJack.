@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             public void onResponse(JSONObject response) throws JSONException {
                 if (response.getString("status").equalsIgnoreCase("1")) {
                     JSONObject jObject = response.getJSONObject("data");
-                    CommonMethods.toast(LoginActivity.this, response.getString("message"));
+                    CommonMethods.showSnakBar(response.getString("message"), userName);
                     PrefManager.getPrefManager(LoginActivity.this).setLoginDetails(jObject.getString("token"), jObject.getString("name"), jObject.getString("ping_location"), jObject.getString("driverid"), jObject.getString("gender"), jObject.getString("paytm_token"));
                     JSONObject vehicleDetail = jObject.getJSONObject("Vehicle");
                     PrefManager.getPrefManager(LoginActivity.this).setVehileDetails(vehicleDetail.getString("vehicle_make"), vehicleDetail.getString("vehicle_model"), vehicleDetail.getString("vehicle_registration_number"), vehicleDetail.getString("bike_photo"), vehicleDetail.getString("balance_status"), vehicleDetail.getString("balance_message"), vehicleDetail.getString("photo"));
@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                     CommonMethods.hideKeyboard(LoginActivity.this, userName);
                     finish();
                 } else {
-                    CommonMethods.toast(LoginActivity.this, response.getString("message"));
+                    CommonMethods.showSnakBar(response.getString("message"), userName);
                 }
             }
 

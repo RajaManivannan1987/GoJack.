@@ -126,7 +126,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                     String lang = String.valueOf(toAddressLatLng.longitude);
                     CommonMethods.locationDirection(HailActivity.this, lat, lang);
                 } else {
-                    CommonMethods.toast(HailActivity.this, "Enter your destination");
+                    CommonMethods.showSnakBar("Enter your destination", startTripButton);
                 }
             }
         });
@@ -148,14 +148,14 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                                         if (response.getString("status").equalsIgnoreCase("1")) {
                                             onTrip = true;
                                             sosIcon.setVisibility(View.VISIBLE);
-                                            CommonMethods.toast(HailActivity.this, response.getString("message"));
+                                            CommonMethods.showSnakBar(response.getString("message"), startTripButton);
                                             rideid = response.getString("rideid");
                                             ridetype = response.getString("ridetype");
                                             PreferenceManager.getDefaultSharedPreferences(HailActivity.this).edit().putString(CommonIntent.rideId, rideid).commit();
                                             PreferenceManager.getDefaultSharedPreferences(HailActivity.this).edit().putString(CommonIntent.rideType, ridetype).commit();
                                             rideStatus = response.getString("status");
                                             tripStatus = "2";
-                                            //  CommonMethods.toast(HailActivity.this, response.getString("message"));
+                                            //  CommonMethods.showSnakBar(response.getString("message"));
                                             // flag = true;
                                             if (mCurrentLocation != null) {
                                                 setMarket(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), "tripStart");
@@ -171,7 +171,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                                             hailOnTripTextView.setVisibility(View.VISIBLE);
 
                                         } else if (response.getString("status").equalsIgnoreCase("0")) {
-                                            CommonMethods.toast(HailActivity.this, response.getString("message"));
+                                            CommonMethods.showSnakBar(response.getString("message"), startTripButton);
                                         }
 
                                     }
@@ -221,10 +221,10 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
                         @Override
                         public void onResponse(JSONObject response) throws JSONException {
                             tripStatus = "0";
-                            CommonMethods.toast(HailActivity.this, "Trip Completed");
+                            CommonMethods.showSnakBar("Trip Completed", startTripButton);
                             sosIcon.setVisibility(View.GONE);
 //                        if (response.getString("status").equalsIgnoreCase("1")) {
-//                            CommonMethods.toast(HailActivity.this, response.getString("message"));
+//                            CommonMethods.showSnakBar(response.getString("message"));
 //                            JSONObject jsonObject = response.getJSONObject("data");
 //                        responseObject = response.toString();
                             if (!RideType.equalsIgnoreCase("courier")) {
@@ -541,7 +541,7 @@ public class HailActivity extends CommonNavigstionBar implements PlaceSelectionL
 //            startActivity(new Intent(getApplicationContext(),HailActivity.class));
 
         } else {
-            CommonMethods.toast(HailActivity.this, "Ride sitll not completed so won't go to back");
+            CommonMethods.showSnakBar("Ride sitll not completed so won't go to back", startTripButton);
         }
     }
 }

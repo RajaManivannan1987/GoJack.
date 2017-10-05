@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.gojack.gojack.CommonActivityClasses.CommonActionBar;
 import com.example.gojack.gojack.CommonActivityClasses.CommonNavigstionBar;
+import com.example.gojack.gojack.HelperClasses.Common.CommonMethods;
 import com.example.gojack.gojack.HelperClasses.Common.GoJackServerUrls;
 import com.example.gojack.gojack.HelperClasses.Interface.VolleyResponseListerner;
 import com.example.gojack.gojack.HelperClasses.Session.PrefManager;
@@ -33,6 +34,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 public class PaymentActivity extends CommonActionBar {
     private String TAG = "PaymentActivity";
@@ -87,9 +89,9 @@ public class PaymentActivity extends CommonActionBar {
                 if (!amountEditText.getText().toString().equalsIgnoreCase("")) {
                     amountValue = Integer.parseInt(amountEditText.getText().toString());
                     // For Live 10/8/2017
-                    if (amountValue >= 150) {
-                        // For Testing 10/8/2017
-//                    if (amountValue >= 1) {
+//                    if (amountValue >= 150) {
+//                     For Testing 10/8/2017
+                    if (amountValue >= 5) {
                         generateChecksum();
                     } else {
                         Toast.makeText(PaymentActivity.this, "Add a minimum of Rs.150 to wallet", Toast.LENGTH_LONG).show();
@@ -186,10 +188,10 @@ public class PaymentActivity extends CommonActionBar {
             @Override
             public void onTransactionResponse(Bundle bundle) {
                 if (bundle.getString("STATUS").equalsIgnoreCase("TXN_SUCCESS")) {
-                    Toast.makeText(getApplicationContext(), "Payment Transaction Successful", Toast.LENGTH_LONG).show();
+                    CommonMethods.showSnakBar( "Payment Transaction Successful",amountEditText);
                     onResume();
                 } else {
-                    Toast.makeText(getApplicationContext(), bundle.getString("RESPMSG") + " Your transaction is : " + bundle.getString("TXNID"), Toast.LENGTH_LONG).show();
+                    CommonMethods.showSnakBar( bundle.getString("RESPMSG") + " Your transaction is : " + bundle.getString("TXNID"),amountEditText);
                 }
 
             }
@@ -222,7 +224,7 @@ public class PaymentActivity extends CommonActionBar {
             @Override
             public void onTransactionCancel(String s, Bundle bundle) {
                 Log.d(TAG, "Payment Transaction Failed " + bundle);
-                Toast.makeText(getBaseContext(), "Payment Transaction Failed ", Toast.LENGTH_LONG).show();
+                CommonMethods.showSnakBar( "Payment Transaction Failed",amountEditText);
             }
 
 
@@ -230,9 +232,11 @@ public class PaymentActivity extends CommonActionBar {
     }
 
     private void generateChecksum() {
+        String uniqueid = UUID.randomUUID().toString().replace("-", "");
+        uniqueid.substring(0, 5);
         Random r = new Random(System.currentTimeMillis());
-        orderId = "dialjackpilot" + (1 + r.nextInt(2)) * 10000
-                + r.nextInt(100) + "add";
+        orderId = "dialjackP_" + uniqueid + (1 + r.nextInt(2)) * 10000
+                + r.nextInt(2);
 
         new WebServiceClasses(PaymentActivity.this, TAG).generateAddmoneyChecksum(orderId, prefManager.getPilotId(), amountEditText.getText().toString(), GoJackServerUrls.ADDMONET_RQUESTTYPE, prefManager.getPilotPaytmemail(), prefManager.getPilotPaytmmobile(), prefManager.getPilotPaytmtoken(), new VolleyResponseListerner() {
             @Override

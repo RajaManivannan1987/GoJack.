@@ -10,7 +10,7 @@
         android:background="@color/ColorGrayLight"
         android:gravity="center"
         android:text="Paytm Balance"
-        android:textColor="@color/ColorBlack"
+        android:textColor="#000080"
         android:textSize="18sp"
         android:textStyle="bold" />
 

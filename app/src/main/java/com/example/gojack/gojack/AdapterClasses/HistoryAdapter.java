@@ -3,6 +3,7 @@ package com.example.gojack.gojack.AdapterClasses;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.CardView;
@@ -26,10 +27,10 @@ import java.util.ArrayList;
  */
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.CustomHolder> {
     ArrayList<HistoryModel> list;
-    Context context;
+    Activity context;
     private int lastPosition = -1;
 
-    public HistoryAdapter(Context context, ArrayList<HistoryModel> arrayList) {
+    public HistoryAdapter(Activity context, ArrayList<HistoryModel> arrayList) {
         this.context = context;
         this.list = arrayList;
     }
@@ -45,25 +46,24 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.CustomHo
         holder.rideDateTextView.setText(list.get(position).getDate_time());
         holder.rideFromLocationTextView.setText(list.get(position).getDriver_s_address());
         holder.rideToLocationTextView.setText(list.get(position).getDriver_e_address());
-        Typeface face = Typeface.createFromAsset(context.getAssets(), "fonts/rupee_foradian.ttf");
-        holder.rideRateTextView.setTypeface(face);
+       /* Typeface face = Typeface.createFromAsset(context.getAssets(), "fonts/rupee_foradian.ttf");
+        holder.rideRateTextView.setTypeface(face);*/
         if (list.get(position).getRide_type().equalsIgnoreCase("courier")) {
-            holder.rideTypeImageView.setImageResource(R.drawable.courier_icon);
+            holder.rideTypeImageView.setImageResource(R.drawable.motorcycle1);
+            holder.rideDateTextView.setTextColor(Color.parseColor("#000080"));
         } else {
-            holder.rideTypeImageView.setImageResource(R.drawable.bike_icon);
+            holder.rideDateTextView.setTextColor(Color.parseColor("#D35400"));
+            holder.rideTypeImageView.setImageResource(R.drawable.motorcycle);
         }
         holder.rideRateTextView.setText("Rs " + list.get(position).getFinal_amount());
         holder.historyMainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Intent intent = new Intent(context, HistoryDetails.class);
-                intent.putExtra("rideId", list.get(position).getRide_id());
-                ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation((Activity) context, holder.history_cardview, "profile");
-                context.startActivity(intent, options.toBundle());*/
                 Intent i = new Intent(context, HistoryDetails.class);
                 i.putExtra("rideId", list.get(position).getRide_id());
-                context.startActivity(i);
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(context, holder.history_cardview, "profile");
+                context.startActivity(i, options.toBundle());
             }
         });
 

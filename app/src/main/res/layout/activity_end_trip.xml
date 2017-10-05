@@ -21,8 +21,10 @@
                 android:background="@color/ColorGrayLight"
                 android:gravity="center"
                 android:text="TRIP DETAILS"
+                android:textColor="#000080"
                 android:textSize="@dimen/contentSizeLarge"
                 android:textStyle="bold" />
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />

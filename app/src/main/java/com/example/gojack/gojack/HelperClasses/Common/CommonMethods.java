@@ -23,6 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gojack.gojack.Activities.About;
 import com.example.gojack.gojack.Activities.GoOffline;
 import com.example.gojack.gojack.Activities.GoOnline;
 import com.example.gojack.gojack.Activities.HailActivity;
@@ -127,12 +128,9 @@ public class CommonMethods extends AppCompatActivity {
     public static String getMarkerMovedAddress(Context context, LatLng dragPosition) {
         String adres = "";
         String location = "";
-
-        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-        try {
+         /*Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+       try {
             List<Address> addresses = geocoder.getFromLocation(dragPosition.latitude, dragPosition.longitude, 1);
-//            toLat = String.valueOf(dragPosition.latitude);
-//            toLang = String.valueOf(dragPosition.longitude);
             if (addresses != null) {
                 android.location.Address returnedAddress = addresses.get(0);
                 if (addresses.get(0).getSubLocality() != null) {
@@ -146,6 +144,21 @@ public class CommonMethods extends AppCompatActivity {
                 }
                 adres = stringBuilder.toString();
                 Log.d("address", adres);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+        try {
+            Geocoder geocoder = new Geocoder(context, Locale.ENGLISH);
+            List<Address> addresses = geocoder.getFromLocation(dragPosition.latitude, dragPosition.longitude, 1);
+            StringBuilder str = new StringBuilder();
+            if (geocoder.isPresent()) {
+                Address returnAddress = addresses.get(0);
+                str.append(returnAddress.getAddressLine(0));
+                adres = str.toString();
+            } else {
+                Toast.makeText(context,
+                        "geocoder not present", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -170,6 +183,7 @@ public class CommonMethods extends AppCompatActivity {
         textView.setTextColor(Color.WHITE);
         snackbar.show();
     }
+
     public static void hideKeyboard(Context context, View v) {
         InputMethodManager input = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         input.hideSoftInputFromWindow(v.getWindowToken(), 0);

@@ -125,7 +125,7 @@ public class LocationCheckActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     enableLocation();
                 } else {
-                    CommonMethods.toast(LocationCheckActivity.this, "My Location permission denied");
+                    CommonMethods.showSnakBar("My Location permission denied", animationIcon);
                     finish();
                 }
                 break;

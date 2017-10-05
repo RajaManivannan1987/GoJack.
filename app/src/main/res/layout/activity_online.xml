@@ -14,7 +14,7 @@
         android:background="@color/ColorGrayLight"
         android:gravity="center"
         android:text="OnLine"
-        android:textColor="@color/ColorBlack"
+        android:textColor="#000080"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -47,7 +47,7 @@
                 style="@style/textView_Normal"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:textColor="@color/ColorBlack"
+                android:textColor="#D35400"
                 android:textStyle="bold" />
 
             <TextView
@@ -55,14 +55,14 @@
                 style="@style/textView_Normal"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:textColor="@color/ColorGray" />
+                android:textColor="@color/ColorBlack" />
 
             <TextView
                 android:id="@+id/bikeNoTextView"
                 style="@style/textView_Normal"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:textColor="@color/ColorGray" />
+                android:textColor="@color/ColorBlack" />
 
             <com.example.gojack.gojack.HelperClasses.SwipeButtonStyle.SwipeButton
                 android:id="@+id/my_swipe_button"

@@ -10,7 +10,7 @@
         android:background="@color/ColorGrayLight"
         android:gravity="center"
         android:text="EARNINGS"
-        android:textColor="@android:color/black"
+        android:textColor="#000080"
         android:textSize="@dimen/contentSizeLarge"
         android:textStyle="bold" />
 
@@ -63,7 +63,7 @@
                             android:layout_marginLeft="5dp"
                             android:layout_weight="1.1"
                             android:text=""
-                            android:textColor="@android:color/black"
+                            android:textColor="#ca022e"
                             android:textSize="28sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -108,7 +108,7 @@
                         android:gravity="center_vertical"
                         android:paddingLeft="7dp"
                         android:text="Last 7 Days"
-                        android:textColor="@android:color/black"
+                        android:textColor="#D35400"
                         android:textSize="@dimen/contentSizeNormal"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -127,7 +127,7 @@
                     android:background="@drawable/account_textview_header_style"
                     android:gravity="center"
                     android:text="DATE"
-                    android:textColor="@android:color/black"
+                    android:textColor="#000080"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -138,7 +138,7 @@
                     android:background="@drawable/account_textview_header_style"
                     android:gravity="center"
                     android:text="TRIPS"
-                    android:textColor="@android:color/black"
+                    android:textColor="#000080"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -149,7 +149,7 @@
                     android:background="@drawable/account_textview_header_style"
                     android:gravity="center"
                     android:text="COMM."
-                    android:textColor="@android:color/black"
+                    android:textColor="#000080"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -160,7 +160,7 @@
                     android:background="@drawable/account_textview_header_style"
                     android:gravity="center"
                     android:text="EARNING"
-                    android:textColor="@android:color/black"
+                    android:textColor="#000080"
                     android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>

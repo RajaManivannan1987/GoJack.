@@ -76,17 +76,17 @@ public class PaytmOtpActivity extends AppCompatActivity {
                         CommonMethods.toast(PaytmOtpActivity.this, "OTP send successful");
                     } else {
                         if (response.getString("responseCode").equalsIgnoreCase("430")) {
-                            CommonMethods.toast(PaytmOtpActivity.this, "Invalid Authorization");
+                            CommonMethods.showSnakBar("Invalid Authorization", paytmotpEditText);
                         } else if (response.getString("responseCode").equalsIgnoreCase("431")) {
-                            CommonMethods.toast(PaytmOtpActivity.this, "Invalid Mobile");
+                            CommonMethods.showSnakBar("Invalid Mobile", paytmotpEditText);
                         } else if (response.getString("responseCode").equalsIgnoreCase("432")) {
-                            CommonMethods.toast(PaytmOtpActivity.this, "Login Failed");
+                            CommonMethods.showSnakBar("Login Failed", paytmotpEditText);
                         } else if (response.getString("responseCode").equalsIgnoreCase("433")) {
-                            CommonMethods.toast(PaytmOtpActivity.this, "Account Blocked");
+                            CommonMethods.showSnakBar("Account Blocked", paytmotpEditText);
                         } else if (response.getString("responseCode").equalsIgnoreCase("434")) {
-                            CommonMethods.toast(PaytmOtpActivity.this, "Bad Request");
+                            CommonMethods.showSnakBar("Bad Request", paytmotpEditText);
                         } else if (response.getString("responseCode").equalsIgnoreCase("465")) {
-                            CommonMethods.toast(PaytmOtpActivity.this, "Invalid Email");
+                            CommonMethods.showSnakBar("Invalid Email", paytmotpEditText);
                         }
                     }
 

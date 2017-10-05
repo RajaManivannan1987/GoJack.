@@ -60,7 +60,7 @@ public class CodeConfirmation extends CommonActionBar {
                     public void onResponse(JSONObject response) throws JSONException {
                         progressDialog.dismiss();
                         if (response.getString("status").equalsIgnoreCase("1")) {
-                            CommonMethods.toast(CodeConfirmation.this, response.getString("message"));
+                            CommonMethods.showSnakBar(response.getString("message"),userNameEditText);
                         }
                     }
 
@@ -84,7 +84,7 @@ public class CodeConfirmation extends CommonActionBar {
                                 userNameEditText.setText("");
                                 startActivity(new Intent(getApplicationContext(), ChangePassword.class).putExtra(CommonIntent.customerId, response.getString("userid")));
                             } else {
-                                CommonMethods.toast(CodeConfirmation.this, response.getString("message"));
+                                CommonMethods.showSnakBar(response.getString("message"),userNameEditText);
                             }
                         }
 
@@ -106,7 +106,7 @@ public class CodeConfirmation extends CommonActionBar {
     protected void onStart() {
         super.onStart();
         if (!CommonMethods.checkmarshmallowPermission(CodeConfirmation.this, Manifest.permission.RECEIVE_SMS, GoJackServerUrls.MY_PERMISSIONS_REQUEST_LOCATION)) {
-            //CommonMethods.toast(CodeConfirmation.this,"Enable");
+            //CommonMethods.showSnakBar(s,"Enable");
         }
     }
 

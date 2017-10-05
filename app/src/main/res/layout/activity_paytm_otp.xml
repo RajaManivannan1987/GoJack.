@@ -10,7 +10,8 @@
         android:background="@color/ColorGrayLight"
         android:gravity="center"
         android:text="Paytm OTP"
-        android:textColor="@color/ColorBlack"
+        android:textStyle="bold"
+        android:textColor="#000080"
         android:textSize="18sp" />
 
     <ScrollView

@@ -48,7 +48,7 @@ public class ForgotPassword extends CommonActionBar {
                                 userNameEditText.setText("");
                                 startActivity(new Intent(getApplicationContext(), CodeConfirmation.class).putExtra(CommonIntent.customerId, response.getString("userid")));
                             } else {
-                                CommonMethods.toast(ForgotPassword.this, response.getString("message"));
+                                CommonMethods.showSnakBar(response.getString("message"),userNameEditText);
                             }
                         }
 

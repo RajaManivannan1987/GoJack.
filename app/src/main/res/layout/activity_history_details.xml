@@ -5,12 +5,13 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize"
         android:background="@color/ColorGrayLight"
         android:gravity="center"
         android:text="TRIP DETAILS"
-        android:textColor="@android:color/black"
+        android:textColor="#000080"
         android:textSize="@dimen/contentSizeLarge"
         android:textStyle="bold" />
 
@@ -112,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="Fare Details"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="#D35400"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -127,6 +128,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Total Fare:"
+                        android:textColor="@color/ColorBlack"
                         android:textSize="@dimen/contentSizeNormal" />
 
                     <TextView
@@ -134,7 +136,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/ColorBlack"
+                        android:textColor="#ca022e"
                         android:textSize="18sp" />
                 </LinearLayout>
 
@@ -149,6 +151,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Payment type:"
+                        android:textColor="@color/ColorBlack"
                         android:textSize="@dimen/contentSizeNormal" />
 
                     <TextView
@@ -156,7 +159,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/ColorBlack"
+                        android:textColor="#ca022e"
                         android:textSize="@dimen/contentSizeNormal" />
                 </LinearLayout>
             </LinearLayout>

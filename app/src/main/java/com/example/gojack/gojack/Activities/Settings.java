@@ -59,7 +59,7 @@ public class Settings extends CommonNavigstionBar {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
                 if (response.getString("token_status").equalsIgnoreCase("1")) {
-                    CommonMethods.toast(Settings.this, response.getString("message"));
+                    CommonMethods.showSnakBar(response.getString("message"), logoutButton);
 //                    stopService(setIntent(getBaseContext()));
                     stopService(new Intent(Settings.this, GPSTracker.class));
                     PrefManager.getPrefManager(Settings.this).logout();

@@ -3,9 +3,9 @@
     android:id="@+id/history_cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_margin="3dp"
     android:orientation="vertical"
-   >
+    android:transitionName="profile">
 
     <LinearLayout
         android:id="@+id/historyMainLayout"
@@ -32,8 +32,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.4"
                 android:paddingLeft="3dp"
-                android:textColor="@color/ColorBlack"
-                android:textSize="@dimen/contentSizeNormal" />
+                android:textSize="@dimen/contentSizeNormal"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/rideRateTextView"
@@ -42,15 +42,16 @@
                 android:layout_weight=".6"
                 android:gravity="center"
                 android:paddingRight="3dp"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/contentSizeNormal" />
+                android:textColor="#ca022e"
+                android:textSize="@dimen/contentSizeNormal"
+                android:textStyle="bold" />
         </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -80,7 +81,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="7dp"
             android:orientation="horizontal">
 
             <ImageView

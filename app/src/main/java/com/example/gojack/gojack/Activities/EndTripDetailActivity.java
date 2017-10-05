@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * Created by IM0033 on 8/23/2016.
@@ -52,7 +53,7 @@ public class EndTripDetailActivity extends CommonActionBar {
                     @Override
                     public void onResponse(JSONObject response) throws JSONException {
                         if (response.getString("token_status").equalsIgnoreCase("1")) {
-                            CommonMethods.toast(EndTripDetailActivity.this, response.getString("message"));
+                            CommonMethods.showSnakBar(response.getString("message"),payModeLayout);
                             deliverySaveTextView.setVisibility(View.GONE);
                             deliveredByEditText.setEnabled(false);
                             deliveredByEditText.setFocusable(false);
@@ -108,19 +109,19 @@ public class EndTripDetailActivity extends CommonActionBar {
                 userLayout.setVisibility(View.VISIBLE);
             }
             if (activityName.equalsIgnoreCase("Hail") && payMode.startsWith("cash")) {
-                //  For Live
-                withDrawAmount(jsonObject.getString("commission"));
-                //  For Testing
-//                withDrawAmount("0.50");
+                //  For Live 5/10/2017
+//                withDrawAmount(jsonObject.getString("commission"));
+                //  For Testing 5/10/2017
+                withDrawAmount("0.10");
             }
             if (!payMode.startsWith("cash")) {
                 payModeLayout.setBackground(getResources().getDrawable(R.drawable.paytm_bg));
             } else {
                 if (!activityName.equalsIgnoreCase("Hail"))
-                    //  For Live
-                withDrawAmount(jsonObject.getString("commission"));
-                    //  For Testing
-//                    withDrawAmount("0.50");
+                    //  For Live 5/10/2017
+//                withDrawAmount(jsonObject.getString("commission"));
+                    //  For Testing 5/10/2017
+                    withDrawAmount("0.10");
             }
 
         } catch (JSONException e) {
@@ -130,14 +131,16 @@ public class EndTripDetailActivity extends CommonActionBar {
     }
 
     private void withDrawAmount(String cash) {
+        String uniqueid = UUID.randomUUID().toString().replace("-", "");
+        uniqueid.substring(0, 5);
         Random r = new Random(System.currentTimeMillis());
-        orderId = "dialjack" + (1 + r.nextInt(2)) * 10000
-                + r.nextInt(100);
+        orderId = "dialjackPW_" + uniqueid+(1 + r.nextInt(2)) * 10000
+                + r.nextInt(2);
         String order = rideId + "p";
-        WebServiceClasses.getWebServiceClasses(EndTripDetailActivity.this, "EndTripDetailActivity").generateWithDrawChecksum(order, prefManager.getPilotId(), cash, GoJackServerUrls.WITHDRAW_RQUESTTYPE, prefManager.getPilotPaytmtoken(), "9865132365", new VolleyResponseListerner() {
+        WebServiceClasses.getWebServiceClasses(EndTripDetailActivity.this, "EndTripDetailActivity").generateWithDrawChecksum(order, prefManager.getPilotId(), cash, GoJackServerUrls.WITHDRAW_RQUESTTYPE, prefManager.getPilotPaytmtoken(), prefManager.getPilotPaytmmobile(), new VolleyResponseListerner() {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
-                CommonMethods.toast(EndTripDetailActivity.this, response.getString("ResponseMessage"));
+                CommonMethods.showSnakBar(response.getString("ResponseMessage"),payModeLayout);
             }
 
             @Override

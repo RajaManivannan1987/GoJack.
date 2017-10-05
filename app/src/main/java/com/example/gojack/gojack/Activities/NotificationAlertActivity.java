@@ -37,11 +37,9 @@ public class NotificationAlertActivity extends Activity {
     private String TAG = "NotificationAlertActivity";
     private CircleImageView notificationGenderImageView;
     private Button notificationAcceptButton, notificationCancelButton, notifyCustomerButton;
-    // private WebServiceClasses webServiceClasses;
     private String rideId, gender, notifiyType;
     private LinearLayout buttonMainLayout;
     private TextView messageTextView;
-    //private PrefManager prefManager;
     NotificationManager nMgr;
 
 
@@ -50,11 +48,8 @@ public class NotificationAlertActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_alert);
         this.setFinishOnTouchOutside(false);
-//        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
         nMgr = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        // prefManager = new PrefManager(NotificationAlertActivity.this);
         messageTextView = (TextView) findViewById(R.id.messageTextView);
-        // webServiceClasses = new WebServiceClasses(NotificationAlertActivity.this, TAG);
         notificationAcceptButton = (Button) findViewById(R.id.notificationAcceptButton);
         notificationCancelButton = (Button) findViewById(R.id.notificationCancelButton);
         notificationGenderImageView = (CircleImageView) findViewById(R.id.notificationGenderImageView);
@@ -79,22 +74,15 @@ public class NotificationAlertActivity extends Activity {
             } else if (notifiyType.startsWith("reachedlocation")) {
                 notifyCustomerButton.setVisibility(View.VISIBLE);
                 buttonMainLayout.setVisibility(View.GONE);
-//                ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted();
                 NotifyCustomerSingleton.actionCompletedSingleton().ActionCompleted();
-//                finish();
             } else if (notifiyType.startsWith("ridecancelledbycustomer")) {
                 notificationAcceptButton.setText("Ok");
                 notificationCancelButton.setVisibility(View.GONE);
-//                NotifyCustomerSingleton.actionCanceled().ActionCompleted();
             } else if (notifiyType.startsWith("ridetaken")) {
-//                notificationAcceptButton.setText("Ok");
-//                notificationCancelButton.setVisibility(View.GONE);
                 nMgr.cancelAll();
-//                NotifyCustomerSingleton.actionCanceled().ActionCompleted();
             } else {
                 notificationAcceptButton.setText("Ok");
                 notificationCancelButton.setVisibility(View.GONE);
-//                nMgr.cancelAll();
             }
 
         }
@@ -126,17 +114,17 @@ public class NotificationAlertActivity extends Activity {
                         if (response.getString("token_status").equalsIgnoreCase("1")) {
                             if (response.getString("status").equalsIgnoreCase("1")) {
                                 NotifyCustomerSingleton.actionCompletedSingleton().ActionCompleted();
-                                CommonMethods.toast(NotificationAlertActivity.this, response.getString("message"));
+                                CommonMethods.showSnakBar(response.getString("message"), messageTextView);
                                 finish();
                             } else {
                                 ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted();
-                                CommonMethods.toast(NotificationAlertActivity.this, response.getString("message"));
+                                CommonMethods.showSnakBar(response.getString("message"), messageTextView);
                                 finish();
                             }
 
                         } else {
                             ActionCompletedSingleton.actionCompletedSingleton().ActionCompleted();
-                            CommonMethods.toast(NotificationAlertActivity.this, response.getString("message"));
+                            CommonMethods.showSnakBar(response.getString("message"), messageTextView);
                             finish();
                         }
                     }
@@ -183,6 +171,11 @@ public class NotificationAlertActivity extends Activity {
                         i.putExtra("start_lang", jsonObject.getString("startinglongitude"));
                         i.putExtra("end_lat", jsonObject.getString("endinglatitude"));
                         i.putExtra("end_lang", jsonObject.getString("endinglongitude"));
+                        i.putExtra("receivername", jsonObject.getString("receivername"));
+                        i.putExtra("receiverphone", jsonObject.getString("receiverphone"));
+                        i.putExtra("receiverlandmark", jsonObject.getString("receiverlandmark"));
+                        i.putExtra("instructions", jsonObject.getString("instructions"));
+                        i.putExtra("ride_type", jsonObject.getString("ride_type"));
                         i.putExtra("rideId", rideId);
                         i.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -191,20 +184,16 @@ public class NotificationAlertActivity extends Activity {
                         NotificationAlertActivity.this.finish();
                         callAccept(rideId);
                     } else if (response.getString("status").equalsIgnoreCase("2")) {
-                        CommonMethods.toast(NotificationAlertActivity.this, response.getString("message"));
-//                        CommonMethods.closeIntent(NotificationAlertActivity.this);
+                        CommonMethods.showSnakBar(response.getString("message"), messageTextView);
                         finish();
                     } else if (response.getString("status").equalsIgnoreCase("0")) {
-                        CommonMethods.toast(NotificationAlertActivity.this, response.getString("message"));
-//                        CommonMethods.closeIntent(NotificationAlertActivity.this);
-//                        closeIntent();
+                        CommonMethods.showSnakBar(response.getString("message"), messageTextView);
                         finish();
                     } else {
                         finish();
-//                        CommonMethods.closeIntent(NotificationAlertActivity.this);
                     }
                 } else {
-                    CommonMethods.toast(NotificationAlertActivity.this, response.getString("token_message"));
+                    CommonMethods.showSnakBar(response.getString("token_message"), messageTextView);
                     PrefManager.getPrefManager(NotificationAlertActivity.this).logout();
                     startActivity(new Intent(NotificationAlertActivity.this, LoginActivity.class));
                 }

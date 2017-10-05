@@ -139,11 +139,10 @@ public class GoOnline extends CommonNavigstionBar {
             @Override
             public void onResponse(JSONObject response) throws JSONException {
                 // For Live 10/8/2017
-                paytmBalance = Float.parseFloat(response.getJSONObject("response").getString("paytmWalletBalance"));
-                balanceTextView.setText("Wallet Balance is: Rs." + response.getJSONObject("response").getString("paytmWalletBalance"));
+               /* paytmBalance = Float.parseFloat(response.getJSONObject("response").getString("paytmWalletBalance"));
+                balanceTextView.setText("Wallet Balance is: Rs." + response.getJSONObject("response").getString("paytmWalletBalance"));*/
                 // For Testing 10/8/2017
-//                paytmBalance = 400;
-
+                paytmBalance=500;
                 if (paytmBalance < 300) {
                     swipeButton.setVisibility(View.GONE);
                     balanceTextView.setVisibility(View.VISIBLE);
@@ -163,7 +162,6 @@ public class GoOnline extends CommonNavigstionBar {
                     onLineView.setVisibility(View.GONE);
                     swipeButton.setVisibility(View.VISIBLE);
                     pilotAccountRechargeButton.setVisibility(View.GONE);
-
                 }
             }
 

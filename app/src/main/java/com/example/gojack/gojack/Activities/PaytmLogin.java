@@ -63,17 +63,17 @@ public class PaytmLogin extends AppCompatActivity {
                     finish();
                 } else {
                     if (response.getString("responseCode").equalsIgnoreCase("430")) {
-                        CommonMethods.toast(PaytmLogin.this, "Invalid Authorization");
+                        CommonMethods.showSnakBar("Invalid Authorization", paytmMobileNodEditText);
                     } else if (response.getString("responseCode").equalsIgnoreCase("431")) {
-                        CommonMethods.toast(PaytmLogin.this, "Invalid Mobile");
+                        CommonMethods.showSnakBar("Invalid Mobile", paytmMobileNodEditText);
                     } else if (response.getString("responseCode").equalsIgnoreCase("432")) {
-                        CommonMethods.toast(PaytmLogin.this, "Login Failed");
+                        CommonMethods.showSnakBar("Login Failed", paytmMobileNodEditText);
                     } else if (response.getString("responseCode").equalsIgnoreCase("433")) {
-                        CommonMethods.toast(PaytmLogin.this, "Account Blocked");
+                        CommonMethods.showSnakBar("Account Blocked", paytmMobileNodEditText);
                     } else if (response.getString("responseCode").equalsIgnoreCase("434")) {
-                        CommonMethods.toast(PaytmLogin.this, "Bad Request");
+                        CommonMethods.showSnakBar("Bad Request", paytmMobileNodEditText);
                     } else if (response.getString("responseCode").equalsIgnoreCase("465")) {
-                        CommonMethods.toast(PaytmLogin.this, "Invalid Email");
+                        CommonMethods.showSnakBar("Invalid Email", paytmMobileNodEditText);
                     }
                 }
 

@@ -75,9 +75,6 @@
         <activity
             android:name=".Activities.HailActivity"
             android:screenOrientation="portrait" />
-        <!--<activity
-            android:name=".Activities.HailTrip"
-            android:screenOrientation="portrait" />-->
         <activity
             android:name=".Activities.About"
             android:screenOrientation="portrait" />
@@ -116,6 +113,10 @@
         <activity
             android:name=".Activities.PaymentActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.ReceiverInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/mytheme" />
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"

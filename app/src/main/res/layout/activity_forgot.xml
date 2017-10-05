@@ -12,7 +12,7 @@
         android:background="@color/ColorGrayLight"
         android:gravity="center"
         android:text="@string/forgotpassword1"
-        android:textColor="@color/ColorBlack"
+        android:textColor="#000080"
         android:textSize="@dimen/contentSizeLarge" />
 
     <ScrollView

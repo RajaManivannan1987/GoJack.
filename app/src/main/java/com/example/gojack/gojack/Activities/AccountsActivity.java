@@ -66,7 +66,7 @@ public class AccountsActivity extends CommonNavigstionBar {
 
                         getTables();
                     } else {
-                        CommonMethods.toast(AccountsActivity.this, response.getString("message"));
+                        CommonMethods.showSnakBar(response.getString("message"), amountTextView);
                     }
                 }
             }
